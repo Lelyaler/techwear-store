@@ -31,6 +31,12 @@ export const ProductCard = {
       ? `<div class="product-card__badge ${badgeModifier}">${badge}</div>` 
       : '';
 
+    // Проверяем, сохранен ли размер в биометрическом профиле
+    const savedSize = localStorage.getItem(`fit_size_${id}`);
+    const fitBadgeHtml = savedSize 
+      ? `<div class="product-card__fit-badge">YOUR FIT: ${savedSize}</div>` 
+      : '';
+
     return `
       <article class="product-card" data-id="${id}">
         <!-- Обертка для изображения с бейджем -->
@@ -52,6 +58,14 @@ export const ProductCard = {
           <div class="product-card__specs">
             ${specsHtml}
           </div>
+
+          <!-- Рекомендованный размер (если отсканирован) -->
+          ${fitBadgeHtml}
+
+          <!-- Кнопка запуска сканера размеров -->
+          <button class="product-card__scan-link js-fit-scan" data-id="${id}" data-name="${name}">
+            FIT SCANNER //
+          </button>
           
           <!-- Футер карточки (Цена + Добавить в корзину) -->
           <div class="product-card__footer">

@@ -43,7 +43,7 @@
 ### Milestone 6: Cybernetic Expansion 🚀
 - [x] Реализовать переключатель цветовых тем (Cyber-Themes: Blue, Green, Stealth, Alert)
 - [x] Добавить звуковое сопровождение интерфейса (Audio Feedback)
-- [ ] Написать интерактивный сканер подбора размеров (Cyber-Fit Assistant)
+- [x] Написать интерактивный сканер подбора размеров (Cyber-Fit Assistant)
 - [ ] Разработать оформление заказа в стиле военного терминала (Checkout Terminal)
 - [ ] Разработать интерактивный конструктор модулей (MBS Builder)
 

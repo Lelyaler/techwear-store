@@ -9,6 +9,8 @@ import { CartState } from './modules/cart.js';
 import { Toast } from './components/Toast.js';
 import { FilterService } from './modules/filter.js';
 import { AudioService } from './modules/audio.js';
+import './styles/components/fit-scanner.css';
+import { FitScanner } from './components/FitScanner.js';
 
 // Импортируем изображения товаров (Vite ESM)
 import jacketImg from './assets/jacket.jpg';
@@ -159,6 +161,9 @@ const initializeApp = () => {
       <!-- Выдвижная корзина (Cart Drawer) -->
       ${CartDrawer.render()}
     </div>
+
+    <!-- Интерактивный сканер размеров -->
+    ${FitScanner.render()}
   `;
 
   const gridContainer = document.querySelector('#product-grid-container');
@@ -218,6 +223,7 @@ const initializeApp = () => {
   // Инициализируем слушатели событий UI-компонентов
   Header.initListeners();
   CartDrawer.initListeners();
+  FitScanner.initListeners();
 
   // Делаем первый рендер каталога
   renderCatalog();
@@ -265,6 +271,15 @@ const initializeApp = () => {
       return; // Выходим из обработчика
     }
 
+    // 2. Клик по кнопке запуска сканера размеров
+    const fitScanBtn = target.closest('.js-fit-scan');
+    if (fitScanBtn) {
+      const productId = fitScanBtn.dataset.id;
+      const productName = fitScanBtn.dataset.name;
+      FitScanner.open(productId, productName);
+      return;
+    }
+
     // 3. Клик по кнопке установки PWA
     const installBtn = target.closest('#pwa-install-btn');
     if (installBtn && deferredPrompt) {
@@ -281,6 +296,11 @@ const initializeApp = () => {
   document.addEventListener('cart-updated', (event) => {
     const { count } = event.detail;
     Header.updateCartCount(count);
+  });
+
+  // Реактивная подписка на обновление профиля размеров
+  document.addEventListener('fit-profile-updated', () => {
+    renderCatalog();
   });
 
   // ==========================================
