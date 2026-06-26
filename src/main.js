@@ -307,6 +307,43 @@ const initializeApp = () => {
   // Регистрация Service Worker для поддержки оффлайн-режима
   registerServiceWorker();
 
+  // ==========================================
+  // Логика переключения цветовых тем (Cyber-Themes)
+  // ==========================================
+  const THEMES = ['default', 'green', 'pink', 'stealth'];
+  let currentTheme = localStorage.getItem('techwear_theme') || 'default';
+
+  /**
+   * Применить выбранную тему к документу
+   */
+  const applyTheme = (theme) => {
+    if (theme === 'default') {
+      document.documentElement.removeAttribute('data-theme');
+    } else {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+    localStorage.setItem('techwear_theme', theme);
+  };
+
+  // Применяем сохраненную тему при запуске
+  applyTheme(currentTheme);
+
+  // Слушаем событие переключения темы из шапки
+  document.addEventListener('toggle-theme', () => {
+    const currentIndex = THEMES.indexOf(currentTheme);
+    const nextIndex = (currentIndex + 1) % THEMES.length;
+    currentTheme = THEMES[nextIndex];
+    applyTheme(currentTheme);
+
+    // Меняем цвет Toast-сообщения под тему
+    const toastStyle = currentTheme === 'pink' ? 'pink' : 'blue';
+    Toast.show(
+      `INTERFACE SPECTRUM UPDATED: [${currentTheme.toUpperCase()}] //`,
+      'THEME ENGAGED //',
+      toastStyle
+    );
+  });
+
   console.log('👾 [Techwear OS] System and CartState initialized successfully.');
 };
 

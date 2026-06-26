@@ -28,6 +28,11 @@ export const Header = {
             <button class="header__btn header__btn--install" id="pwa-install-btn" aria-label="Установить приложение">
               INSTALL //
             </button>
+
+            <!-- Кнопка переключения темы -->
+            <button class="header__btn header__btn--theme" id="theme-toggle-btn" aria-label="Сменить тему">
+              THEME //
+            </button>
             
             <!-- Кнопка поиска -->
             <button class="header__btn header__btn--search" id="search-trigger" aria-label="Открыть поиск">
@@ -63,7 +68,15 @@ export const Header = {
   initListeners() {
     const searchTrigger = document.querySelector('#search-trigger');
     const cartTrigger = document.querySelector('#cart-trigger');
+    const themeTrigger = document.querySelector('#theme-toggle-btn');
     const logo = document.querySelector('#header-logo');
+
+    if (themeTrigger) {
+      themeTrigger.addEventListener('click', () => {
+        console.log('🎨 [Header] Dispatching toggle-theme event');
+        document.dispatchEvent(new CustomEvent('toggle-theme'));
+      });
+    }
 
     if (searchTrigger) {
       searchTrigger.addEventListener('click', () => {
