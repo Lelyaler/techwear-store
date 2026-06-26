@@ -1,5 +1,45 @@
 import './styles/variables.css';
 import './styles/base.css';
+import './styles/components/product-grid.css';
+import { Header } from './components/Header.js';
+import { ProductCard } from './components/ProductCard.js';
+import { CartDrawer } from './components/CartDrawer.js';
+
+// Импортируем оптимизированные изображения товаров
+import jacketImg from './assets/jacket.jpg';
+import chestRigImg from './assets/chest-rig.jpg';
+import backpackImg from './assets/backpack.jpg';
+
+// Локальная база данных товаров
+const PRODUCTS = [
+  {
+    id: 'mod-jacket-x1',
+    name: 'X-1 Shadow Shell Jacket',
+    price: 289,
+    image: jacketImg,
+    badge: 'Shell Module',
+    badgeClass: 'blue',
+    specs: ['Waterproof', 'Cordura Shell', '3 Attachments']
+  },
+  {
+    id: 'mod-rig-c3',
+    name: 'C-3 Cyber Rig Harness',
+    price: 145,
+    image: chestRigImg,
+    badge: 'Core Module',
+    badgeClass: 'pink',
+    specs: ['Tactical straps', 'Molle Grid', 'Quick-Release']
+  },
+  {
+    id: 'mod-backpack-b5',
+    name: 'B-5 Modular Pack V2',
+    price: 195,
+    image: backpackImg,
+    badge: 'Cargo Module',
+    badgeClass: 'green',
+    specs: ['Waterproof zip', '25L Capacity', 'Modular expansion']
+  }
+];
 
 // Точка входа в систему Techwear & Modular Gear
 const initializeApp = () => {
@@ -7,85 +47,85 @@ const initializeApp = () => {
   
   if (!appElement) return;
 
+  // Генерируем разметку для всех товаров
+  const productsHtml = PRODUCTS.map(product => ProductCard.render(product)).join('');
+
   appElement.innerHTML = `
-    <!-- Эффект CRT-сканирования для создания атмосферы -->
+    <!-- Эффект CRT-сканирования -->
     <div class="scanline-overlay"></div>
     
     <div class="app">
-      <!-- Временная шапка, далее заменим на полноценный компонент Header -->
-      <header style="
-        height: var(--header-height); 
-        border-bottom: var(--border-width) solid var(--border-color); 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        position: fixed; 
-        width: 100%; 
-        top: 0; 
-        background: rgba(6, 7, 9, 0.85); 
-        backdrop-filter: blur(12px); 
-        -webkit-backdrop-filter: blur(12px);
-        z-index: var(--z-header);
-      ">
-        <h1 style="
-          font-size: 1.1rem; 
-          color: var(--color-accent-blue); 
-          text-shadow: var(--glow-blue); 
-          letter-spacing: 0.15em;
-        ">
-          TECHWEAR // MODULE
-        </h1>
-      </header>
+      <!-- Шапка -->
+      ${Header.render(0)}
       
       <!-- Основной контент -->
       <main class="main">
-        <section style="
-          display: flex; 
-          flex-direction: column; 
-          align-items: center; 
-          justify-content: center; 
-          min-height: 60vh; 
-          text-align: center;
-          padding: var(--space-xl) var(--space-sm);
-        ">
+        <!-- Блок интро каталога -->
+        <section style="margin-bottom: var(--space-lg); padding-top: var(--space-md);">
           <h2 style="
-            font-size: clamp(2rem, 5vw, 3.5rem); 
-            margin-bottom: var(--space-sm); 
-            background: linear-gradient(90deg, var(--color-accent-blue), var(--color-accent-pink)); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+            font-size: 1.5rem; 
+            letter-spacing: 0.12em; 
+            margin-bottom: var(--space-xs); 
+            color: var(--color-text-primary);
           ">
-            MODULAR GEAR
+            TACTICAL // GEAR
           </h2>
           <p style="
             color: var(--color-text-secondary); 
-            max-width: 540px; 
-            font-size: clamp(0.85rem, 2vw, 1rem);
+            max-width: 600px; 
+            font-size: 0.85rem; 
             line-height: 1.6;
-            margin-bottom: var(--space-md);
           ">
-            Прототип интернет-магазина высокотехнологичной экипировки и аксессуаров.
-            Дизайн-система успешно настроена. Все зависимости установлены.
+            Модульная городская экипировка. Каждый элемент спроектирован с учетом максимальной утилитарности и совместимости по стандартам Modular Belt System.
           </p>
-          <div style="
-            font-family: var(--font-display); 
-            font-size: 0.75rem; 
-            color: var(--color-accent-pink); 
-            border: 1px solid var(--color-accent-pink); 
-            padding: var(--space-xs) var(--space-sm); 
-            letter-spacing: 0.2em;
-            box-shadow: var(--glow-pink);
-            text-transform: uppercase;
-          ">
-            Status: System Ready
-          </div>
+        </section>
+
+        <!-- Сетка каталога -->
+        <section class="product-grid">
+          ${productsHtml}
         </section>
       </main>
+
+      <!-- Выдвижная корзина (Cart Drawer) -->
+      ${CartDrawer.render()}
     </div>
   `;
 
-  console.log('👾 [Techwear OS] System initialized successfully.');
+  // Инициализируем слушатели событий для компонентов
+  Header.initListeners();
+  CartDrawer.initListeners();
+
+  // Делегирование события клика для добавления товара в корзину
+  appElement.addEventListener('click', (event) => {
+    const addToCartBtn = event.target.closest('.js-add-to-cart');
+    
+    if (addToCartBtn) {
+      const productId = addToCartBtn.dataset.id;
+      const product = PRODUCTS.find(p => p.id === productId);
+      
+      if (product) {
+        console.log(`➕ [App] Action: Add to gear: ${product.name} (ID: ${productId})`);
+        
+        // Временная интерактивная симуляция: увеличиваем счетчик в шапке
+        const cartCountEl = document.querySelector('#header-cart-count');
+        if (cartCountEl) {
+          const currentCount = parseInt(cartCountEl.textContent) || 0;
+          Header.updateCartCount(currentCount + 1);
+        }
+      }
+    }
+  });
+
+  // Локальные отладочные сообщения глобальных событий
+  document.addEventListener('toggle-cart', () => {
+    console.log('⚡ [App Event] toggle-cart event processed by CartDrawer.');
+  });
+
+  document.addEventListener('toggle-search', () => {
+    console.log('⚡ [App Event] toggle-search received. No search modal implemented yet.');
+  });
+
+  console.log('👾 [Techwear OS] System initialized. Shell and CartDrawer loaded.');
 };
 
 document.addEventListener('DOMContentLoaded', initializeApp);

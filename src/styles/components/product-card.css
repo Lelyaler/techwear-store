@@ -1,0 +1,166 @@
+.product-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-card);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  position: relative;
+  transition: all var(--transition-normal);
+}
+
+.product-card:hover {
+  border-color: rgba(0, 240, 255, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65), 0 0 15px rgba(0, 240, 255, 0.08);
+  transform: translateY(-4px);
+}
+
+.product-card__image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 133.33%; /* Соотношение сторон 3:4 */
+  overflow: hidden;
+  background: #090a0d;
+}
+
+.product-card__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.product-card:hover .product-card__image {
+  transform: scale(1.04);
+}
+
+/* Бейджи модульности товара */
+.product-card__badge {
+  position: absolute;
+  top: var(--space-xs);
+  left: var(--space-xs);
+  z-index: 10;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.6rem;
+  padding: var(--space-xxs) var(--space-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(6, 7, 9, 0.85);
+  border: var(--border-width) solid var(--border-color);
+  color: var(--color-text-primary);
+}
+
+.product-card__badge--blue {
+  border-color: var(--color-accent-blue);
+  color: var(--color-accent-blue);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+}
+
+.product-card__badge--pink {
+  border-color: var(--color-accent-pink);
+  color: var(--color-accent-pink);
+  box-shadow: 0 0 8px rgba(255, 0, 85, 0.2);
+}
+
+.product-card__badge--green {
+  border-color: var(--color-accent-green);
+  color: var(--color-accent-green);
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.2);
+}
+
+.product-card__body {
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.product-card__title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin-bottom: var(--space-xxs);
+  color: var(--color-text-primary);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Технические характеристики (спецификации) */
+.product-card__specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xxs);
+  margin-bottom: var(--space-md);
+}
+
+.product-card__spec {
+  font-size: 0.6rem;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 2px 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.product-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  gap: var(--space-xs);
+}
+
+.product-card__price {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--color-text-primary);
+}
+
+.product-card__price::before {
+  content: "$";
+  font-size: 0.9rem;
+  margin-right: 1px;
+  color: var(--color-accent-blue);
+}
+
+/* Кнопка добавления в корзину */
+.product-card__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xxs);
+  border: var(--border-width) solid var(--color-accent-blue);
+  background: transparent;
+  color: var(--color-accent-blue);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: var(--space-xs) var(--space-sm);
+  transition: all var(--transition-fast);
+  border-radius: var(--border-radius-sm);
+}
+
+.product-card__btn:hover {
+  background: var(--color-accent-blue);
+  color: var(--color-bg-main);
+  box-shadow: var(--glow-blue);
+}
+
+.product-card__btn-icon {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

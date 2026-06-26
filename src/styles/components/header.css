@@ -1,0 +1,149 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  background: rgba(6, 7, 9, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: var(--border-width) solid var(--border-color);
+  z-index: var(--z-header);
+  display: flex;
+  align-items: center;
+  transition: border-color var(--transition-normal);
+}
+
+.header:hover {
+  border-bottom-color: var(--border-color-glow);
+}
+
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-sm);
+}
+
+.header__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xxs);
+  cursor: pointer;
+  user-select: none;
+}
+
+.header__logo-brand {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  color: var(--color-text-primary);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  transition: color var(--transition-fast), text-shadow var(--transition-fast);
+}
+
+.header__logo:hover .header__logo-brand {
+  color: var(--color-accent-blue);
+  text-shadow: var(--glow-blue);
+}
+
+.header__logo-sub {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 0.95rem;
+  color: var(--color-accent-pink);
+  text-shadow: var(--glow-pink);
+  animation: logo-pulse 2s infinite alternate;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.header__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  background: rgba(13, 15, 18, 0.6);
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.header__btn:hover {
+  border-color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+  background: rgba(13, 15, 18, 0.9);
+}
+
+.header__btn--cart:hover {
+  border-color: var(--color-accent-pink);
+  box-shadow: var(--glow-pink);
+}
+
+.header__icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--color-text-primary);
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke var(--transition-fast);
+}
+
+.header__btn:hover .header__icon {
+  stroke: var(--color-accent-blue);
+}
+
+.header__btn--cart:hover .header__icon {
+  stroke: var(--color-accent-pink);
+}
+
+.header__cart-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--color-text-muted);
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.65rem;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-normal);
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.header__cart-count--active {
+  background: var(--color-accent-pink);
+  color: var(--color-text-primary);
+  box-shadow: var(--glow-pink);
+  opacity: 1;
+  transform: scale(1);
+}
+
+@keyframes logo-pulse {
+  0% {
+    opacity: 0.75;
+    text-shadow: 0 0 5px rgba(255, 0, 85, 0.4);
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 15px rgba(255, 0, 85, 0.8), 0 0 25px rgba(255, 0, 85, 0.3);
+  }
+}
