@@ -9,6 +9,12 @@ import backpackImg from '../assets/backpack.jpg';
 import visorImg from '../assets/visor.jpg';
 import glovesImg from '../assets/gloves.jpg';
 import sneakersImg from '../assets/sneakers.jpg';
+import maskImg from '../assets/mask.jpg';
+import trenchImg from '../assets/trench.jpg';
+import vestImg from '../assets/vest.jpg';
+import slingImg from '../assets/sling.jpg';
+import exoGlovesImg from '../assets/exo-gloves.jpg';
+import bootsImg from '../assets/boots.jpg';
 
 // База данных совместимых модулей Modular Belt System
 const BUILDER_PRODUCTS = [
@@ -17,7 +23,13 @@ const BUILDER_PRODUCTS = [
   { id: 'mod-backpack-b5', name: 'B-5 Modular Pack V2', price: 195, image: backpackImg, slot: 'back', weight: 1.2 },
   { id: 'mod-visor-g9', name: 'G-9 Cyber Visor Specs', price: 95, image: visorImg, slot: 'head', weight: 0.2 },
   { id: 'mod-gloves-gl2', name: 'GL-2 Tactical Gloves', price: 75, image: glovesImg, slot: 'hands', weight: 0.3 },
-  { id: 'mod-sneakers-s7', name: 'S-7 Cyber Sneakers', price: 220, image: sneakersImg, slot: 'feet', weight: 1.4 }
+  { id: 'mod-sneakers-s7', name: 'S-7 Cyber Sneakers', price: 220, image: sneakersImg, slot: 'feet', weight: 1.4 },
+  { id: 'mod-mask-m1', name: 'M-1 Cyber Rebreather Mask', price: 120, image: maskImg, slot: 'head', weight: 0.4 },
+  { id: 'mod-trench-x2', name: 'X-2 Tactical Trench Coat', price: 310, image: trenchImg, slot: 'body', weight: 2.2 },
+  { id: 'mod-vest-v8', name: 'V-8 Recon Tactical Vest', price: 180, image: vestImg, slot: 'chest', weight: 1.5 },
+  { id: 'mod-sling-b6', name: 'B-6 Tactical Sling Bag', price: 135, image: slingImg, slot: 'back', weight: 0.7 },
+  { id: 'mod-gloves-gl5', name: 'GL-5 Exo-Skeletal Gloves', price: 95, image: exoGlovesImg, slot: 'hands', weight: 0.4 },
+  { id: 'mod-boots-bt9', name: 'BT-9 Exo-Steel Boots', price: 260, image: bootsImg, slot: 'feet', weight: 1.9 }
 ];
 
 export const MbsBuilder = {

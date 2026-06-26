@@ -23,6 +23,12 @@ import backpackImg from './assets/backpack.jpg';
 import visorImg from './assets/visor.jpg';
 import glovesImg from './assets/gloves.jpg';
 import sneakersImg from './assets/sneakers.jpg';
+import maskImg from './assets/mask.jpg';
+import trenchImg from './assets/trench.jpg';
+import vestImg from './assets/vest.jpg';
+import slingImg from './assets/sling.jpg';
+import exoGlovesImg from './assets/exo-gloves.jpg';
+import bootsImg from './assets/boots.jpg';
 
 // Расширенная база данных товаров магазина Techwear
 const PRODUCTS = [
@@ -79,6 +85,60 @@ const PRODUCTS = [
     badge: 'Cargo Module',
     badgeClass: 'green',
     specs: ['Glow-sole', 'Modular straps', 'Shock absorption']
+  },
+  {
+    id: 'mod-mask-m1',
+    name: 'M-1 Cyber Rebreather Mask',
+    price: 120,
+    image: maskImg,
+    badge: 'Core Module',
+    badgeClass: 'pink',
+    specs: ['HEPA Filter', 'Dual Intake', 'Magnetic straps']
+  },
+  {
+    id: 'mod-trench-x2',
+    name: 'X-2 Tactical Trench Coat',
+    price: 310,
+    image: trenchImg,
+    badge: 'Shell Module',
+    badgeClass: 'blue',
+    specs: ['Nanotech Shell', 'Modular Collar', 'Magnetic Snaps']
+  },
+  {
+    id: 'mod-vest-v8',
+    name: 'V-8 Recon Tactical Vest',
+    price: 180,
+    image: vestImg,
+    badge: 'Core Module',
+    badgeClass: 'pink',
+    specs: ['Armor plate pockets', 'Laser cut Molle', 'Lightweight mesh']
+  },
+  {
+    id: 'mod-sling-b6',
+    name: 'B-6 Tactical Sling Bag',
+    price: 135,
+    image: slingImg,
+    badge: 'Cargo Module',
+    badgeClass: 'green',
+    specs: ['Sling strap', 'Quick release Cobra', 'Waterproof zip']
+  },
+  {
+    id: 'mod-gloves-gl5',
+    name: 'GL-5 Exo-Skeletal Gloves',
+    price: 95,
+    image: exoGlovesImg,
+    badge: 'Shell Module',
+    badgeClass: 'pink',
+    specs: ['Exo protection', 'Heated grip pads', 'Conductive fingertips']
+  },
+  {
+    id: 'mod-boots-bt9',
+    name: 'BT-9 Exo-Steel Boots',
+    price: 260,
+    image: bootsImg,
+    badge: 'Cargo Module',
+    badgeClass: 'green',
+    specs: ['Steel toe armor', 'Exo-cushion sole', 'Auto-lacing locks']
   }
 ];
 
