@@ -1,0 +1,105 @@
+.catalog-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+/* На десктопах выстраиваем фильтры и поиск в одну линию */
+@media (min-width: 768px) {
+  .catalog-controls {
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+}
+
+/* Группа поиска */
+.catalog-search {
+  position: relative;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .catalog-search {
+    max-width: 320px;
+  }
+}
+
+.catalog-search__input {
+  width: 100%;
+  padding: var(--space-xs) var(--space-sm);
+  padding-left: 36px;
+  background: rgba(13, 15, 18, 0.6);
+  border: var(--border-width) solid var(--border-color);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  border-radius: var(--border-radius-sm);
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.catalog-search__input:focus {
+  border-color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+  background: rgba(13, 15, 18, 0.85);
+}
+
+.catalog-search__icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  stroke: var(--color-text-muted);
+  stroke-width: 2.5;
+  pointer-events: none;
+  transition: stroke var(--transition-fast);
+}
+
+.catalog-search__input:focus + .catalog-search__icon {
+  stroke: var(--color-accent-blue);
+}
+
+/* Группа кнопок фильтров */
+.catalog-filter {
+  display: flex;
+  gap: var(--space-xs);
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none; /* Firefox */
+}
+
+.catalog-filter::-webkit-scrollbar {
+  display: none; /* Safari/Chrome */
+}
+
+.catalog-filter__btn {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: var(--space-xs) var(--space-sm);
+  border: var(--border-width) solid var(--border-color);
+  background: rgba(13, 15, 18, 0.4);
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  border-radius: var(--border-radius-sm);
+  text-transform: uppercase;
+}
+
+.catalog-filter__btn:hover {
+  color: var(--color-accent-blue);
+  border-color: var(--color-accent-blue);
+}
+
+.catalog-filter__btn--active {
+  color: var(--color-bg-main);
+  background: var(--color-accent-blue);
+  border-color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+}

@@ -1,9 +1,13 @@
 import './styles/variables.css';
 import './styles/base.css';
 import './styles/components/product-grid.css';
+import './styles/components/catalog-filter.css';
 import { Header } from './components/Header.js';
 import { ProductCard } from './components/ProductCard.js';
 import { CartDrawer } from './components/CartDrawer.js';
+import { CartState } from './modules/cart.js';
+import { Toast } from './components/Toast.js';
+import { FilterService } from './modules/filter.js';
 
 // Импортируем оптимизированные изображения товаров
 import jacketImg from './assets/jacket.jpg';
@@ -41,14 +45,25 @@ const PRODUCTS = [
   }
 ];
 
+/**
+ * Вспомогательная функция задержки выполнения (Debounce)
+ * @param {Function} fn - исходная функция
+ * @param {number} delay - задержка в миллисекундах
+ * @returns {Function} дебаунс-версия функции
+ */
+const debounce = (fn, delay) => {
+  let timeoutId;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), delay);
+  };
+};
+
 // Точка входа в систему Techwear & Modular Gear
 const initializeApp = () => {
   const appElement = document.querySelector('#app');
   
   if (!appElement) return;
-
-  // Генерируем разметку для всех товаров
-  const productsHtml = PRODUCTS.map(product => ProductCard.render(product)).join('');
 
   appElement.innerHTML = `
     <!-- Эффект CRT-сканирования -->
@@ -61,7 +76,7 @@ const initializeApp = () => {
       <!-- Основной контент -->
       <main class="main">
         <!-- Блок интро каталога -->
-        <section style="margin-bottom: var(--space-lg); padding-top: var(--space-md);">
+        <section style="margin-bottom: var(--space-md); padding-top: var(--space-md);">
           <h2 style="
             font-size: 1.5rem; 
             letter-spacing: 0.12em; 
@@ -80,9 +95,36 @@ const initializeApp = () => {
           </p>
         </section>
 
-        <!-- Сетка каталога -->
-        <section class="product-grid">
-          ${productsHtml}
+        <!-- Контрольная панель каталога (Поиск и Табы) -->
+        <div class="catalog-controls">
+          <!-- Поисковое поле -->
+          <div class="catalog-search">
+            <input 
+              type="text" 
+              id="catalog-search-input" 
+              class="catalog-search__input" 
+              placeholder="SEARCH SYSTEM //" 
+              aria-label="Поиск товаров" 
+              autocomplete="off" 
+            />
+            <svg class="catalog-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          
+          <!-- Фильтры по модулям -->
+          <div class="catalog-filter" id="catalog-filter-container">
+            <button class="catalog-filter__btn catalog-filter__btn--active" data-category="ALL">All</button>
+            <button class="catalog-filter__btn" data-category="SHELL">Shell</button>
+            <button class="catalog-filter__btn" data-category="CORE">Core</button>
+            <button class="catalog-filter__btn" data-category="CARGO">Cargo</button>
+          </div>
+        </div>
+
+        <!-- Сетка каталога (динамический рендеринг) -->
+        <section class="product-grid" id="product-grid-container">
+          <!-- Заполняется динамически -->
         </section>
       </main>
 
@@ -91,9 +133,90 @@ const initializeApp = () => {
     </div>
   `;
 
-  // Инициализируем слушатели событий для компонентов
+  const gridContainer = document.querySelector('#product-grid-container');
+  const searchInput = document.querySelector('#catalog-search-input');
+  const filterContainer = document.querySelector('#catalog-filter-container');
+
+  let activeCategory = 'ALL';
+  let searchQuery = '';
+
+  /**
+   * Функция отрисовки каталога на основе текущих фильтров
+   */
+  const renderCatalog = () => {
+    if (!gridContainer) return;
+
+    const filteredProducts = FilterService.filter(PRODUCTS, activeCategory, searchQuery);
+    
+    // Если ничего не найдено — выводим системную заглушку
+    if (filteredProducts.length === 0) {
+      gridContainer.innerHTML = `
+        <div style="
+          grid-column: 1 / -1; 
+          display: flex; 
+          flex-direction: column; 
+          align-items: center; 
+          justify-content: center; 
+          min-height: 35vh; 
+          text-align: center; 
+          color: var(--color-text-secondary); 
+          font-family: var(--font-display); 
+          gap: var(--space-xs);
+        ">
+          <svg style="width: 36px; height: 36px; stroke: var(--color-text-muted); stroke-width: 1.5;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>
+          <span style="
+            font-size: 0.75rem; 
+            letter-spacing: 0.08em; 
+            color: var(--color-accent-pink); 
+            text-shadow: var(--glow-pink);
+          ">
+            SYSTEM ERROR: NO COMPATIBLE MODULES FOUND //
+          </span>
+        </div>
+      `;
+      return;
+    }
+
+    // Рендерим отфильтрованный список карточек
+    gridContainer.innerHTML = filteredProducts
+      .map(product => ProductCard.render(product))
+      .join('');
+  };
+
+  // Инициализируем слушатели событий UI-компонентов
   Header.initListeners();
   CartDrawer.initListeners();
+
+  // Делаем первый рендер каталога
+  renderCatalog();
+
+  // Обработчик переключения табов фильтрации
+  if (filterContainer) {
+    filterContainer.addEventListener('click', (event) => {
+      const clickedBtn = event.target.closest('.catalog-filter__btn');
+      if (!clickedBtn) return;
+
+      // Переключаем класс активности
+      filterContainer.querySelectorAll('.catalog-filter__btn').forEach(btn => {
+        btn.classList.remove('catalog-filter__btn--active');
+      });
+      clickedBtn.classList.add('catalog-filter__btn--active');
+
+      activeCategory = clickedBtn.dataset.category;
+      renderCatalog();
+    });
+  }
+
+  // Обработчик ввода в поиск с задержкой (Debounce)
+  if (searchInput) {
+    searchInput.addEventListener('input', debounce((event) => {
+      searchQuery = event.target.value;
+      renderCatalog();
+    }, 250));
+  }
 
   // Делегирование события клика для добавления товара в корзину
   appElement.addEventListener('click', (event) => {
@@ -104,28 +227,23 @@ const initializeApp = () => {
       const product = PRODUCTS.find(p => p.id === productId);
       
       if (product) {
-        console.log(`➕ [App] Action: Add to gear: ${product.name} (ID: ${productId})`);
-        
-        // Временная интерактивная симуляция: увеличиваем счетчик в шапке
-        const cartCountEl = document.querySelector('#header-cart-count');
-        if (cartCountEl) {
-          const currentCount = parseInt(cartCountEl.textContent) || 0;
-          Header.updateCartCount(currentCount + 1);
-        }
+        CartState.addToCart(product);
+        // Вызываем всплывающее системное уведомление
+        Toast.show(`${product.name.toUpperCase()} EQUIPPED //`, 'GEAR UPDATE //', 'blue');
       }
     }
   });
 
-  // Локальные отладочные сообщения глобальных событий
-  document.addEventListener('toggle-cart', () => {
-    console.log('⚡ [App Event] toggle-cart event processed by CartDrawer.');
+  // Реактивная подписка: обновляем шапку при изменении корзины
+  document.addEventListener('cart-updated', (event) => {
+    const { count } = event.detail;
+    Header.updateCartCount(count);
   });
 
-  document.addEventListener('toggle-search', () => {
-    console.log('⚡ [App Event] toggle-search received. No search modal implemented yet.');
-  });
+  // Инициализируем состояние корзины (загрузка из LocalStorage)
+  CartState.init();
 
-  console.log('👾 [Techwear OS] System initialized. Shell and CartDrawer loaded.');
+  console.log('👾 [Techwear OS] System and CartState initialized successfully.');
 };
 
 document.addEventListener('DOMContentLoaded', initializeApp);
