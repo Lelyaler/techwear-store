@@ -243,7 +243,25 @@ const initializeApp = () => {
   // Инициализируем состояние корзины (загрузка из LocalStorage)
   CartState.init();
 
+  // Регистрация Service Worker для поддержки оффлайн-режима
+  registerServiceWorker();
+
   console.log('👾 [Techwear OS] System and CartState initialized successfully.');
+};
+
+/**
+ * Регистрация Service Worker для оффлайн-работы PWA
+ */
+const registerServiceWorker = () => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        console.log('📡 [PWA] Service Worker registered. Scope:', registration.scope);
+      })
+      .catch((error) => {
+        console.error('❌ [PWA] Service Worker registration failed:', error);
+      });
+  }
 };
 
 document.addEventListener('DOMContentLoaded', initializeApp);
