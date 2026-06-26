@@ -1,0 +1,565 @@
+/* ==========================================================================
+   Компонент: MBS Builder (Конструктор модулей Modular Belt System)
+   ========================================================================== */
+
+.mbs-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background: rgba(8, 10, 12, 0.85);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal);
+  padding: var(--space-md);
+}
+
+.mbs-overlay--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mbs-modal {
+  background: rgba(13, 16, 21, 0.95);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 0 35px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(var(--color-accent-blue-rgb, 0, 240, 255), 0.05);
+  width: 100%;
+  max-width: 850px;
+  height: 85vh;
+  min-height: 500px;
+  border-radius: var(--border-radius-sm);
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Свечение углов */
+.mbs-modal::before, .mbs-modal::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: var(--border-width) solid var(--color-accent-blue);
+  pointer-events: none;
+}
+
+.mbs-modal::before {
+  top: 8px;
+  left: 8px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.mbs-modal::after {
+  bottom: 8px;
+  right: 8px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Шапка конструктора */
+.mbs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-sm);
+}
+
+.mbs-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.mbs-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  letter-spacing: 0.15em;
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+}
+
+.mbs-subtitle {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.1em;
+  font-family: var(--font-display);
+}
+
+.mbs-close {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.mbs-close:hover {
+  color: var(--color-accent-pink);
+  transform: rotate(90deg);
+}
+
+/* Двухколоночный интерфейс */
+.mbs-workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+  .mbs-workspace {
+    grid-template-columns: 1.2fr 1fr;
+    overflow: hidden;
+  }
+}
+
+/* Левая колонка: Интерактивный чертеж */
+.mbs-blueprint {
+  background: rgba(10, 12, 14, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 320px;
+}
+
+/* Координатная сетка */
+.mbs-grid {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: 
+    linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+
+/* Силуэт на чертеже */
+.mbs-avatar-wrapper {
+  position: relative;
+  width: 200px;
+  height: 300px;
+}
+
+.mbs-avatar-svg {
+  width: 100%;
+  height: 100%;
+  stroke: var(--color-accent-blue);
+  stroke-width: 1;
+  fill: none;
+  opacity: 0.25;
+}
+
+/* Точки привязки оборудования (Nodes) */
+.mbs-node {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Иконка/кружок точки */
+.mbs-node__dot {
+  width: 12px;
+  height: 12px;
+  background: var(--color-bg-main);
+  border: 2px solid var(--color-text-muted);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all var(--transition-fast);
+}
+
+/* Пульсация точки */
+.mbs-node::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--color-text-muted);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: all var(--transition-fast);
+}
+
+.mbs-node--active .mbs-node__dot {
+  border-color: var(--color-accent-blue);
+  background: var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+}
+
+.mbs-node--active::after {
+  border-color: var(--color-accent-blue);
+  animation: node-pulse 1.8s infinite ease-out;
+  opacity: 1;
+}
+
+/* Если модуль экипирован, заменяем точку на миниатюру */
+.mbs-node__thumb {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+  background: var(--color-bg-main);
+  overflow: hidden;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  transition: transform var(--transition-fast);
+}
+
+.mbs-node__thumb:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.mbs-node__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mbs-node--equipped .mbs-node__thumb {
+  display: block;
+}
+.mbs-node--equipped .mbs-node__dot,
+.mbs-node--equipped::after {
+  display: none;
+}
+
+@keyframes node-pulse {
+  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.9; }
+  100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+}
+
+/* Линии связи на чертеже */
+.mbs-blueprint__line {
+  position: absolute;
+  stroke: var(--border-color);
+  stroke-dasharray: 4;
+  stroke-width: 1;
+  pointer-events: none;
+  transition: stroke var(--transition-fast);
+}
+
+.mbs-blueprint__line--active {
+  stroke: var(--color-accent-blue);
+  stroke-dasharray: none;
+  stroke-width: 1.5;
+}
+
+/* Координаты точек на холсте 200x300 */
+#node-head { top: 12%; left: 50%; }
+#node-body { top: 38%; left: 50%; }
+#node-chest { top: 48%; left: 50%; }
+#node-back { top: 35%; left: 80%; }
+#node-hands { top: 58%; left: 20%; }
+#node-feet { top: 90%; left: 50%; }
+
+/* Правая колонка: Настройки слотов */
+.mbs-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .mbs-controls {
+    border-top: none;
+    padding-top: 0;
+    overflow-y: auto;
+    padding-right: 4px;
+    scrollbar-width: thin;
+  }
+}
+
+/* Список слотов */
+.mbs-slots-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.mbs-slot-card {
+  border: 1px solid var(--border-color);
+  background: rgba(13, 16, 21, 0.4);
+  border-radius: var(--border-radius-sm);
+  padding: var(--space-xs) var(--space-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mbs-slot-card:hover {
+  border-color: var(--color-accent-blue);
+  background: rgba(0, 240, 255, 0.02);
+}
+
+.mbs-slot-card--active {
+  border-color: var(--color-accent-blue);
+  background: rgba(0, 240, 255, 0.05);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.05);
+}
+
+.mbs-slot-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.mbs-slot-label {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.mbs-slot-equipped {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--color-text-primary);
+}
+
+.mbs-slot-equipped--empty {
+  color: var(--color-text-muted);
+  font-style: italic;
+  font-weight: normal;
+}
+
+.mbs-slot-status-badge {
+  font-family: var(--font-display);
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.mbs-slot-status-badge--empty {
+  border: 1px solid var(--border-color);
+  color: var(--color-text-muted);
+}
+
+.mbs-slot-status-badge--equipped {
+  border: 1px solid var(--color-accent-blue);
+  color: var(--color-accent-blue);
+  background: rgba(0, 240, 255, 0.05);
+  box-shadow: var(--glow-blue);
+}
+
+/* Панель выбора товара для активного слота */
+.mbs-selection-panel {
+  border: 1px solid var(--border-color);
+  background: rgba(10, 12, 14, 0.7);
+  border-radius: var(--border-radius-sm);
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.mbs-selection-title {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.mbs-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.mbs-option-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.mbs-option-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--border-color);
+}
+
+.mbs-option-row--selected {
+  background: rgba(0, 240, 255, 0.05);
+  border-color: var(--color-accent-blue);
+}
+
+.mbs-option-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.mbs-option-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mbs-option-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.mbs-option-name {
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.mbs-option-price {
+  font-size: 0.65rem;
+  color: var(--color-accent-blue);
+}
+
+/* Футер конструктора */
+.mbs-footer {
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+@media (min-width: 600px) {
+  .mbs-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.mbs-summary {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.mbs-summary-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.mbs-summary-label {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.mbs-summary-value {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+}
+
+.mbs-summary-value--accent {
+  color: var(--color-accent-blue);
+  text-shadow: var(--glow-blue);
+}
+
+.mbs-actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.mbs-btn {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all var(--transition-normal);
+  white-space: nowrap;
+}
+
+.mbs-btn--primary {
+  background: var(--color-accent-blue);
+  color: var(--color-bg-main);
+  border: 1px solid var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+}
+
+.mbs-btn--primary:hover {
+  background: transparent;
+  color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue), inset 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+.mbs-btn--secondary {
+  background: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.mbs-btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--color-text-primary);
+}
+
+/* Кнопка открытия MBS в шапке */
+.header__btn--builder {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--color-text-secondary);
+  border-color: var(--border-color);
+  background: rgba(13, 15, 18, 0.6);
+  padding: 0 var(--space-xs);
+  width: auto;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+}
+
+.header__btn--builder:hover {
+  border-color: var(--color-accent-blue);
+  color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+}

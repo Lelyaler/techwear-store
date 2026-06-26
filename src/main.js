@@ -13,6 +13,8 @@ import './styles/components/fit-scanner.css';
 import { FitScanner } from './components/FitScanner.js';
 import './styles/components/checkout-terminal.css';
 import { CheckoutTerminal } from './components/CheckoutTerminal.js';
+import './styles/components/mbs-builder.css';
+import { MbsBuilder } from './components/MbsBuilder.js';
 
 // Импортируем изображения товаров (Vite ESM)
 import jacketImg from './assets/jacket.jpg';
@@ -169,6 +171,9 @@ const initializeApp = () => {
 
     <!-- Военный консольный терминал оформления заказа -->
     ${CheckoutTerminal.render()}
+
+    <!-- Конструктор модулей Modular Belt System -->
+    ${MbsBuilder.render()}
   `;
 
   const gridContainer = document.querySelector('#product-grid-container');
@@ -230,6 +235,7 @@ const initializeApp = () => {
   CartDrawer.initListeners();
   FitScanner.initListeners();
   CheckoutTerminal.initListeners();
+  MbsBuilder.initListeners();
 
   // Делаем первый рендер каталога
   renderCatalog();
@@ -388,6 +394,11 @@ const initializeApp = () => {
       'SYSTEM CONFIG //',
       'blue'
     );
+  });
+
+  // Слушаем событие открытия конструктора MBS из шапки
+  document.addEventListener('toggle-builder', () => {
+    MbsBuilder.open();
   });
 
   // Глобальный перехватчик кликов на фазе захвата для озвучивания всех интерактивных элементов
