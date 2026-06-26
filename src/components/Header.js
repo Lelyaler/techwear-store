@@ -24,6 +24,11 @@ export const Header = {
           
           <!-- Действия в шапке (Поиск, Корзина) -->
           <div class="header__actions">
+            <!-- Кнопка установки PWA -->
+            <button class="header__btn header__btn--install" id="pwa-install-btn" aria-label="Установить приложение">
+              INSTALL //
+            </button>
+            
             <!-- Кнопка поиска -->
             <button class="header__btn header__btn--search" id="search-trigger" aria-label="Открыть поиск">
               <svg class="header__icon" viewBox="0 0 24 24">

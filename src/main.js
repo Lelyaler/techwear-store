@@ -246,6 +246,50 @@ const initializeApp = () => {
   // Регистрация Service Worker для поддержки оффлайн-режима
   registerServiceWorker();
 
+  // ==========================================
+  // Логика установки PWA приложения (Add to Home Screen)
+  // ==========================================
+  let deferredPrompt;
+  const installBtn = document.querySelector('#pwa-install-btn');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Предотвращаем автоматический показ стандартного баннера браузера
+    e.preventDefault();
+    // Сохраняем событие установки
+    deferredPrompt = e;
+    // Делаем кнопку установки в шапке видимой
+    if (installBtn) {
+      installBtn.style.display = 'flex';
+    }
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      
+      // Показываем диалог установки
+      deferredPrompt.prompt();
+      
+      // Ожидаем решения пользователя
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`📱 [PWA] User choice outcome: ${outcome}`);
+      
+      // Очищаем сохраненное событие и скрываем кнопку
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    });
+  }
+
+  // Событие срабатывает при успешной установке PWA на устройство
+  window.addEventListener('appinstalled', () => {
+    console.log('📱 [PWA] Techwear App installed successfully.');
+    if (installBtn) {
+      installBtn.style.display = 'none';
+    }
+    // Выводим уведомление об успешной установке
+    Toast.show('SYSTEM DEPLOYED // PWA fully installed.', 'PWA SUCCESS //', 'pink');
+  });
+
   console.log('👾 [Techwear OS] System and CartState initialized successfully.');
 };
 
