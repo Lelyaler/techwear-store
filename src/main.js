@@ -8,7 +8,6 @@ import { CartDrawer } from './components/CartDrawer.js';
 import { CartState } from './modules/cart.js';
 import { Toast } from './components/Toast.js';
 import { FilterService } from './modules/filter.js';
-import { Viewer3D } from './modules/viewer3d.js';
 
 // Импортируем изображения товаров (Vite ESM)
 import jacketImg from './assets/jacket.jpg';
@@ -174,11 +173,6 @@ const initializeApp = () => {
   const renderCatalog = () => {
     if (!gridContainer) return;
 
-    // Уничтожаем все активные 3D сцены перед перерендером для освобождения WebGL памяти
-    PRODUCTS.forEach(product => {
-      Viewer3D.destroy(product.id);
-    });
-
     const filteredProducts = FilterService.filter(PRODUCTS, activeCategory, searchQuery);
     
     // Если ничего не найдено — выводим системную заглушку
@@ -266,41 +260,6 @@ const initializeApp = () => {
         Toast.show(`${product.name.toUpperCase()} EQUIPPED //`, 'GEAR UPDATE //', 'blue');
       }
       return; // Выходим из обработчика
-    }
-
-    // 2. Клики по кнопке переключения 3D-режима (3D //)
-    const btn3d = target.closest('.js-btn-3d');
-    if (btn3d) {
-      const productId = btn3d.dataset.id;
-      const card = btn3d.closest('.product-card');
-      const img = card.querySelector('.product-card__image');
-      const canvas = card.querySelector('.product-card__canvas');
-      
-      const is3DActive = btn3d.classList.contains('product-card__3d-btn--active');
-      
-      if (is3DActive) {
-        // ВЫКЛЮЧАЕМ 3D режим
-        btn3d.classList.remove('product-card__3d-btn--active');
-        if (canvas) canvas.style.display = 'none';
-        if (img) img.style.display = 'block';
-        
-        Viewer3D.destroy(productId);
-      } else {
-        // ВКЛЮЧАЕМ 3D режим
-        btn3d.classList.add('product-card__3d-btn--active');
-        if (img) img.style.display = 'none';
-        if (canvas) canvas.style.display = 'block';
-        
-        // Инициализируем Three.js рендер на холсте
-        Viewer3D.init(canvas, productId);
-        
-        Toast.show(
-          '3D ENGINE LOADED // Drag to rotate model', 
-          'CORE VISUALIZER //', 
-          'blue'
-        );
-      }
-      return;
     }
 
     // 3. Клик по кнопке установки PWA
