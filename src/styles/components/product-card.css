@@ -164,3 +164,53 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+/* Кнопка активации 3D-просмотра */
+.product-card__3d-btn {
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+  z-index: 10;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.65rem;
+  padding: var(--space-xxs) var(--space-sm);
+  background: rgba(13, 15, 18, 0.85);
+  border: var(--border-width) solid var(--color-accent-blue);
+  color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-radius: var(--border-radius-sm);
+}
+
+.product-card__3d-btn:hover {
+  background: var(--color-accent-blue);
+  color: var(--color-bg-main);
+  box-shadow: 0 0 12px var(--color-accent-blue);
+}
+
+/* Активное состояние кнопки (розовое свечение) */
+.product-card__3d-btn--active {
+  border-color: var(--color-accent-pink);
+  color: var(--color-accent-pink);
+  box-shadow: var(--glow-pink);
+}
+
+.product-card__3d-btn--active:hover {
+  background: var(--color-accent-pink);
+  color: var(--color-text-primary);
+  box-shadow: 0 0 12px var(--color-accent-pink);
+}
+
+/* Скрытый по умолчанию холст WebGL */
+.product-card__canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 5;
+}
+

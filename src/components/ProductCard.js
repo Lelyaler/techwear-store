@@ -36,12 +36,26 @@ export const ProductCard = {
         <!-- Обертка для изображения с бейджем -->
         <div class="product-card__image-wrapper">
           ${badgeHtml}
+          
+          <!-- Переключатель 3D-режима -->
+          <button 
+            class="product-card__3d-btn js-btn-3d" 
+            data-id="${id}" 
+            title="Интерактивный 3D-просмотр"
+            aria-label="Интерактивный 3D-просмотр"
+          >
+            3D //
+          </button>
+          
           <img 
             class="product-card__image" 
             src="${image}" 
             alt="${name}" 
             loading="lazy" 
           />
+          
+          <!-- WebGL Холст для Three.js -->
+          <canvas class="product-card__canvas" id="canvas-${id}"></canvas>
         </div>
         
         <!-- Контентная часть карточки -->
