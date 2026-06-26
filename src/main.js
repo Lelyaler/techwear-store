@@ -8,6 +8,7 @@ import { CartDrawer } from './components/CartDrawer.js';
 import { CartState } from './modules/cart.js';
 import { Toast } from './components/Toast.js';
 import { FilterService } from './modules/filter.js';
+import { AudioService } from './modules/audio.js';
 
 // Импортируем изображения товаров (Vite ESM)
 import jacketImg from './assets/jacket.jpg';
@@ -98,7 +99,7 @@ const initializeApp = () => {
     
     <div class="app">
       <!-- Шапка -->
-      ${Header.render(0)}
+      ${Header.render(0, AudioService.isEnabled())}
       
       <!-- Основной контент -->
       <main class="main">
@@ -204,6 +205,7 @@ const initializeApp = () => {
           </span>
         </div>
       `;
+      AudioService.playError(); // Звуковой сигнал об ошибке поиска
       return;
     }
 
@@ -258,6 +260,7 @@ const initializeApp = () => {
       if (product) {
         CartState.addToCart(product);
         Toast.show(`${product.name.toUpperCase()} EQUIPPED //`, 'GEAR UPDATE //', 'blue');
+        AudioService.playSuccess(); // Звук успешного добавления
       }
       return; // Выходим из обработчика
     }
@@ -343,6 +346,31 @@ const initializeApp = () => {
       toastStyle
     );
   });
+
+  // Слушаем событие переключения звука из шапки
+  document.addEventListener('toggle-sound', () => {
+    const isEnabled = AudioService.toggle();
+    Header.updateSoundBtn(isEnabled);
+    
+    // Если включили — воспроизводим проверочный щелчок
+    if (isEnabled) {
+      AudioService.playClick();
+    }
+    
+    Toast.show(
+      `SYSTEM SOUNDS: [${isEnabled ? 'ACTIVE' : 'MUTED'}] //`,
+      'SYSTEM CONFIG //',
+      'blue'
+    );
+  });
+
+  // Глобальный перехватчик кликов на фазе захвата для озвучивания всех интерактивных элементов
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (target.closest('button, a, .catalog-filter__btn, .js-interactive')) {
+      AudioService.playClick();
+    }
+  }, true); // true активирует фазу capture, чтобы сработало раньше других слушателей
 
   console.log('👾 [Techwear OS] System and CartState initialized successfully.');
 };

@@ -2,15 +2,16 @@ import '../styles/components/header.css';
 
 /**
  * UI Компонент: Header (Шапка сайта)
- * Отвечает за брендинг, быстрый поиск и отображение/вызов корзины.
+ * Отвечает за брендинг, смену темы, звуковое сопровождение, поиск и корзину.
  */
 export const Header = {
   /**
    * Генерация HTML-разметки компонента
    * @param {number} cartCount - количество товаров в корзине
+   * @param {boolean} isSoundEnabled - активен ли звук в системе
    * @returns {string} HTML string
    */
-  render(cartCount = 0) {
+  render(cartCount = 0, isSoundEnabled = false) {
     const isCartActive = cartCount > 0;
     
     return `
@@ -22,11 +23,20 @@ export const Header = {
             <span class="header__logo-sub">// MODULE</span>
           </div>
           
-          <!-- Действия в шапке (Поиск, Корзина) -->
+          <!-- Действия в шапке -->
           <div class="header__actions">
             <!-- Кнопка установки PWA -->
             <button class="header__btn header__btn--install" id="pwa-install-btn" aria-label="Установить приложение">
               INSTALL //
+            </button>
+
+            <!-- Кнопка переключения звука -->
+            <button 
+              class="header__btn header__btn--sound ${isSoundEnabled ? 'header__btn--sound--active' : ''}" 
+              id="sound-toggle-btn" 
+              aria-label="Включить/выключить звук"
+            >
+              SOUND // ${isSoundEnabled ? 'ON' : 'OFF'}
             </button>
 
             <!-- Кнопка переключения темы -->
@@ -69,12 +79,20 @@ export const Header = {
     const searchTrigger = document.querySelector('#search-trigger');
     const cartTrigger = document.querySelector('#cart-trigger');
     const themeTrigger = document.querySelector('#theme-toggle-btn');
+    const soundTrigger = document.querySelector('#sound-toggle-btn');
     const logo = document.querySelector('#header-logo');
 
     if (themeTrigger) {
       themeTrigger.addEventListener('click', () => {
         console.log('🎨 [Header] Dispatching toggle-theme event');
         document.dispatchEvent(new CustomEvent('toggle-theme'));
+      });
+    }
+
+    if (soundTrigger) {
+      soundTrigger.addEventListener('click', () => {
+        console.log('🔊 [Header] Dispatching toggle-sound event');
+        document.dispatchEvent(new CustomEvent('toggle-sound'));
       });
     }
 
@@ -113,6 +131,22 @@ export const Header = {
       cartCountEl.classList.add('header__cart-count--active');
     } else {
       cartCountEl.classList.remove('header__cart-count--active');
+    }
+  },
+
+  /**
+   * Динамическое обновление текста и подсветки кнопки звука
+   * @param {boolean} isEnabled - активен ли звук
+   */
+  updateSoundBtn(isEnabled) {
+    const soundBtn = document.querySelector('#sound-toggle-btn');
+    if (!soundBtn) return;
+    
+    soundBtn.textContent = isEnabled ? 'SOUND // ON' : 'SOUND // OFF';
+    if (isEnabled) {
+      soundBtn.classList.add('header__btn--sound--active');
+    } else {
+      soundBtn.classList.remove('header__btn--sound--active');
     }
   }
 };

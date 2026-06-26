@@ -190,4 +190,32 @@
   box-shadow: var(--glow-blue);
 }
 
+/* Кнопка переключения звука */
+.header__btn--sound {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--color-text-secondary);
+  border-color: var(--border-color);
+  background: rgba(13, 15, 18, 0.6);
+  padding: 0 var(--space-xs);
+  width: auto;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+}
+
+.header__btn--sound:hover {
+  border-color: var(--color-accent-blue);
+  color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+}
+
+.header__btn--sound--active {
+  color: var(--color-accent-blue);
+  border-color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+}
+
+
 

@@ -1,6 +1,7 @@
 import '../styles/components/cart-drawer.css';
 import '../styles/components/cart-item.css';
 import { CartState } from '../modules/cart.js';
+import { AudioService } from '../modules/audio.js';
 
 /**
  * UI Компонент: CartDrawer (Выдвижная корзина)
@@ -126,6 +127,7 @@ export const CartDrawer = {
     if (drawer) {
       drawer.classList.add('cart-drawer--open');
       document.body.style.overflow = 'hidden';
+      AudioService.playOpen(); // Звук открытия корзины
     }
   },
 
@@ -137,6 +139,7 @@ export const CartDrawer = {
     if (drawer) {
       drawer.classList.remove('cart-drawer--open');
       document.body.style.overflow = '';
+      AudioService.playClick(); // Звук закрытия (щелчок)
     }
   },
 
