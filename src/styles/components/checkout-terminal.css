@@ -1,0 +1,200 @@
+/* ==========================================================================
+   Компонент: CheckoutTerminal (Оформление заказа в стиле военного терминала)
+   ========================================================================== */
+
+.checkout-terminal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1100; /* Выше чем корзина */
+  background: rgba(4, 5, 6, 0.92);
+  backdrop-filter: blur(15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal);
+  padding: var(--space-md);
+}
+
+.checkout-terminal-overlay--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.checkout-terminal {
+  background: #05070a;
+  border: 1px solid var(--color-accent-green, #00ff66);
+  box-shadow: 0 0 35px rgba(0, 255, 102, 0.15), inset 0 0 20px rgba(0, 255, 102, 0.05);
+  width: 100%;
+  max-width: 600px;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--color-accent-green, #00ff66);
+  text-shadow: 0 0 4px rgba(0, 255, 102, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Изменяем цвет под тему, если тема не "зеленая", терминал все равно остается аутентичным зеленым или синим */
+[data-theme="pink"] .checkout-terminal {
+  border-color: var(--color-accent-pink);
+  color: var(--color-accent-pink);
+  text-shadow: 0 0 4px rgba(255, 0, 127, 0.5);
+  box-shadow: 0 0 35px rgba(255, 0, 127, 0.15), inset 0 0 20px rgba(255, 0, 127, 0.05);
+}
+
+[data-theme="default"] .checkout-terminal,
+[data-theme="blue"] .checkout-terminal {
+  border-color: var(--color-accent-blue);
+  color: var(--color-accent-blue);
+  text-shadow: 0 0 4px rgba(0, 240, 255, 0.5);
+  box-shadow: 0 0 35px rgba(0, 240, 255, 0.15), inset 0 0 20px rgba(0, 240, 255, 0.05);
+}
+
+/* Шапка окна терминала */
+.checkout-terminal__header {
+  background: rgba(0, 0, 0, 0.8);
+  border-bottom: 1px solid currentColor;
+  padding: var(--space-xs) var(--space-sm);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+}
+
+.checkout-terminal__window-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.checkout-terminal__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+}
+
+.checkout-terminal__dot--fill {
+  background: currentColor;
+}
+
+/* Тело вывода логов */
+.checkout-terminal__body {
+  height: 380px;
+  padding: var(--space-md);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  scrollbar-width: thin;
+  scrollbar-color: currentColor transparent;
+}
+
+.checkout-terminal__body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.checkout-terminal__body::-webkit-scrollbar-thumb {
+  background-color: currentColor;
+}
+
+/* Строки вывода */
+.terminal-line {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.terminal-line--system {
+  opacity: 0.85;
+}
+
+.terminal-line--user {
+  font-weight: bold;
+}
+
+.terminal-line--error {
+  color: var(--color-accent-pink, #ff007f);
+  text-shadow: 0 0 4px rgba(255, 0, 127, 0.5);
+}
+
+/* Интерактивная строка ввода */
+.checkout-terminal__input-line {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.8rem;
+}
+
+.checkout-terminal__prompt {
+  font-family: inherit;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.checkout-terminal__input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  text-shadow: inherit;
+  flex: 1;
+  width: 100%;
+}
+
+/* CRT Мерцание экрана */
+.checkout-terminal::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2;
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+}
+
+/* Анимация курсора */
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 14px;
+  background: currentColor;
+  animation: cursor-blink 1s infinite steps(2, start);
+  vertical-align: middle;
+  margin-left: 2px;
+}
+
+@keyframes cursor-blink {
+  to { visibility: hidden; }
+}
+
+/* Сетка товаров в чеке */
+.terminal-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: var(--space-xs) 0;
+  border-top: 1px dashed currentColor;
+  border-bottom: 1px dashed currentColor;
+  padding: var(--space-xs) 0;
+  opacity: 0.9;
+}
+
+.terminal-grid-row {
+  display: flex;
+  justify-content: space-between;
+}

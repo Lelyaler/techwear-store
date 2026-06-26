@@ -2,6 +2,7 @@ import '../styles/components/cart-drawer.css';
 import '../styles/components/cart-item.css';
 import { CartState } from '../modules/cart.js';
 import { AudioService } from '../modules/audio.js';
+import { CheckoutTerminal } from './CheckoutTerminal.js';
 
 /**
  * UI Компонент: CartDrawer (Выдвижная корзина)
@@ -99,10 +100,8 @@ export const CartDrawer = {
     // Обработчик кнопки оформления заказа
     if (checkoutBtn) {
       checkoutBtn.addEventListener('click', () => {
-        const items = CartState.getItems();
-        console.log('🛍️ [Cart] Checkout requested for items:', items);
-        alert('ORDER DISPATCHED // Secure connection established.');
-        CartState.clearCart();
+        CheckoutTerminal.open();
+        document.dispatchEvent(new CustomEvent('checkout-opened'));
         this.close();
       });
     }

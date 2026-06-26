@@ -11,6 +11,8 @@ import { FilterService } from './modules/filter.js';
 import { AudioService } from './modules/audio.js';
 import './styles/components/fit-scanner.css';
 import { FitScanner } from './components/FitScanner.js';
+import './styles/components/checkout-terminal.css';
+import { CheckoutTerminal } from './components/CheckoutTerminal.js';
 
 // Импортируем изображения товаров (Vite ESM)
 import jacketImg from './assets/jacket.jpg';
@@ -164,6 +166,9 @@ const initializeApp = () => {
 
     <!-- Интерактивный сканер размеров -->
     ${FitScanner.render()}
+
+    <!-- Военный консольный терминал оформления заказа -->
+    ${CheckoutTerminal.render()}
   `;
 
   const gridContainer = document.querySelector('#product-grid-container');
@@ -224,6 +229,7 @@ const initializeApp = () => {
   Header.initListeners();
   CartDrawer.initListeners();
   FitScanner.initListeners();
+  CheckoutTerminal.initListeners();
 
   // Делаем первый рендер каталога
   renderCatalog();
