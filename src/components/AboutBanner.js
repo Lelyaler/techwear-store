@@ -12,9 +12,9 @@ export const AboutBanner = {
       <section class="hero-banner reveal">
         <div class="hero-banner__image-wrapper">
           <img class="hero-banner__image hero-banner__image--active" src="${femaleBannerImg}" alt="Techwear Tactical Gear" id="hero-banner-img-female" />
-          <img class="hero-banner__image" src="${maleBannerImg}" alt="Techwear Tactical Gear" id="hero-banner-img-male" />
-          <img class="hero-banner__image" src="${cyberBannerImg}" alt="Techwear Cybernetical Gear" id="hero-banner-img-cyber" />
-          <img class="hero-banner__image" src="${pilotBannerImg}" alt="Techwear Pilot Gear" id="hero-banner-img-pilot" />
+          <img class="hero-banner__image" data-src="${maleBannerImg}" alt="Techwear Tactical Gear" id="hero-banner-img-male" />
+          <img class="hero-banner__image" data-src="${cyberBannerImg}" alt="Techwear Cybernetical Gear" id="hero-banner-img-cyber" />
+          <img class="hero-banner__image" data-src="${pilotBannerImg}" alt="Techwear Pilot Gear" id="hero-banner-img-pilot" />
           <div class="hero-banner__overlay"></div>
         </div>
         
@@ -117,11 +117,35 @@ export const AboutBanner = {
     const models = ['female', 'male', 'cyber', 'pilot'];
     let currentIndex = 0;
 
+    // Отложенная загрузка остальных фонов после загрузки страницы (чтобы не блокировать LCP/FCP)
+    const loadSecondaryImages = () => {
+      const lazyImages = document.querySelectorAll('.hero-banner__image[data-src]');
+      lazyImages.forEach(img => {
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+      });
+    };
+
+    if (document.readyState === 'complete') {
+      setTimeout(loadSecondaryImages, 1500);
+    } else {
+      window.addEventListener('load', () => setTimeout(loadSecondaryImages, 1500), { once: true });
+    }
+
     if (window.techwearBannerInterval) {
       clearInterval(window.techwearBannerInterval);
     }
 
     window.techwearBannerInterval = setInterval(() => {
+      // Гарантируем загрузку следующей картинки перед её отображением
+      const nextModelIndex = (currentIndex + 1) % models.length;
+      const nextModel = models[nextModelIndex];
+      const nextImgEl = document.getElementById(`hero-banner-img-${nextModel}`);
+      if (nextImgEl && nextImgEl.dataset.src) {
+        nextImgEl.src = nextImgEl.dataset.src;
+        nextImgEl.removeAttribute('data-src');
+      }
+
       // Снимаем класс active со всех картинок
       models.forEach(model => {
         const el = document.getElementById(`hero-banner-img-${model}`);
@@ -129,7 +153,7 @@ export const AboutBanner = {
       });
 
       // Переходим к следующему индексу
-      currentIndex = (currentIndex + 1) % models.length;
+      currentIndex = nextModelIndex;
 
       // Навешиваем active на новое изображение
       const nextEl = document.getElementById(`hero-banner-img-${models[currentIndex]}`);
