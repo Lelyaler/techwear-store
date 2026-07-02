@@ -1,6 +1,7 @@
 import { CartState } from '../modules/cart.js';
 import { AudioService } from '../modules/audio.js';
 import { Toast } from './Toast.js';
+import { ProfileState } from '../modules/profile.js';
 
 // Импортируем изображения для конструктора
 import jacketImg from '../assets/jacket.jpg';
@@ -15,6 +16,7 @@ import vestImg from '../assets/vest.jpg';
 import slingImg from '../assets/sling.jpg';
 import exoGlovesImg from '../assets/exo-gloves.jpg';
 import bootsImg from '../assets/boots.jpg';
+import mannequinImg from '../assets/mbs_mannequin.jpg';
 
 // База данных совместимых модулей Modular Belt System
 const BUILDER_PRODUCTS = [
@@ -73,55 +75,89 @@ export const MbsBuilder = {
             <div class="mbs-blueprint">
               <div class="mbs-grid"></div>
               
-              <!-- Аватар чертежа с точками -->
-              <div class="mbs-avatar-wrapper">
-                <svg class="mbs-avatar-svg" viewBox="0 0 100 150">
-                  <!-- Контур головы -->
-                  <circle cx="50" cy="20" r="10"></circle>
-                  <!-- Шея -->
-                  <line x1="50" y1="30" x2="50" y2="35"></line>
-                  <!-- Плечи -->
-                  <line x1="30" y1="35" x2="70" y2="35"></line>
-                  <!-- Корпус -->
-                  <rect x="33" y="35" width="34" height="60"></rect>
-                  <!-- Руки -->
-                  <line x1="30" y1="35" x2="20" y2="90"></line>
-                  <line x1="70" y1="35" x2="80" y2="90"></line>
-                  <!-- Ноги -->
-                  <line x1="40" y1="95" x2="35" y2="140"></line>
-                  <line x1="60" y1="95" x2="65" y2="140"></line>
+              <!-- Интерактивная тактическая примерочная с манекеном и кружочками-указателями -->
+              <div class="mbs-mannequin-container">
+                <!-- Лазерная линия сканирования -->
+                <div class="mbs-scanner-line"></div>
+
+                <!-- HUD диагностика в углу -->
+                <div class="mbs-hud-diagnostics">
+                  <div class="mbs-hud-diagnostics__header">SYSTEM INTEGRITY SCAN //</div>
+                  <div class="mbs-hud-diagnostics__row" id="hud-diag-slot">SLOT: NONE</div>
+                  <div class="mbs-hud-diagnostics__row" id="hud-diag-item">ITEM: UNKNOWN</div>
+                  <div class="mbs-hud-diagnostics__row" id="hud-diag-weight">WEIGHT: -- KG</div>
+                </div>
+                
+                <!-- Фоновое изображение сгенерированного кибер-манекена -->
+                <img class="mbs-mannequin-image" src="${mannequinImg}" alt="MANNEQUIN SYSTEM PROTOCOL" />
+
+                <!-- SVG направляющих линий (ответвления) -->
+                <svg class="mbs-mannequin-svg" viewBox="0 0 100 150">
+                  <g stroke="var(--color-accent-blue)" stroke-width="0.8" stroke-dasharray="2,2" opacity="0.45">
+                    <!-- Head: Node(12, 22) -> Helmet(50, 24) -->
+                    <line x1="12" y1="22" x2="50" y2="24" id="line-head"></line>
+                    <!-- Back: Node(88, 37) -> Shoulder/Backpack(68, 45) -->
+                    <line x1="88" y1="37" x2="68" y2="45" id="line-back"></line>
+                    <!-- Chest: Node(12, 57) -> Armor(49, 48) -->
+                    <line x1="12" y1="57" x2="49" y2="48" id="line-chest"></line>
+                    <!-- Hands: Node(88, 75) -> Glove/Arm(68, 68) -->
+                    <line x1="88" y1="75" x2="68" y2="68" id="line-hands"></line>
+                    <!-- Body: Node(12, 93) -> Torso Shell(48, 75) -->
+                    <line x1="12" y1="93" x2="48" y2="75" id="line-body"></line>
+                    <!-- Feet: Node(88, 129) -> Boots(50, 132) -->
+                    <line x1="88" y1="129" x2="50" y2="132" id="line-feet"></line>
+                  </g>
                 </svg>
 
-                <!-- Точки привязки (Nodes) -->
+                <!-- Слоты в виде кружочков (Nodes) по бокам от манекена -->
                 <div class="mbs-node" id="node-head" data-slot="head">
-                  <div class="mbs-node__dot"></div>
-                  <div class="mbs-node__thumb"><img id="node-head-img" src="" alt="Head Slot" /></div>
+                  <div class="mbs-node__circle">
+                    <span class="mbs-node__placeholder">HD</span>
+                    <img id="node-head-img" src="" class="mbs-node__img" alt="Head" />
+                  </div>
+                  <span class="mbs-node__label">HEAD</span>
                 </div>
                 
                 <div class="mbs-node" id="node-body" data-slot="body">
-                  <div class="mbs-node__dot"></div>
-                  <div class="mbs-node__thumb"><img id="node-body-img" src="" alt="Body Slot" /></div>
+                  <div class="mbs-node__circle">
+                    <span class="mbs-node__placeholder">BD</span>
+                    <img id="node-body-img" src="" class="mbs-node__img" alt="Body" />
+                  </div>
+                  <span class="mbs-node__label">SHELL</span>
                 </div>
 
                 <div class="mbs-node" id="node-chest" data-slot="chest">
-                  <div class="mbs-node__dot"></div>
-                  <div class="mbs-node__thumb"><img id="node-chest-img" src="" alt="Chest Slot" /></div>
+                  <div class="mbs-node__circle">
+                    <span class="mbs-node__placeholder">CH</span>
+                    <img id="node-chest-img" src="" class="mbs-node__img" alt="Chest" />
+                  </div>
+                  <span class="mbs-node__label">VEST</span>
                 </div>
 
                 <div class="mbs-node" id="node-back" data-slot="back">
-                  <div class="mbs-node__dot"></div>
-                  <div class="mbs-node__thumb"><img id="node-back-img" src="" alt="Back Slot" /></div>
+                  <div class="mbs-node__circle">
+                    <span class="mbs-node__placeholder">BK</span>
+                    <img id="node-back-img" src="" class="mbs-node__img" alt="Back" />
+                  </div>
+                  <span class="mbs-node__label">PACK</span>
                 </div>
 
                 <div class="mbs-node" id="node-hands" data-slot="hands">
-                  <div class="mbs-node__dot"></div>
-                  <div class="mbs-node__thumb"><img id="node-hands-img" src="" alt="Hands Slot" /></div>
+                  <div class="mbs-node__circle">
+                    <span class="mbs-node__placeholder">HN</span>
+                    <img id="node-hands-img" src="" class="mbs-node__img" alt="Hands" />
+                  </div>
+                  <span class="mbs-node__label">HANDS</span>
                 </div>
 
                 <div class="mbs-node" id="node-feet" data-slot="feet">
-                  <div class="mbs-node__dot"></div>
-                  <div class="mbs-node__thumb"><img id="node-feet-img" src="" alt="Feet Slot" /></div>
+                  <div class="mbs-node__circle">
+                    <span class="mbs-node__placeholder">FT</span>
+                    <img id="node-feet-img" src="" class="mbs-node__img" alt="Feet" />
+                  </div>
+                  <span class="mbs-node__label">FEET</span>
                 </div>
+
               </div>
             </div>
 
@@ -207,6 +243,9 @@ export const MbsBuilder = {
             </div>
             
             <div class="mbs-actions">
+              <button class="mbs-btn mbs-btn--secondary js-interactive" id="mbs-share-btn" title="Share current loadout link">
+                SHARE CONFIG //
+              </button>
               <button class="mbs-btn mbs-btn--secondary js-interactive" id="mbs-reset-btn">
                 PURGE SYSTEM //
               </button>
@@ -232,9 +271,9 @@ export const MbsBuilder = {
       AudioService.playOpen();
     }
     
+    this.updateUI();
     // По дефолту активируем слот body
     this.selectSlot('body');
-    this.updateUI();
   },
 
   /**
@@ -271,6 +310,31 @@ export const MbsBuilder = {
         node.classList.remove('mbs-node--active');
       }
     });
+
+    // Сбрасываем и подсвечиваем направляющие линии (branches)
+    document.querySelectorAll('.mbs-mannequin-svg line').forEach(line => {
+      line.setAttribute('stroke', 'var(--color-accent-blue)');
+      line.setAttribute('stroke-width', '0.8');
+      line.setAttribute('opacity', '0.45');
+      line.setAttribute('stroke-dasharray', '2,2');
+    });
+    const activeLine = document.getElementById(`line-${slotName}`);
+    if (activeLine) {
+      activeLine.setAttribute('stroke', 'var(--color-accent-pink)');
+      activeLine.setAttribute('stroke-width', '1.5');
+      activeLine.setAttribute('opacity', '1');
+      activeLine.removeAttribute('stroke-dasharray');
+    }
+
+    // Обновляем HUD диагностику
+    const item = this.equippedItems[slotName];
+    const diagSlot = document.getElementById('hud-diag-slot');
+    const diagItem = document.getElementById('hud-diag-item');
+    const diagWeight = document.getElementById('hud-diag-weight');
+    
+    if (diagSlot) diagSlot.textContent = `SLOT: ${slotName.toUpperCase()}`;
+    if (diagItem) diagItem.textContent = `ITEM: ${item ? item.name.toUpperCase() : 'EMPTY'}`;
+    if (diagWeight) diagWeight.textContent = `WEIGHT: ${item ? item.weight.toFixed(1) + ' KG' : '0.0 KG'}`;
 
     // Обновляем панель выбора товара
     const titleEl = document.getElementById('mbs-selection-title');
@@ -358,6 +422,7 @@ export const MbsBuilder = {
       const badgeEl = document.getElementById(`slot-${slot}-badge`);
       const nodeEl = document.getElementById(`node-${slot}`);
       const imgEl = document.getElementById(`node-${slot}-img`);
+      const lineEl = document.getElementById(`line-${slot}`);
 
       if (item) {
         totalPrice += item.price;
@@ -372,6 +437,20 @@ export const MbsBuilder = {
 
         if (nodeEl) nodeEl.classList.add('mbs-node--equipped');
         if (imgEl) imgEl.src = item.image;
+        
+        if (lineEl) {
+          const colorMap = {
+            head: 'var(--color-accent-blue)',
+            body: 'var(--color-accent-blue)',
+            hands: 'var(--color-accent-blue)',
+            chest: 'var(--color-accent-pink)',
+            back: 'var(--color-accent-green)',
+            feet: 'var(--color-accent-green)'
+          };
+          lineEl.setAttribute('stroke', colorMap[slot]);
+          lineEl.setAttribute('opacity', '0.75');
+          lineEl.classList.add('line--flowing');
+        }
       } else {
         if (textEl) textEl.textContent = 'Empty slot';
         if (badgeEl) {
@@ -380,8 +459,23 @@ export const MbsBuilder = {
         }
 
         if (nodeEl) nodeEl.classList.remove('mbs-node--equipped');
+        if (lineEl) {
+          lineEl.setAttribute('stroke', 'var(--color-accent-blue)');
+          lineEl.setAttribute('opacity', '0.35');
+          lineEl.classList.remove('line--flowing');
+        }
       }
     });
+
+    // Обновляем текущую диагностику активного слота
+    const activeItem = this.equippedItems[this.activeSlot];
+    const diagSlot = document.getElementById('hud-diag-slot');
+    const diagItem = document.getElementById('hud-diag-item');
+    const diagWeight = document.getElementById('hud-diag-weight');
+    
+    if (diagSlot) diagSlot.textContent = `SLOT: ${this.activeSlot.toUpperCase()}`;
+    if (diagItem) diagItem.textContent = `ITEM: ${activeItem ? activeItem.name.toUpperCase() : 'EMPTY'}`;
+    if (diagWeight) diagWeight.textContent = `WEIGHT: ${activeItem ? activeItem.weight.toFixed(1) + ' KG' : '0.0 KG'}`;
 
     // Обновляем счетчики подвала
     const priceEl = document.getElementById('mbs-total-price');
@@ -435,7 +529,77 @@ export const MbsBuilder = {
         'MBS CONFIG SYNC //',
         'blue'
       );
+      ProfileState.addXP(50);
       this.close();
+    }
+  },
+
+  /**
+   * Сформировать ссылку на текущую экипировку и скопировать в буфер обмена
+   */
+  shareLoadout() {
+    const parts = [];
+    Object.keys(this.equippedItems).forEach(slot => {
+      const item = this.equippedItems[slot];
+      if (item) {
+        parts.push(`${slot}:${item.id}`);
+      }
+    });
+
+    if (parts.length === 0) {
+      AudioService.playError();
+      Toast.show('NO MODULES EQUIPPED TO SHARE //', 'MBS SYNC ERROR //', 'pink');
+      return;
+    }
+
+    const loadoutString = parts.join(',');
+    const url = new URL(window.location.href);
+    url.searchParams.set('loadout', loadoutString);
+
+    navigator.clipboard.writeText(url.toString())
+      .then(() => {
+        AudioService.playSuccess();
+        Toast.show('CONFIG COPIED TO CLIPBOARD //', 'MBS LINK LINKED //', 'green');
+      })
+      .catch(err => {
+        console.error('Failed to copy loadout url: ', err);
+        AudioService.playError();
+      });
+  },
+
+  /**
+   * Загрузить экипировку из параметров URL при старте приложения
+   */
+  loadFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const loadout = params.get('loadout');
+    if (!loadout) return;
+
+    const parts = loadout.split(',');
+    let loadedCount = 0;
+    parts.forEach(part => {
+      const [slot, id] = part.split(':');
+      if (slot && id && slot in this.equippedItems) {
+        const item = BUILDER_PRODUCTS.find(p => p.id === id);
+        if (item) {
+          this.equippedItems[slot] = item;
+          loadedCount++;
+        }
+      }
+    });
+
+    if (loadedCount > 0) {
+      this.updateUI();
+      // Запускаем открытие конструктора с небольшой задержкой, чтобы страница успела отрендериться
+      setTimeout(() => {
+        this.open();
+        Toast.show(`LOADED ${loadedCount} MODULES FROM LINK //`, 'MBS CONFIG SYNC //', 'blue');
+      }, 500);
+
+      // Очищаем параметры URL, чтобы при перезагрузке окно повторно не всплывало
+      const url = new URL(window.location.href);
+      url.searchParams.delete('loadout');
+      window.history.replaceState({}, document.title, url.toString());
     }
   },
 
@@ -445,6 +609,7 @@ export const MbsBuilder = {
   initListeners() {
     const overlay = document.getElementById('mbs-overlay');
     const closeBtn = document.getElementById('mbs-close-btn');
+    const shareBtn = document.getElementById('mbs-share-btn');
     const resetBtn = document.getElementById('mbs-reset-btn');
     const deployBtn = document.getElementById('mbs-deploy-btn');
 
@@ -456,6 +621,10 @@ export const MbsBuilder = {
 
     if (closeBtn) {
       closeBtn.addEventListener('click', () => this.close());
+    }
+
+    if (shareBtn) {
+      shareBtn.addEventListener('click', () => this.shareLoadout());
     }
 
     if (resetBtn) {

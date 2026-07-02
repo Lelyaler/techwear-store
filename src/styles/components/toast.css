@@ -1,62 +1,125 @@
+/* ==========================================================================
+   Компонент: Toast (Всплывающие уведомления системы - Высокий контраст)
+   ========================================================================== */
+
 .toast-container {
   position: fixed;
-  bottom: var(--space-md);
-  right: var(--space-md);
-  z-index: var(--z-toast);
+  top: 88px; /* Располагаем уведомления сверху под шапкой */
+  right: 24px;
+  bottom: auto; /* Отменяем позиционирование снизу */
+  z-index: 9999; /* Поверх чата (999) и быстрых настроек (998) */
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 12px;
   pointer-events: none; /* Пропускаем клики по пустому контейнеру */
   width: calc(100% - var(--space-lg));
-  max-width: 320px;
+  max-width: 220px;
 }
 
 .toast {
   pointer-events: auto;
-  background: var(--color-bg-panel);
-  border: var(--border-width) solid var(--color-accent-blue);
+  position: relative;
+  /* Глубокий темный фон для максимального контраста с элементами сайта */
+  background: linear-gradient(135deg, rgba(8, 10, 13, 0.98) 0%, rgba(16, 20, 26, 0.98) 100%);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-left: 4px solid var(--color-accent-blue);
-  box-shadow: var(--glow-blue);
-  color: var(--color-text-primary);
-  padding: var(--space-sm);
+  padding: 10px 14px;
   font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   display: flex;
   flex-direction: column;
-  gap: var(--space-xxs);
-  transform: translateY(20px);
+  gap: 4px;
+  transform: translateY(-20px) scale(0.95);
   opacity: 0;
-  transition: transform var(--transition-normal), opacity var(--transition-normal);
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1);
   border-radius: var(--border-radius-sm);
+  overflow: hidden;
 }
 
-/* Модификатор для уведомлений розового цвета (например, корзина) */
-.toast--pink {
-  border-color: var(--color-accent-pink);
-  border-left-color: var(--color-accent-pink);
-  box-shadow: var(--glow-pink);
+/* Декоративная тактильная сетка на бэкграунде */
+.toast::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(rgba(255, 255, 255, 0.01) 50%, rgba(0, 0, 0, 0.05) 50%);
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .toast--show {
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
   opacity: 1;
 }
+
+/* --- Модификаторы Цвета (Для четкой градации статусов) --- */
+
+/* 1. Синий тип (Служебная информация / Подключение) */
+.toast--blue {
+  border-color: rgba(0, 240, 255, 0.35);
+  border-left-color: var(--color-accent-blue);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 240, 255, 0.25);
+}
+.toast--blue .toast__header {
+  color: var(--color-accent-blue);
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+}
+
+/* 2. Розовый тип (Ошибки / Смена тем / Корзина) */
+.toast--pink {
+  border-color: rgba(255, 0, 85, 0.35);
+  border-left-color: var(--color-accent-pink);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 0, 85, 0.25);
+}
+.toast--pink .toast__header {
+  color: var(--color-accent-pink);
+  text-shadow: 0 0 8px rgba(255, 0, 85, 0.6);
+}
+
+/* 3. Зеленый тип (Успех операции / Взлом / Повышение уровня) */
+.toast--green {
+  border-color: rgba(0, 255, 102, 0.35);
+  border-left-color: var(--color-accent-green);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 255, 102, 0.25);
+}
+.toast--green .toast__header {
+  color: var(--color-accent-green);
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
+}
+
+/* --- Текстовые стили --- */
 
 .toast__header {
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-accent-blue);
-}
-
-.toast--pink .toast__header {
-  color: var(--color-accent-pink);
+  z-index: 2;
 }
 
 .toast__message {
-  color: var(--color-text-primary);
-  font-weight: 500;
+  color: #ffffff; /* Белый яркий цвет для полной читаемости */
+  font-weight: 600;
+  font-size: 0.7rem;
   letter-spacing: 0.02em;
+  line-height: 1.35;
+  z-index: 2;
+}
+
+/* Мобильная адаптивность */
+@media (max-width: 600px) {
+  .toast-container {
+    top: 80px; /* Под мобильной шапкой */
+    right: 16px;
+    left: 16px;
+    width: calc(100% - 32px);
+    max-width: none;
+  }
+
+  .toast {
+    padding: 12px 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  }
 }

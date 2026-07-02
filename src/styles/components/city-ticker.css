@@ -1,0 +1,82 @@
+/* ==========================================
+   Компонент: CityTicker (Бегущая строка чрезвычайных сводок)
+   ========================================== */
+
+.city-ticker {
+  width: 100%;
+  height: 32px;
+  background-color: rgba(255, 0, 85, 0.04);
+  border: var(--border-width) solid var(--color-accent-pink);
+  box-shadow: var(--glow-pink);
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-md);
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition-normal);
+}
+
+.city-ticker:hover {
+  background-color: rgba(255, 0, 85, 0.08);
+  box-shadow: 0 0 15px rgba(255, 0, 85, 0.25), var(--glow-pink);
+  transform: translateY(-1px);
+}
+
+.city-ticker__badge {
+  background-color: var(--color-accent-pink);
+  color: var(--color-bg-main);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  padding: 0 var(--space-sm);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+  box-shadow: 4px 0 10px rgba(255, 0, 85, 0.35);
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.city-ticker__body {
+  flex-grow: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.city-ticker__track {
+  display: flex;
+  white-space: nowrap;
+  animation: city-ticker-marquee 35s linear infinite;
+  padding-left: 20px;
+}
+
+.city-ticker__text {
+  font-family: monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--color-accent-pink);
+  text-shadow: var(--glow-pink);
+  letter-spacing: 0.05em;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.city-ticker:hover .city-ticker__track {
+  animation-play-state: paused; /* Пауза при наведении мыши для удобства чтения */
+}
+
+@keyframes city-ticker-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}

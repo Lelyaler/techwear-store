@@ -1,0 +1,464 @@
+/* ==========================================
+   Компонент: AboutBanner (Hero Banner & Features)
+   ========================================== */
+
+/* Геройский баннер */
+.hero-banner {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+  margin-top: var(--space-sm);
+  background-color: var(--color-bg-card);
+}
+
+.hero-banner__image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.hero-banner__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 80% center;
+  opacity: 0;
+  transform: scale(1.05) translateX(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-banner__image--active {
+  opacity: 0.95;
+  transform: scale(1) translateX(0);
+  z-index: 2;
+}
+
+/* Эффект отдаления/сдвига уходящего слайда */
+.hero-banner__image:not(.hero-banner__image--active) {
+  opacity: 0;
+  transform: scale(0.97) translateX(-30px);
+}
+
+.hero-banner:hover .hero-banner__image--active {
+  transform: scale(1.02) translateX(0);
+}
+
+.hero-banner__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(6, 7, 9, 0.88) 30%, rgba(6, 7, 9, 0.5) 65%, rgba(6, 7, 9, 0.0) 100%);
+  z-index: 3;
+}
+
+@media (max-width: 768px) {
+  .hero-banner__overlay {
+    background: linear-gradient(180deg, rgba(6, 7, 9, 0.95) 40%, rgba(6, 7, 9, 0.6) 100%);
+    z-index: 3;
+  }
+  .hero-banner {
+    min-height: 350px;
+  }
+}
+
+.hero-banner__content {
+  position: relative;
+  z-index: 10;
+  max-width: 650px;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+}
+
+@media (max-width: 768px) {
+  .hero-banner__content {
+    padding: var(--space-md);
+  }
+  .hero-banner__title {
+    font-size: 1.8rem !important;
+  }
+}
+
+.hero-banner__badge {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--color-accent-pink);
+  text-shadow: var(--glow-pink);
+  border: 1px solid var(--color-accent-pink);
+  padding: var(--space-xxs) var(--space-xs);
+  background: rgba(255, 0, 85, 0.05);
+  text-transform: uppercase;
+}
+
+.hero-banner__title {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: var(--color-text-primary);
+  line-height: 1.1;
+  text-transform: uppercase;
+  margin: 0;
+  position: relative;
+}
+
+.hero-banner__subtitle {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: var(--space-xxs) 0;
+}
+
+.hero-banner__actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.hero-banner__btn {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--color-bg-main);
+  background: var(--color-accent-blue);
+  border: 1px solid var(--color-accent-blue);
+  padding: 12px 24px;
+  cursor: pointer;
+  box-shadow: var(--glow-blue);
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+}
+
+.hero-banner__btn:hover {
+  background: transparent;
+  color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue), inset 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+.hero-banner__btn--outline {
+  background: transparent;
+  color: var(--color-text-primary);
+  border-color: var(--border-color);
+  box-shadow: none;
+}
+
+.hero-banner__btn--outline:hover {
+  border-color: var(--color-accent-blue);
+  background: rgba(0, 240, 255, 0.05);
+  box-shadow: var(--glow-blue);
+  color: var(--color-accent-blue);
+}
+
+/* Колонки особенностей бренда */
+.brand-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+@media (max-width: 768px) {
+  .brand-features {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+}
+
+.brand-feature {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--border-color);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  transition: all var(--transition-normal);
+}
+
+.brand-feature:hover {
+  border-color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue), inset 0 0 10px rgba(0, 240, 255, 0.05);
+  transform: translateY(-4px);
+}
+
+.brand-feature__icon-wrapper {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-main);
+  color: var(--color-text-primary);
+  transition: all var(--transition-fast);
+}
+
+.brand-feature:hover .brand-feature__icon-wrapper {
+  border-color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+  background-color: rgba(0, 240, 255, 0.05);
+  color: var(--color-accent-blue);
+}
+
+.brand-feature__icon {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.5;
+}
+
+.brand-feature__title {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--color-text-primary);
+}
+
+.brand-feature__desc {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* Модалка Манифеста */
+.manifesto-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(6, 7, 9, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: var(--z-drawer);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal);
+  padding: var(--space-sm);
+}
+
+.manifesto-overlay--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.manifesto-modal {
+  width: 100%;
+  max-width: 600px;
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+}
+
+.manifesto-header {
+  height: 45px;
+  background-color: var(--color-bg-main);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 var(--space-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-blue);
+}
+
+.manifesto-close {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--color-text-secondary);
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  padding: var(--space-xxs) var(--space-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.manifesto-close:hover {
+  color: var(--color-accent-pink);
+  border-color: var(--color-accent-pink);
+  box-shadow: var(--glow-pink);
+}
+
+.manifesto-body {
+  padding: var(--space-md);
+  overflow-y: auto;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+.manifesto-body h2 {
+  font-size: 1.1rem;
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-primary);
+}
+
+.manifesto-body p {
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-secondary);
+}
+
+.manifesto-body ul {
+  margin-bottom: var(--space-sm);
+  padding-left: var(--space-sm);
+}
+
+.manifesto-body li {
+  margin-bottom: var(--space-xxs);
+  color: var(--color-text-secondary);
+}
+
+/* Эффект Glitch для заголовка */
+.glitch {
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 var(--color-accent-pink);
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+  left: -2px;
+  text-shadow: -2px 0 var(--color-accent-blue), 0 2px var(--color-accent-pink);
+  clip: rect(85px, 450px, 140px, 0);
+  animation: glitch-anim2 5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% {
+    clip: rect(31px, 9999px, 94px, 0);
+  }
+  10% {
+    clip: rect(112px, 9999px, 76px, 0);
+  }
+  20% {
+    clip: rect(85px, 9999px, 5px, 0);
+  }
+  30% {
+    clip: rect(27px, 9999px, 115px, 0);
+  }
+  40% {
+    clip: rect(73px, 9999px, 29px, 0);
+  }
+  50% {
+    clip: rect(114px, 9999px, 98px, 0);
+  }
+  60% {
+    clip: rect(9px, 9999px, 43px, 0);
+  }
+  70% {
+    clip: rect(84px, 9999px, 119px, 0);
+  }
+  80% {
+    clip: rect(39px, 9999px, 64px, 0);
+  }
+  90% {
+    clip: rect(102px, 9999px, 53px, 0);
+  }
+  100% {
+    clip: rect(18px, 9999px, 87px, 0);
+  }
+}
+
+@keyframes glitch-anim2 {
+  0% {
+    clip: rect(76px, 9999px, 116px, 0);
+  }
+  11% {
+    clip: rect(5px, 9999px, 12px, 0);
+  }
+  22% {
+    clip: rect(113px, 9999px, 48px, 0);
+  }
+  33% {
+    clip: rect(87px, 9999px, 32px, 0);
+  }
+  44% {
+    clip: rect(12px, 9999px, 83px, 0);
+  }
+  55% {
+    clip: rect(64px, 9999px, 122px, 0);
+  }
+  66% {
+    clip: rect(95px, 9999px, 19px, 0);
+  }
+  77% {
+    clip: rect(33px, 9999px, 90px, 0);
+  }
+  88% {
+    clip: rect(119px, 9999px, 73px, 0);
+  }
+  99% {
+    clip: rect(44px, 9999px, 102px, 0);
+  }
+  100% {
+    clip: rect(9px, 9999px, 5px, 0);
+  }
+}
+
+/* Мобильная адаптивность для экранов шириной до 480px (микромобилки) */
+@media (max-width: 480px) {
+  .hero-banner__actions {
+    flex-direction: column;
+    width: 100%;
+    align-self: stretch;
+    gap: var(--space-xs);
+  }
+
+  .hero-banner__btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px 16px;
+  }
+
+  .hero-banner__title {
+    font-size: 1.45rem !important;
+  }
+
+  .hero-banner__subtitle {
+    font-size: 0.75rem;
+  }
+}
+
+

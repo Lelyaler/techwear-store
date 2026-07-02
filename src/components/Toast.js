@@ -32,7 +32,7 @@ export const Toast = {
     
     // Создаем элемент уведомления
     const toast = document.createElement('div');
-    toast.className = `toast ${type === 'pink' ? 'toast--pink' : ''}`;
+    toast.className = `toast toast--${type}`;
     
     toast.innerHTML = `
       <div class="toast__header">${title}</div>

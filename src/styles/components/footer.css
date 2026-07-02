@@ -1,0 +1,136 @@
+/* ==========================================
+   Компонент: Footer (Секция копирайта и телеметрии)
+   ========================================== */
+
+.footer {
+  width: 100%;
+  background-color: var(--color-bg-main);
+  border-top: var(--border-width) solid var(--border-color);
+  padding: var(--space-lg) 0;
+  margin-top: var(--space-xl);
+  transition: border-color var(--transition-normal);
+}
+
+.footer:hover {
+  border-top-color: var(--border-color-glow);
+}
+
+.footer__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-sm);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+@media (max-width: 768px) {
+  .footer__container {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+    text-align: left;
+  }
+}
+
+.footer__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.footer__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xxs);
+  user-select: none;
+}
+
+.footer__logo-brand {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  color: var(--color-text-primary);
+}
+
+.footer__logo-sub {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--color-accent-pink);
+  text-shadow: var(--glow-pink);
+}
+
+.footer__copyright {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+.footer__title {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-xxs);
+  margin-bottom: 4px;
+}
+
+/* Телеметрия */
+.footer__telemetry {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer__telemetry-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: monospace;
+  font-size: 0.7rem;
+}
+
+.footer__telemetry-label {
+  color: var(--color-text-muted);
+}
+
+.footer__telemetry-val {
+  color: var(--color-text-secondary);
+}
+
+.footer__telemetry-val--green {
+  color: var(--color-accent-green);
+  text-shadow: var(--glow-green);
+}
+
+/* Ссылки */
+.footer__links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer__link-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--color-text-secondary);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+}
+
+.footer__link-btn:hover {
+  color: var(--color-accent-blue);
+  text-shadow: var(--glow-blue);
+  transform: translateX(4px);
+}

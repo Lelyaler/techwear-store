@@ -1,4 +1,5 @@
 import { AudioService } from '../modules/audio.js';
+import { Toast } from './Toast.js';
 
 /**
  * UI Компонент: FitScanner (Интерактивный сканер размеров)
@@ -141,9 +142,10 @@ export const FitScanner = {
    * Определение категории товара по его ID
    */
   detectCategory(productId) {
-    if (productId === 'mod-sneakers-s7') return 'sneakers';
-    if (productId === 'mod-gloves-gl2') return 'gloves';
-    if (productId === 'mod-backpack-b5' || productId === 'mod-visor-g9') return 'onesize';
+    const id = productId.toLowerCase();
+    if (id.includes('sneakers') || id.includes('boots')) return 'sneakers';
+    if (id.includes('gloves')) return 'gloves';
+    if (id.includes('backpack') || id.includes('visor') || id.includes('mask') || id.includes('sling')) return 'onesize';
     return 'apparel';
   },
 

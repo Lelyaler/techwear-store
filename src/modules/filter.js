@@ -15,8 +15,13 @@ export const FilterService = {
     return products.filter(product => {
       // 1. Фильтрация по категории (модульности)
       let matchesCategory = true;
-      if (category !== 'ALL') {
-        const badgeText = (product.badge || '').toUpperCase();
+      const isBlackMarketItem = (product.badge || '').toUpperCase().includes('BLACK MARKET');
+
+      if (category === 'ALL') {
+        // По умолчанию скрываем товары Черного Рынка в общей категории
+        matchesCategory = !isBlackMarketItem;
+      } else {
+        const badgeText = (product.badge || '').toUpperCase().replace(' ', '');
         matchesCategory = badgeText.includes(category.toUpperCase());
       }
       

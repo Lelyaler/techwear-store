@@ -17,8 +17,9 @@ export const ProductCard = {
    * @param {string[]} [product.specs] - массив технических характеристик
    * @returns {string} HTML string
    */
-  render(product) {
+  render(product, index = 0) {
     const { id, name, price, image, badge, badgeClass, specs = [] } = product;
+    const delay = index * 0.04;
 
     // Генерируем HTML для характеристик
     const specsHtml = specs
@@ -38,7 +39,7 @@ export const ProductCard = {
       : '';
 
     return `
-      <article class="product-card" data-id="${id}">
+      <article class="product-card" data-id="${id}" style="animation-delay: ${delay}s">
         <!-- Обертка для изображения с бейджем -->
         <div class="product-card__image-wrapper">
           ${badgeHtml}

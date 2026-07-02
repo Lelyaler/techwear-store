@@ -1,17 +1,8 @@
 import '../styles/components/header.css';
+import { AudioService } from '../modules/audio.js';
 
-/**
- * UI Компонент: Header (Шапка сайта)
- * Отвечает за брендинг, смену темы, звуковое сопровождение, поиск и корзину.
- */
 export const Header = {
-  /**
-   * Генерация HTML-разметки компонента
-   * @param {number} cartCount - количество товаров в корзине
-   * @param {boolean} isSoundEnabled - активен ли звук в системе
-   * @returns {string} HTML string
-   */
-  render(cartCount = 0, isSoundEnabled = false) {
+  render(cartCount = 0, isSoundEnabled = false, isAmbientEnabled = false) {
     const isCartActive = cartCount > 0;
     
     return `
@@ -25,32 +16,29 @@ export const Header = {
           
           <!-- Действия в шапке -->
           <div class="header__actions">
-            <!-- Кнопка установки PWA -->
-            <button class="header__btn header__btn--install" id="pwa-install-btn" aria-label="Установить приложение">
-              INSTALL //
-            </button>
+            
+            <!-- Десктопная навигация (скрывается на мобилках) -->
+            <div class="header__desktop-nav">
+              <!-- Кнопка установки PWA -->
+              <button class="header__btn header__btn--install" id="pwa-install-btn" aria-label="Установить PWA">
+                INSTALL //
+              </button>
 
-            <!-- Кнопка переключения звука -->
-            <button 
-              class="header__btn header__btn--sound ${isSoundEnabled ? 'header__btn--sound--active' : ''}" 
-              id="sound-toggle-btn" 
-              aria-label="Включить/выключить звук"
-            >
-              SOUND // ${isSoundEnabled ? 'ON' : 'OFF'}
-            </button>
+              <!-- Кнопка MBS конструктора -->
+              <button class="header__btn header__btn--builder" id="builder-toggle-btn" aria-label="Открыть конструктор">
+                MBS BUILDER //
+              </button>
+              
+              <!-- Кнопка Личного Кабинета -->
+              <button class="header__btn header__btn--profile" id="profile-toggle-btn" aria-label="Открыть личный кабинет">
+                NEURAL ID //
+              </button>
+            </div>
 
-            <!-- Кнопка переключения темы -->
-            <button class="header__btn header__btn--theme" id="theme-toggle-btn" aria-label="Сменить тему">
-              THEME //
-            </button>
-
-            <!-- Кнопка MBS конструктора -->
-            <button class="header__btn header__btn--builder" id="builder-toggle-btn" aria-label="Открыть конструктор">
-              MBS BUILDER //
-            </button>
+            <!-- Общие кнопки для мобилок и ПК (Поиск, Корзина, Бургер-Меню) -->
             
             <!-- Кнопка поиска -->
-            <button class="header__btn header__btn--search" id="search-trigger" aria-label="Открыть поиск">
+            <button class="header__btn header__btn--search js-interactive" id="search-trigger" aria-label="Открыть поиск">
               <svg class="header__icon" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -58,8 +46,8 @@ export const Header = {
             </button>
             
             <!-- Иконка Корзины -->
-            <button class="header__cart" id="cart-trigger" aria-label="Открыть корзину">
-              <svg class="header__cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <button class="header__btn header__btn--cart js-interactive" id="cart-trigger" aria-label="Открыть корзину">
+              <svg class="header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                 <line x1="3" y1="6" x2="21" y2="6"></line>
                 <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -68,70 +56,194 @@ export const Header = {
                 ${cartCount}
               </span>
             </button>
+
+            <!-- Кнопка Мобильного Бургер-меню (скрыта на ПК) -->
+            <button class="header__btn header__btn--menu js-interactive" id="menu-toggle-btn" aria-label="Открыть меню">
+              <svg class="header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+
           </div>
         </div>
+
+        <!-- Оверлей Мобильного Меню (Drawer) -->
+        <div class="menu-overlay" id="menu-overlay">
+          <div class="menu-drawer">
+            <div class="menu-drawer__header">
+              <span>SYSTEM NAVIGATION // DIRECTORY</span>
+              <button class="menu-drawer__close js-interactive" id="menu-close-btn">X // CLOSE</button>
+            </div>
+            <div class="menu-drawer__body">
+              <ul class="menu-drawer__list">
+                <li>
+                  <button class="menu-drawer__item js-interactive" id="menu-item-profile">
+                    NEURAL ID // PROFILE
+                  </button>
+                </li>
+                <li>
+                  <button class="menu-drawer__item js-interactive" id="menu-item-builder">
+                    MBS BUILDER // CUSTOMIZER
+                  </button>
+                </li>
+
+                <li id="menu-item-install-wrapper" style="display: none;">
+                  <button class="menu-drawer__item js-interactive" id="menu-item-install">
+                    INSTALL APP // DOWNLOAD
+                  </button>
+                </li>
+              </ul>
+              <div class="menu-drawer__footer">
+                STATUS: ENCRYPTED SEC_LINK
+              </div>
+            </div>
+          </div>
+        </div>
+
       </header>
     `;
   },
 
-  /**
-   * Инициализация обработчиков событий
-   */
   initListeners() {
     const searchTrigger = document.querySelector('#search-trigger');
     const cartTrigger = document.querySelector('#cart-trigger');
-    const themeTrigger = document.querySelector('#theme-toggle-btn');
-    const soundTrigger = document.querySelector('#sound-toggle-btn');
-    const builderTrigger = document.querySelector('#builder-toggle-btn');
     const logo = document.querySelector('#header-logo');
 
+    // Десктопные кнопки
+    const themeTrigger = document.querySelector('#theme-toggle-btn');
+    const soundTrigger = document.querySelector('#sound-toggle-btn');
+    const ambientTrigger = document.querySelector('#ambient-toggle-btn');
+    const builderTrigger = document.querySelector('#builder-toggle-btn');
+    const profileTrigger = document.querySelector('#profile-toggle-btn');
+
+    // Бургер меню кнопки
+    const menuTrigger = document.querySelector('#menu-toggle-btn');
+    const menuOverlay = document.querySelector('#menu-overlay');
+    const menuCloseBtn = document.querySelector('#menu-close-btn');
+
+    const mProfileBtn = document.querySelector('#menu-item-profile');
+    const mBuilderBtn = document.querySelector('#menu-item-builder');
+    const mThemeBtn = document.querySelector('#menu-item-theme');
+    const mSoundBtn = document.querySelector('#menu-item-sound');
+    const mAmbientBtn = document.querySelector('#menu-item-ambient');
+    const mInstallBtn = document.querySelector('#menu-item-install');
+
+    // Функции закрытия/открытия меню
+    const openMenu = () => {
+      if (menuOverlay) {
+        menuOverlay.classList.add('menu-overlay--open');
+        document.body.style.overflow = 'hidden';
+        AudioService.playOpen();
+      }
+    };
+
+    const closeMenu = () => {
+      if (menuOverlay) {
+        menuOverlay.classList.remove('menu-overlay--open');
+        document.body.style.overflow = '';
+      }
+    };
+
+    if (menuTrigger) menuTrigger.addEventListener('click', openMenu);
+    if (menuCloseBtn) menuCloseBtn.addEventListener('click', closeMenu);
+    if (menuOverlay) {
+      menuOverlay.addEventListener('click', (e) => {
+        if (e.target === menuOverlay) closeMenu();
+      });
+    }
+
+    // Обработчики кликов мобильного меню
+    if (mProfileBtn) {
+      mProfileBtn.addEventListener('click', () => {
+        closeMenu();
+        document.dispatchEvent(new CustomEvent('toggle-profile'));
+      });
+    }
+
+    if (mBuilderBtn) {
+      mBuilderBtn.addEventListener('click', () => {
+        closeMenu();
+        document.dispatchEvent(new CustomEvent('toggle-builder'));
+      });
+    }
+
+    if (mThemeBtn) {
+      mThemeBtn.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('toggle-theme'));
+      });
+    }
+
+    if (mSoundBtn) {
+      mSoundBtn.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('toggle-sound'));
+      });
+    }
+
+    if (mAmbientBtn) {
+      mAmbientBtn.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('toggle-ambient'));
+      });
+    }
+
+    if (mInstallBtn) {
+      mInstallBtn.addEventListener('click', () => {
+        closeMenu();
+        document.dispatchEvent(new CustomEvent('install-app'));
+      });
+    }
+
+    // Десктопные обработчики кликов
     if (themeTrigger) {
       themeTrigger.addEventListener('click', () => {
-        console.log('🎨 [Header] Dispatching toggle-theme event');
         document.dispatchEvent(new CustomEvent('toggle-theme'));
       });
     }
 
     if (builderTrigger) {
       builderTrigger.addEventListener('click', () => {
-        console.log('🛠️ [Header] Dispatching toggle-builder event');
         document.dispatchEvent(new CustomEvent('toggle-builder'));
+      });
+    }
+
+    if (profileTrigger) {
+      profileTrigger.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('toggle-profile'));
       });
     }
 
     if (soundTrigger) {
       soundTrigger.addEventListener('click', () => {
-        console.log('🔊 [Header] Dispatching toggle-sound event');
         document.dispatchEvent(new CustomEvent('toggle-sound'));
+      });
+    }
+
+    if (ambientTrigger) {
+      ambientTrigger.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('toggle-ambient'));
       });
     }
 
     if (searchTrigger) {
       searchTrigger.addEventListener('click', () => {
-        console.log('🔍 [Header] Dispatching toggle-search event');
         document.dispatchEvent(new CustomEvent('toggle-search'));
       });
     }
 
     if (cartTrigger) {
       cartTrigger.addEventListener('click', () => {
-        console.log('🛒 [Header] Dispatching toggle-cart event');
         document.dispatchEvent(new CustomEvent('toggle-cart'));
       });
     }
 
     if (logo) {
       logo.addEventListener('click', () => {
-        console.log('🏠 [Header] Dispatching navigate-home event');
         document.dispatchEvent(new CustomEvent('navigate-home'));
       });
     }
   },
 
-  /**
-   * Точечное обновление счетчика корзины без перерисовки всей шапки
-   * @param {number} count - новое количество товаров
-   */
   updateCartCount(count) {
     const cartCountEl = document.querySelector('#header-cart-count');
     if (!cartCountEl) return;
@@ -144,19 +256,33 @@ export const Header = {
     }
   },
 
-  /**
-   * Динамическое обновление текста и подсветки кнопки звука
-   * @param {boolean} isEnabled - активен ли звук
-   */
   updateSoundBtn(isEnabled) {
-    const soundBtn = document.querySelector('#sound-toggle-btn');
-    if (!soundBtn) return;
-    
-    soundBtn.textContent = isEnabled ? 'SOUND // ON' : 'SOUND // OFF';
-    if (isEnabled) {
-      soundBtn.classList.add('header__btn--sound--active');
-    } else {
-      soundBtn.classList.remove('header__btn--sound--active');
-    }
+    const soundBtns = document.querySelectorAll('#sound-toggle-btn, #menu-item-sound');
+    soundBtns.forEach(btn => {
+      if (btn.id === 'sound-toggle-btn') {
+        btn.textContent = isEnabled ? 'SOUND // ON' : 'SOUND // OFF';
+        if (isEnabled) btn.classList.add('header__btn--sound--active');
+        else btn.classList.remove('header__btn--sound--active');
+      } else {
+        btn.textContent = isEnabled ? 'SOUND EFFECTS // ON' : 'SOUND EFFECTS // OFF';
+        if (isEnabled) btn.classList.add('menu-drawer__item--active');
+        else btn.classList.remove('menu-drawer__item--active');
+      }
+    });
+  },
+
+  updateAmbientBtn(isActive) {
+    const ambientBtns = document.querySelectorAll('#ambient-toggle-btn, #menu-item-ambient');
+    ambientBtns.forEach(btn => {
+      if (btn.id === 'ambient-toggle-btn') {
+        btn.textContent = isActive ? 'SYS_HUM // ON' : 'SYS_HUM // OFF';
+        if (isActive) btn.classList.add('header__btn--ambient--active');
+        else btn.classList.remove('header__btn--ambient--active');
+      } else {
+        btn.textContent = isActive ? 'SYSTEM HUM (AMBIENT) // ON' : 'SYSTEM HUM (AMBIENT) // OFF';
+        if (isActive) btn.classList.add('menu-drawer__item--active');
+        else btn.classList.remove('menu-drawer__item--active');
+      }
+    });
   }
 };

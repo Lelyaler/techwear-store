@@ -15,6 +15,14 @@ import './styles/components/checkout-terminal.css';
 import { CheckoutTerminal } from './components/CheckoutTerminal.js';
 import './styles/components/mbs-builder.css';
 import { MbsBuilder } from './components/MbsBuilder.js';
+import { ProfileState } from './modules/profile.js';
+import { CyberProfile } from './components/CyberProfile.js';
+import { AboutBanner } from './components/AboutBanner.js';
+import { InfoSections } from './components/InfoSections.js';
+import { Footer } from './components/Footer.js';
+import { CityTicker } from './components/CityTicker.js';
+import { NeonChat } from './components/NeonChat.js';
+import './styles/components/settings-dock.css';
 
 // Импортируем изображения товаров (Vite ESM)
 import jacketImg from './assets/jacket.jpg';
@@ -29,6 +37,9 @@ import vestImg from './assets/vest.jpg';
 import slingImg from './assets/sling.jpg';
 import exoGlovesImg from './assets/exo-gloves.jpg';
 import bootsImg from './assets/boots.jpg';
+import shadowVisorImg from './assets/shadow-visor.jpg';
+import legExoImg from './assets/leg-exo.jpg';
+import stealthCloakImg from './assets/stealth-cloak.jpg';
 
 // Расширенная база данных товаров магазина Techwear
 const PRODUCTS = [
@@ -139,6 +150,87 @@ const PRODUCTS = [
     badge: 'Cargo Module',
     badgeClass: 'green',
     specs: ['Steel toe armor', 'Exo-cushion sole', 'Auto-lacing locks']
+  },
+  {
+    id: 'mod-jacket-j4',
+    name: 'J-4 Storm Shell Windbreaker',
+    price: 240,
+    image: jacketImg,
+    badge: 'Shell Module',
+    badgeClass: 'blue',
+    specs: ['Lightweight', 'Wind-Resistant', 'Packable']
+  },
+  {
+    id: 'mod-mask-m2',
+    name: 'M-2 Filtration Shield',
+    price: 110,
+    image: maskImg,
+    badge: 'Core Module',
+    badgeClass: 'pink',
+    specs: ['Level 2 HEPA', 'Breathable Mesh', 'Adjustable Fit']
+  },
+  {
+    id: 'mod-backpack-b7',
+    name: 'B-7 Cargo Rucksack',
+    price: 215,
+    image: backpackImg,
+    badge: 'Cargo Module',
+    badgeClass: 'green',
+    specs: ['35L Volume', 'Laptop Pocket', 'Waterproof Zips']
+  },
+  {
+    id: 'mod-rig-c4',
+    name: 'C-4 Comm-Link Chest Plate',
+    price: 155,
+    image: chestRigImg,
+    badge: 'Core Module',
+    badgeClass: 'pink',
+    specs: ['Comms-Integrated', 'Laser-Cut Grid', 'FIDLOCK Buckles']
+  },
+  {
+    id: 'mod-sneakers-s8',
+    name: 'S-8 Street Ranger Shoes',
+    price: 235,
+    image: sneakersImg,
+    badge: 'Cargo Module',
+    badgeClass: 'green',
+    specs: ['Exo-Grip Outsole', 'Water-Resistant Upper', 'Quick-Lacing']
+  },
+  {
+    id: 'mod-trench-x3',
+    name: 'X-3 Cyberpunk Overcoat',
+    price: 325,
+    image: trenchImg,
+    badge: 'Shell Module',
+    badgeClass: 'blue',
+    specs: ['Gore-Tex Shell', 'Reinforced Elbows', 'FIDLOCK Collar']
+  },
+  {
+    id: 'mod-visor-shadow',
+    name: 'M-9 Shadow-Link HUD Visor',
+    price: 450,
+    image: shadowVisorImg,
+    badge: 'Black Market',
+    badgeClass: 'pink',
+    specs: ['Military HUD', 'Synaptic Sync', 'Target Tracker']
+  },
+  {
+    id: 'mod-leg-exo',
+    name: 'EXO-7 Cybernetic Leg Augment',
+    price: 750,
+    image: legExoImg,
+    badge: 'Black Market',
+    badgeClass: 'pink',
+    specs: ['Exo-steel frame', 'Sprint booster', 'Shock dampers']
+  },
+  {
+    id: 'mod-cloak-stealth',
+    name: 'N-3 Nano-Tech Stealth Cloak',
+    price: 600,
+    image: stealthCloakImg,
+    badge: 'Black Market',
+    badgeClass: 'pink',
+    specs: ['Thermal invisibility', 'Active camouflage', 'Silent movement']
   }
 ];
 
@@ -155,9 +247,47 @@ const debounce = (fn, delay) => {
 
 // Точка входа в систему Techwear & Modular Gear
 const initializeApp = () => {
+  // Инициализация дефолтных настроек в LocalStorage для предотвращения кэш-багов
+  if (localStorage.getItem('techwear_theme') === null || localStorage.getItem('techwear_theme') === 'stealth') {
+    localStorage.setItem('techwear_theme', 'default');
+  }
+  if (localStorage.getItem('techwear_sound') === null) {
+    localStorage.setItem('techwear_sound', 'true');
+  }
+  if (localStorage.getItem('techwear_ambient') === null) {
+    localStorage.setItem('techwear_ambient', 'true');
+  }
+
   const appElement = document.querySelector('#app');
   
   if (!appElement) return;
+
+  const renderBlackMarketTabButton = () => {
+    const level = ProfileState.getLevel();
+    if (level >= 2) {
+      return `<button class="catalog-filter__btn catalog-filter__btn--blackmarket" data-category="BLACKMARKET" id="blackmarket-filter-btn">⚡ Black Market //</button>`;
+    } else {
+      return `<button class="catalog-filter__btn catalog-filter__btn--locked" id="blackmarket-filter-btn" title="Reach Neural Level 2 to unlock">🔒 Locked //</button>`;
+    }
+  };
+
+  const updateBlackMarketTabButton = () => {
+    const btn = document.querySelector('#blackmarket-filter-btn');
+    if (!btn) return;
+
+    const level = ProfileState.getLevel();
+    if (level >= 2) {
+      btn.className = 'catalog-filter__btn catalog-filter__btn--blackmarket';
+      btn.dataset.category = 'BLACKMARKET';
+      btn.textContent = '⚡ Black Market //';
+      btn.removeAttribute('title');
+    } else {
+      btn.className = 'catalog-filter__btn catalog-filter__btn--locked';
+      btn.dataset.category = '';
+      btn.textContent = '🔒 Locked //';
+      btn.setAttribute('title', 'Reach Neural Level 2 to unlock');
+    }
+  };
 
   appElement.innerHTML = `
     <!-- Эффект CRT-сканирования -->
@@ -165,32 +295,18 @@ const initializeApp = () => {
     
     <div class="app">
       <!-- Шапка -->
-      ${Header.render(0, AudioService.isEnabled())}
+      ${Header.render(0, AudioService.isEnabled(), AudioService.isAmbientActive())}
       
       <!-- Основной контент -->
       <main class="main">
-        <!-- Блок интро каталога -->
-        <section style="margin-bottom: var(--space-md); padding-top: var(--space-md);">
-          <h2 style="
-            font-size: 1.5rem; 
-            letter-spacing: 0.12em; 
-            margin-bottom: var(--space-xs); 
-            color: var(--color-text-primary);
-          ">
-            TACTICAL // GEAR
-          </h2>
-          <p style="
-            color: var(--color-text-secondary); 
-            max-width: 600px; 
-            font-size: 0.85rem; 
-            line-height: 1.6;
-          ">
-            Модульная городская экипировка. Каждый элемент спроектирован с учетом максимальной утилитарности и совместимости по стандартам Modular Belt System.
-          </p>
-        </section>
+        <!-- Бегущая строка чрезвычайных сводок Сити -->
+        ${CityTicker.render()}
+
+        <!-- Герой-баннер и интро о бренде -->
+        ${AboutBanner.render()}
 
         <!-- Контрольная панель каталога (Поиск и Табы) -->
-        <div class="catalog-controls">
+        <div class="catalog-controls reveal" id="catalog-controls">
           <!-- Поисковое поле -->
           <div class="catalog-search">
             <input 
@@ -213,14 +329,27 @@ const initializeApp = () => {
             <button class="catalog-filter__btn" data-category="SHELL">Shell</button>
             <button class="catalog-filter__btn" data-category="CORE">Core</button>
             <button class="catalog-filter__btn" data-category="CARGO">Cargo</button>
+            ${renderBlackMarketTabButton()}
           </div>
         </div>
 
         <!-- Сетка каталога (динамический рендеринг) -->
-        <section class="product-grid" id="product-grid-container">
+        <section class="product-grid reveal" id="product-grid-container">
           <!-- Заполняется динамически -->
         </section>
+
+        <!-- Пагинация каталога -->
+        <div class="catalog-pagination reveal" id="catalog-pagination-container"></div>
+
+        <!-- Отзывы и FAQ -->
+        ${InfoSections.render()}
+
+        <!-- Блок с описанием ключевых особенностей (MBS Modular System) -->
+        ${AboutBanner.renderFeatures()}
       </main>
+
+      <!-- Футер сайта -->
+      ${Footer.render()}
 
       <!-- Выдвижная корзина (Cart Drawer) -->
       ${CartDrawer.render()}
@@ -234,14 +363,85 @@ const initializeApp = () => {
 
     <!-- Конструктор модулей Modular Belt System -->
     ${MbsBuilder.render()}
+
+    <!-- Личный кабинет пользователя и терминал взлома -->
+    ${CyberProfile.render()}
+
+    <!-- ИИ Чат-Ассистент N.E.O.N. Cortex -->
+    ${NeonChat.render()}
+
+    <!-- Панель быстрых настроек системы -->
+    <div class="cyber-settings-dock" id="cyber-quick-settings">
+      <div class="cyber-settings-title">SYS // QUICK SETTINGS</div>
+      
+      <!-- Кнопка-триггер для мобильных устройств -->
+      <button class="cyber-settings-toggle-btn js-interactive" id="settings-toggle-trigger" title="Toggle Quick Settings">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+
+      <div class="cyber-settings-buttons">
+        <button class="cyber-settings-btn cyber-settings-btn--theme js-interactive" id="quick-theme-btn" title="Cycle System Theme">
+          🎨 THEME
+        </button>
+        <button class="cyber-settings-btn js-interactive" id="quick-sound-btn" title="Toggle Sound FX">
+          🔊 SOUND
+        </button>
+        <button class="cyber-settings-btn js-interactive" id="quick-ambient-btn" title="Toggle Ambient Hum">
+          🌐 HUM
+        </button>
+      </div>
+    </div>
   `;
+
+  // Инициализируем обработчики событий для ИИ Чата
+  NeonChat.initListeners();
 
   const gridContainer = document.querySelector('#product-grid-container');
   const searchInput = document.querySelector('#catalog-search-input');
   const filterContainer = document.querySelector('#catalog-filter-container');
+  const paginationContainer = document.querySelector('#catalog-pagination-container');
 
   let activeCategory = 'ALL';
   let searchQuery = '';
+  let currentPage = 1;
+  const itemsPerPage = 6;
+
+  /**
+   * Функция отрисовки кнопок переключения страниц (Пагинации)
+   */
+  const renderPagination = (totalPages) => {
+    if (!paginationContainer) return;
+
+    if (totalPages <= 1) {
+      paginationContainer.innerHTML = '';
+      return;
+    }
+
+    let html = `
+      <button class="pagination__btn js-pagination-prev" ${currentPage === 1 ? 'disabled' : ''} title="Previous Page">
+        &lt;
+      </button>
+    `;
+
+    for (let i = 1; i <= totalPages; i++) {
+      html += `
+        <button class="pagination__btn ${i === currentPage ? 'pagination__btn--active' : ''} js-pagination-page" data-page="${i}">
+          ${i}
+        </button>
+      `;
+    }
+
+    html += `
+      <button class="pagination__btn js-pagination-next" ${currentPage === totalPages ? 'disabled' : ''} title="Next Page">
+        &gt;
+      </button>
+    `;
+
+    paginationContainer.innerHTML = html;
+  };
 
   /**
    * Функция отрисовки каталога на основе текущих фильтров
@@ -280,14 +480,27 @@ const initializeApp = () => {
           </span>
         </div>
       `;
+      if (paginationContainer) paginationContainer.innerHTML = '';
       AudioService.playError(); // Звуковой сигнал об ошибке поиска
       return;
     }
 
-    // Рендерим отфильтрованный список карточек
-    gridContainer.innerHTML = filteredProducts
-      .map(product => ProductCard.render(product))
+    // Рассчитываем параметры пагинации
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+    if (currentPage > totalPages) {
+      currentPage = totalPages || 1;
+    }
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
+
+    // Рендерим отфильтрованный список карточек (только 6 штук на страницу)
+    gridContainer.innerHTML = paginatedProducts
+      .map((product, index) => ProductCard.render(product, index))
       .join('');
+
+    // Отрисовываем кнопки пагинации
+    renderPagination(totalPages);
   };
 
   // Инициализируем слушатели событий UI-компонентов
@@ -296,6 +509,150 @@ const initializeApp = () => {
   FitScanner.initListeners();
   CheckoutTerminal.initListeners();
   MbsBuilder.initListeners();
+  CyberProfile.initListeners();
+  AboutBanner.initListeners();
+  InfoSections.initListeners();
+  Footer.initListeners();
+  CityTicker.initListeners();
+
+  // Настройка скролл-анимаций (Intersection Observer)
+  const setupScrollAnimations = () => {
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal--active');
+        } else {
+          entry.target.classList.remove('reveal--active');
+        }
+      });
+    }, {
+      threshold: 0.05,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    reveals.forEach(el => observer.observe(el));
+  };
+  setupScrollAnimations();
+
+  // Настройка интерактивного 3D Tilt эффекта на карточках товаров с бликом
+  const setup3DTiltEffects = () => {
+    if (!gridContainer) return;
+
+    gridContainer.addEventListener('mousemove', (e) => {
+      const card = e.target.closest('.product-card');
+      if (!card) return;
+
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      // Максимальный угол наклона 7 градусов
+      const rotateX = ((centerY - y) / centerY) * 7;
+      const rotateY = ((x - centerX) / centerX) * 7;
+
+      card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(1)}deg) rotateY(${rotateY.toFixed(1)}deg) translateY(-6px)`;
+      card.style.transition = 'transform 0.05s linear';
+
+      // Передаем координаты для CSS-блика
+      card.style.setProperty('--mouse-x', `${((x / rect.width) * 100).toFixed(0)}%`);
+      card.style.setProperty('--mouse-y', `${((y / rect.height) * 100).toFixed(0)}%`);
+    });
+
+    gridContainer.addEventListener('mouseout', (e) => {
+      const card = e.target.closest('.product-card');
+      if (!card) return;
+
+      const related = e.relatedTarget;
+      if (related && card.contains(related)) return;
+
+      card.style.transform = '';
+      card.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    });
+  };
+  setup3DTiltEffects();
+
+  // Функция обновления состояния кнопок быстрого доступа (Quick Settings)
+  const updateQuickSettingsUI = () => {
+    const soundBtn = document.querySelector('#quick-sound-btn');
+    const ambientBtn = document.querySelector('#quick-ambient-btn');
+    const themeBtn = document.querySelector('#quick-theme-btn');
+    
+    if (soundBtn) {
+      const isSoundEnabled = AudioService.isEnabled();
+      if (isSoundEnabled) {
+        soundBtn.classList.add('cyber-settings-btn--active');
+        soundBtn.innerHTML = '🔊 SOUND // ON';
+      } else {
+        soundBtn.classList.remove('cyber-settings-btn--active');
+        soundBtn.innerHTML = '🔇 SOUND // OFF';
+      }
+    }
+    
+    if (ambientBtn) {
+      const isAmbientEnabled = localStorage.getItem('techwear_ambient') !== 'false';
+      if (isAmbientEnabled) {
+        ambientBtn.classList.add('cyber-settings-btn--active');
+        ambientBtn.innerHTML = '🌐 HUM // ON';
+      } else {
+        ambientBtn.classList.remove('cyber-settings-btn--active');
+        ambientBtn.innerHTML = '💤 HUM // OFF';
+      }
+    }
+
+    if (themeBtn) {
+      const theme = localStorage.getItem('techwear_theme') || 'default';
+      themeBtn.innerHTML = `🎨 THEME: ${theme.toUpperCase()}`;
+    }
+  };
+
+  // Слушатели кликов по кнопкам быстрой настройки
+  const quickThemeBtn = document.querySelector('#quick-theme-btn');
+  const quickSoundBtn = document.querySelector('#quick-sound-btn');
+  const quickAmbientBtn = document.querySelector('#quick-ambient-btn');
+  
+  if (quickThemeBtn) {
+    quickThemeBtn.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('toggle-theme'));
+    });
+  }
+  if (quickSoundBtn) {
+    quickSoundBtn.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('toggle-sound'));
+    });
+  }
+  if (quickAmbientBtn) {
+    quickAmbientBtn.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('toggle-ambient'));
+    });
+  }
+
+  // Настройка мобильного переключателя быстрых настроек
+  const settingsToggleTrigger = document.querySelector('#settings-toggle-trigger');
+  const settingsDock = document.querySelector('#cyber-quick-settings');
+
+  if (settingsToggleTrigger && settingsDock) {
+    settingsToggleTrigger.addEventListener('click', () => {
+      settingsDock.classList.toggle('cyber-settings-dock--open');
+      settingsToggleTrigger.classList.toggle('cyber-settings-toggle-btn--active');
+    });
+
+    // Автоматическое закрытие панели при клике в пустом месте на мобильных экранах
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 600) {
+        if (!settingsDock.contains(e.target)) {
+          settingsDock.classList.remove('cyber-settings-dock--open');
+          settingsToggleTrigger.classList.remove('cyber-settings-toggle-btn--active');
+        }
+      }
+    });
+  }
+
+  // Обновляем UI быстрой настройки при инициализации
+  updateQuickSettingsUI();
 
   // Делаем первый рендер каталога
   renderCatalog();
@@ -306,6 +663,17 @@ const initializeApp = () => {
       const clickedBtn = event.target.closest('.catalog-filter__btn');
       if (!clickedBtn) return;
 
+      // Если кликнули на заблокированный таб Черного Рынка
+      if (clickedBtn.classList.contains('catalog-filter__btn--locked')) {
+        AudioService.playError();
+        Toast.show(
+          'ACCESS DENIED // NEURAL LEVEL 2 REQUIRED //',
+          'LINK OFFLINE //',
+          'pink'
+        );
+        return;
+      }
+
       // Переключаем класс активности
       filterContainer.querySelectorAll('.catalog-filter__btn').forEach(btn => {
         btn.classList.remove('catalog-filter__btn--active');
@@ -313,6 +681,7 @@ const initializeApp = () => {
       clickedBtn.classList.add('catalog-filter__btn--active');
 
       activeCategory = clickedBtn.dataset.category;
+      currentPage = 1; // Сброс страницы на 1 при смене категории
       renderCatalog();
     });
   }
@@ -321,8 +690,47 @@ const initializeApp = () => {
   if (searchInput) {
     searchInput.addEventListener('input', debounce((event) => {
       searchQuery = event.target.value;
+      currentPage = 1; // Сброс страницы на 1 при вводе в поиск
       renderCatalog();
     }, 250));
+  }
+
+  // Обработчик кликов по кнопкам пагинации страниц
+  if (paginationContainer) {
+    paginationContainer.addEventListener('click', (e) => {
+      const prevBtn = e.target.closest('.js-pagination-prev');
+      const nextBtn = e.target.closest('.js-pagination-next');
+      const pageBtn = e.target.closest('.js-pagination-page');
+      
+      const totalFiltered = FilterService.filter(PRODUCTS, activeCategory, searchQuery).length;
+      const totalPages = Math.ceil(totalFiltered / itemsPerPage);
+
+      let changed = false;
+
+      if (prevBtn && currentPage > 1) {
+        currentPage--;
+        changed = true;
+      } else if (nextBtn && currentPage < totalPages) {
+        currentPage++;
+        changed = true;
+      } else if (pageBtn) {
+        const pageNum = parseInt(pageBtn.dataset.page, 10);
+        if (pageNum && pageNum !== currentPage) {
+          currentPage = pageNum;
+          changed = true;
+        }
+      }
+
+      if (changed) {
+        AudioService.playClick();
+        renderCatalog();
+        // Скроллим к шапке каталога
+        const catalogControls = document.getElementById('catalog-controls');
+        if (catalogControls) {
+          catalogControls.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
   }
 
   // Общий обработчик событий клика на корневом уровне (Делегирование)
@@ -370,8 +778,39 @@ const initializeApp = () => {
     Header.updateCartCount(count);
   });
 
-  // Реактивная подписка на обновление профиля размеров
+  // Реактивная подписка на обновление профиля размеров (начисляем 25 XP)
   document.addEventListener('fit-profile-updated', () => {
+    renderCatalog();
+    ProfileState.addXP(25);
+  });
+
+  // Реактивная подписка на обновление профиля
+  document.addEventListener('profile-updated', () => {
+    updateBlackMarketTabButton();
+  });
+
+  // Реактивная подписка на повышение уровня (геймификация)
+  document.addEventListener('level-up', (event) => {
+    const { level } = event.detail;
+    AudioService.playSuccess();
+    Toast.show(
+      `SYSTEM RANK UPDATED: LEVEL ${level} //`,
+      'LEVEL UP //',
+      'pink'
+    );
+
+    if (level === 2) {
+      setTimeout(() => {
+        Toast.show(
+          'BLACK MARKET COMM-LINK ESTABLISHED // CATALOG UNLOCKED //',
+          'SECURITY DECRYPTED //',
+          'green'
+        );
+      }, 1500);
+    }
+
+    // Обновляем состояние кнопки в UI и перерисовываем каталог
+    updateBlackMarketTabButton();
     renderCatalog();
   });
 
@@ -380,6 +819,7 @@ const initializeApp = () => {
   // ==========================================
   let deferredPrompt;
   const installBtn = document.querySelector('#pwa-install-btn');
+  const mInstallBtnWrapper = document.querySelector('#menu-item-install-wrapper');
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
@@ -387,17 +827,40 @@ const initializeApp = () => {
     if (installBtn) {
       installBtn.style.display = 'flex';
     }
+    if (mInstallBtnWrapper) {
+      mInstallBtnWrapper.style.display = 'block';
+    }
+  });
+
+  // Слушаем событие установки PWA из мобильного меню
+  document.addEventListener('install-app', () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(({ outcome }) => {
+        console.log(`📱 [PWA] User choice outcome: ${outcome}`);
+        deferredPrompt = null;
+        if (installBtn) installBtn.style.display = 'none';
+        if (mInstallBtnWrapper) mInstallBtnWrapper.style.display = 'none';
+      });
+    }
   });
 
   // Успешная установка PWA
   window.addEventListener('appinstalled', () => {
     console.log('📱 [PWA] App installed.');
     if (installBtn) installBtn.style.display = 'none';
+    if (mInstallBtnWrapper) mInstallBtnWrapper.style.display = 'none';
     Toast.show('SYSTEM DEPLOYED // PWA fully installed.', 'PWA SUCCESS //', 'pink');
   });
 
+  // Инициализируем состояние профиля и кошелька
+  ProfileState.init();
+
   // Инициализируем состояние корзины (загрузка из LocalStorage)
   CartState.init();
+
+  // Загружаем экипировку из параметров URL, если они присутствуют
+  MbsBuilder.loadFromUrl();
 
   // Регистрация Service Worker для поддержки оффлайн-режима
   registerServiceWorker();
@@ -405,7 +868,7 @@ const initializeApp = () => {
   // ==========================================
   // Логика переключения цветовых тем (Cyber-Themes)
   // ==========================================
-  const THEMES = ['default', 'green', 'pink', 'stealth'];
+  const THEMES = ['default', 'green', 'pink', 'cyber'];
   let currentTheme = localStorage.getItem('techwear_theme') || 'default';
 
   /**
@@ -437,6 +900,9 @@ const initializeApp = () => {
       'THEME ENGAGED //',
       toastStyle
     );
+
+    // Синхронизируем панель быстрых настроек
+    updateQuickSettingsUI();
   });
 
   // Слушаем событие переключения звука из шапки
@@ -454,6 +920,31 @@ const initializeApp = () => {
       'SYSTEM CONFIG //',
       'blue'
     );
+
+    // Синхронизируем панель быстрых настроек
+    updateQuickSettingsUI();
+  });
+
+  // Слушаем событие переключения фонового эмбиента из шапки
+  document.addEventListener('toggle-ambient', () => {
+    const isAmbientActive = AudioService.toggleAmbient();
+    Header.updateAmbientBtn(isAmbientActive);
+    
+    Toast.show(
+      `BACKGROUND SYSTEM HUM: [${isAmbientActive ? 'ENGAGED' : 'OFFLINE'}] //`,
+      'NAVIGATOR HUM //',
+      isAmbientActive ? 'green' : 'blue'
+    );
+
+    // Синхронизируем панель быстрых настроек
+    updateQuickSettingsUI();
+  });
+
+  // Синхронизируем состояние кнопок при автоматическом включении/выключении гула
+  document.addEventListener('ambient-status-updated', (event) => {
+    const isAmbientActive = event.detail.active;
+    Header.updateAmbientBtn(isAmbientActive);
+    updateQuickSettingsUI();
   });
 
   // Слушаем событие открытия конструктора MBS из шапки
@@ -461,11 +952,22 @@ const initializeApp = () => {
     MbsBuilder.open();
   });
 
+  // Слушаем событие открытия личного кабинета из шапки
+  document.addEventListener('toggle-profile', () => {
+    CyberProfile.open();
+  });
+
   // Глобальный перехватчик кликов на фазе захвата для озвучивания всех интерактивных элементов
   document.addEventListener('click', (event) => {
     const target = event.target;
     if (target.closest('button, a, .catalog-filter__btn, .js-interactive')) {
       AudioService.playClick();
+      
+      // Автоматический запуск эмбиента при первом взаимодействии с интерактивным элементом
+      const isAmbientEnabled = localStorage.getItem('techwear_ambient') !== 'false';
+      if (isAmbientEnabled && !AudioService.isAmbientActive()) {
+        AudioService.startAmbient();
+      }
     }
   }, true); // true активирует фазу capture, чтобы сработало раньше других слушателей
 

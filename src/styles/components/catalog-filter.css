@@ -1,8 +1,10 @@
+/* Контрольная панель каталога */
 .catalog-controls {
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
   margin-bottom: var(--space-lg);
+  scroll-margin-top: calc(var(--header-height) + var(--space-md));
 }
 
 /* На десктопах выстраиваем фильтры и поиск в одну линию */
@@ -88,6 +90,7 @@
   color: var(--color-text-secondary);
   transition: all var(--transition-fast);
   white-space: nowrap;
+  flex-shrink: 0; /* Исключает сжатие и наложение кнопок */
   border-radius: var(--border-radius-sm);
   text-transform: uppercase;
 }
@@ -102,4 +105,37 @@
   background: var(--color-accent-blue);
   border-color: var(--color-accent-blue);
   box-shadow: var(--glow-blue);
+}
+
+.catalog-filter__btn--locked {
+  color: var(--color-text-muted);
+  border-color: rgba(255, 255, 255, 0.04);
+  background: rgba(13, 15, 18, 0.1);
+  cursor: not-allowed;
+}
+
+.catalog-filter__btn--locked:hover {
+  color: var(--color-accent-pink);
+  border-color: var(--color-accent-pink);
+  box-shadow: var(--glow-pink);
+}
+
+.catalog-filter__btn--blackmarket {
+  color: var(--color-accent-pink);
+  border-color: var(--color-accent-pink);
+  background: rgba(255, 0, 85, 0.05);
+}
+
+.catalog-filter__btn--blackmarket:hover {
+  color: #ffffff;
+  background: var(--color-accent-pink);
+  border-color: var(--color-accent-pink);
+  box-shadow: var(--glow-pink);
+}
+
+.catalog-filter__btn--blackmarket.catalog-filter__btn--active {
+  color: #ffffff;
+  background: var(--color-accent-pink);
+  border-color: var(--color-accent-pink);
+  box-shadow: var(--glow-pink);
 }

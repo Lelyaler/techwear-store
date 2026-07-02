@@ -1,0 +1,281 @@
+/* ==========================================
+   Компонент: InfoSections (Reviews & FAQ Accordions)
+   ========================================== */
+
+.info-section-wrapper {
+  width: 100%;
+}
+
+.info-section-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-xs);
+  margin-bottom: var(--space-md);
+  position: relative;
+}
+
+.info-section-title::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 60px;
+  height: 1px;
+  background-color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+}
+
+/* ==========================================
+   Отзывы (Reviews Slider)
+   ========================================== */
+
+.reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-xs);
+}
+
+.reviews-header .info-section-title {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.reviews-nav {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.reviews-nav__btn {
+  background: rgba(13, 15, 18, 0.6);
+  border: var(--border-width) solid var(--border-color);
+  color: var(--color-text-secondary);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+}
+
+.reviews-nav__btn:hover {
+  color: var(--color-accent-blue);
+  border-color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+}
+
+.reviews-slider-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.reviews-slider {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.reviews-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.reviews-slider .review-card {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 600px) {
+  .reviews-slider .review-card {
+    flex: 0 0 calc(50% - 12px);
+  }
+}
+
+@media (min-width: 900px) {
+  .reviews-slider .review-card {
+    flex: 0 0 calc(33.333% - 16px);
+  }
+}
+
+.review-card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  transition: all var(--transition-normal);
+}
+
+.review-card:hover {
+  border-color: var(--color-accent-blue);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(0, 240, 255, 0.02);
+  transform: translateY(-2px);
+}
+
+.review-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.review-card__avatar-wrapper {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-main);
+  flex-shrink: 0;
+}
+
+.review-card__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.review-card__meta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.review-card__author {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: 0.05em;
+}
+
+.review-card__rating {
+  font-size: 0.6rem;
+  color: var(--color-accent-green);
+  text-shadow: var(--glow-green);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.review-card__text {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* ==========================================
+   FAQ (Interactive Accordion)
+   ========================================== */
+
+.faq-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.faq-item {
+  border: 1px solid var(--border-color);
+  background-color: var(--color-bg-card);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.faq-item:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.faq-item--open {
+  border-color: var(--color-accent-blue);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.faq-item__trigger {
+  width: 100%;
+  padding: var(--space-sm);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  background: transparent;
+  border: none;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.faq-item__trigger:hover {
+  color: var(--color-accent-blue);
+}
+
+.faq-item--open .faq-item__trigger {
+  color: var(--color-accent-blue);
+  background-color: rgba(0, 240, 255, 0.02);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.faq-item__question-text {
+  flex: 1;
+  margin-right: var(--space-sm);
+  line-height: 1.4;
+}
+
+.faq-item__icon {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+  flex-shrink: 0; /* Запрещает сжатие и искажение скобок */
+  white-space: nowrap; /* Исключает перенос символов внутри скобок */
+  text-align: right;
+  min-width: 35px; /* Резервируем фиксированное место под иконку */
+}
+
+.faq-item__trigger:hover .faq-item__icon {
+  color: var(--color-accent-blue);
+}
+
+.faq-item--open .faq-item__icon {
+  color: var(--color-accent-pink);
+  text-shadow: var(--glow-pink);
+}
+
+.faq-item__panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-item__content {
+  padding: var(--space-sm);
+  background-color: rgba(2, 3, 4, 0.15);
+}
+
+.faq-item__text {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}

@@ -1,0 +1,303 @@
+/* ==========================================================================
+   Компонент: ИИ Чат-Ассистент N.E.O.N. Cortex (Темная тема киберпанка)
+   ========================================================================== */
+
+.neon-chat-trigger {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-bg-card);
+  border: 1.5px solid var(--color-accent-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+  transition: all var(--transition-normal);
+  color: var(--color-accent-blue);
+  
+  /* Изначально активный светящийся стиль с мягкой пульсацией */
+  transform: scale(1.1);
+  animation: trigger-pulse 2s infinite alternate ease-in-out;
+}
+
+@keyframes trigger-pulse {
+  0% {
+    box-shadow: 0 0 12px var(--color-accent-blue), inset 0 0 6px rgba(0, 240, 255, 0.15);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 22px var(--color-accent-blue), inset 0 0 12px rgba(0, 240, 255, 0.35);
+    transform: scale(1.15);
+  }
+}
+
+.neon-chat-trigger:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 28px var(--color-accent-blue), inset 0 0 15px rgba(0, 240, 255, 0.4);
+}
+
+.neon-chat-trigger--active {
+  border-color: var(--color-accent-pink);
+  color: var(--color-accent-pink);
+  animation: trigger-pulse-active 2s infinite alternate ease-in-out;
+}
+
+@keyframes trigger-pulse-active {
+  0% {
+    box-shadow: 0 0 12px var(--color-accent-pink), inset 0 0 6px rgba(255, 0, 85, 0.15);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 22px var(--color-accent-pink), inset 0 0 12px rgba(255, 0, 85, 0.35);
+    transform: scale(1.15);
+  }
+}
+
+.neon-chat-trigger__icon {
+  width: 26px;
+  height: 26px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  transition: all var(--transition-normal);
+}
+
+/* Окно чата (Темная тема киберпанка) */
+.neon-chat-window {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  width: 360px;
+  height: 480px;
+  background: rgba(13, 15, 18, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid var(--color-accent-blue);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 240, 255, 0.2);
+  border-radius: var(--border-radius-md);
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+  overflow: hidden;
+  transition: all var(--transition-normal) cubic-bezier(0.19, 1, 0.22, 1);
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.neon-chat-window--hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px) scale(0.95);
+}
+
+/* Декоративные углы */
+.neon-chat-window::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 8px;
+  height: 8px;
+  border-top: 1.5px solid var(--color-accent-blue);
+  border-left: 1.5px solid var(--color-accent-blue);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.neon-chat-window::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 1.5px solid var(--color-accent-blue);
+  border-right: 1.5px solid var(--color-accent-blue);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Шапка чата */
+.neon-chat-header {
+  padding: 12px 16px;
+  background: rgba(20, 24, 30, 0.95);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2;
+}
+
+.neon-chat-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.neon-chat-title {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--color-text-primary);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.neon-chat-status {
+  font-size: 0.55rem;
+  color: var(--color-accent-blue);
+  letter-spacing: 0.05em;
+  font-family: var(--font-display);
+  font-weight: bold;
+}
+
+.neon-chat-close {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.neon-chat-close:hover {
+  color: var(--color-accent-pink);
+  border-color: var(--color-accent-pink);
+}
+
+/* Область сообщений */
+.neon-chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scrollbar-width: thin;
+  background: rgba(10, 12, 15, 0.85);
+  z-index: 1;
+}
+
+/* Сообщения */
+.neon-chat-msg {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  position: relative;
+  word-break: break-word;
+}
+
+.neon-chat-msg--system {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--color-text-primary);
+  border-left: 3px solid var(--color-accent-blue);
+}
+
+.neon-chat-msg--user {
+  align-self: flex-end;
+  background: rgba(0, 240, 255, 0.05);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  color: var(--color-text-primary);
+  border-right: 3px solid var(--color-accent-blue);
+}
+
+.neon-chat-msg--typing {
+  color: var(--color-accent-blue);
+  font-style: italic;
+  letter-spacing: 0.1em;
+}
+
+.neon-chat-msg__code {
+  font-family: var(--font-display);
+  color: #ff0055;
+  background: rgba(255, 0, 85, 0.05);
+  padding: 2px 6px;
+  border: 1px dashed rgba(255, 0, 85, 0.4);
+  border-radius: 2px;
+  margin: 2px 0;
+  display: inline-block;
+  letter-spacing: 0.05em;
+  font-weight: bold;
+}
+
+/* Нижняя панель ввода */
+.neon-chat-input-row {
+  padding: 12px;
+  background: rgba(20, 24, 30, 0.95);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 2;
+}
+
+.neon-chat-input {
+  flex: 1;
+  background: rgba(6, 7, 9, 0.8);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  padding: 8px 12px;
+  color: var(--color-text-primary);
+  font-size: 0.8rem;
+  font-family: var(--font-body);
+}
+
+.neon-chat-input:focus {
+  outline: none;
+  border-color: var(--color-accent-blue);
+  box-shadow: 0 0 5px rgba(0, 240, 255, 0.15);
+}
+
+.neon-chat-send {
+  background: var(--color-accent-blue);
+  color: var(--color-bg-main);
+  border: none;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--glow-blue);
+  transition: all var(--transition-fast);
+}
+
+.neon-chat-send:hover {
+  background: transparent;
+  color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue), inset 0 0 5px rgba(0, 240, 255, 0.2);
+  border: 1px solid var(--color-accent-blue);
+  padding: 7px 13px;
+}
+
+/* Мобильная адаптивность */
+@media (max-width: 600px) {
+  .neon-chat-window {
+    bottom: 0;
+    right: 0;
+    width: 100vw;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .neon-chat-trigger {
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .neon-chat-trigger__icon {
+    width: 20px;
+    height: 20px;
+  }
+}

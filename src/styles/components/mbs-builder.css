@@ -130,15 +130,15 @@
 
 /* Левая колонка: Интерактивный чертеж */
 .mbs-blueprint {
-  background: rgba(10, 12, 14, 0.6);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-sm);
+  background: transparent;
+  border: none;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   min-height: 320px;
+  height: 100%;
 }
 
 /* Координатная сетка */
@@ -152,133 +152,269 @@
   pointer-events: none;
 }
 
-/* Силуэт на чертеже */
-.mbs-avatar-wrapper {
+/* Интерактивная примерочная: Тактическая карта с манекеном и ответвлениями */
+.mbs-mannequin-container {
   position: relative;
-  width: 200px;
-  height: 300px;
+  height: 100%;
+  width: auto;
+  aspect-ratio: 2 / 3;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-color);
+  background: #060709;
+  overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9);
 }
 
-.mbs-avatar-svg {
+/* Лазерная линия сканирования */
+.mbs-scanner-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(0, 240, 255, 0.65);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 4px rgba(0, 240, 255, 0.4);
+  z-index: 4;
+  pointer-events: none;
+  animation: scan-sweep 6s infinite linear;
+}
+
+@keyframes scan-sweep {
+  0% { top: 0%; opacity: 0.1; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { top: 100%; opacity: 0.1; }
+}
+
+/* Диагностический блок HUD в углу манекена */
+.mbs-hud-diagnostics {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(6, 7, 9, 0.85);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  border-radius: var(--border-radius-xs);
+  padding: 6px 8px;
+  z-index: 6;
+  font-family: monospace;
+  font-size: 0.48rem;
+  color: var(--color-accent-blue);
+  text-shadow: var(--glow-blue);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 120px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.05em;
+}
+
+.mbs-hud-diagnostics__header {
+  font-weight: bold;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.25);
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+  color: var(--color-accent-pink);
+  text-shadow: var(--glow-pink);
+}
+
+.mbs-hud-diagnostics__row {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Анимированный поток энергии по связям */
+@keyframes line-energy-flow {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+.mbs-mannequin-svg line.line--flowing {
+  stroke-dasharray: 4, 3;
+  animation: line-energy-flow 1.5s infinite linear;
+  filter: drop-shadow(0 0 1px currentColor);
+}
+
+/* Фоновый сгенерированный кибер-манекен */
+.mbs-mannequin-image {
   width: 100%;
   height: 100%;
-  stroke: var(--color-accent-blue);
-  stroke-width: 1;
-  fill: none;
-  opacity: 0.25;
+  object-fit: fill;
+  opacity: 0.65;
+  pointer-events: none;
 }
 
-/* Точки привязки оборудования (Nodes) */
+/* Направляющие SVG линии-ответвления */
+.mbs-mannequin-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  filter: drop-shadow(0 0 1.5px rgba(0, 240, 255, 0.4));
+}
+
+/* Узлы слотов по бокам от манекена (Nodes) */
 .mbs-node {
   position: absolute;
-  width: 32px;
-  height: 32px;
-  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   z-index: 10;
 }
 
-/* Иконка/кружок точки */
-.mbs-node__dot {
-  width: 12px;
-  height: 12px;
-  background: var(--color-bg-main);
-  border: 2px solid var(--color-text-muted);
+/* Точное позиционирование узлов по бокам (согласовано с координатами SVG линий) */
+#node-head { top: 15%; left: 12%; transform: translate(-50%, -50%); }
+#node-back { top: 25%; left: 88%; transform: translate(-50%, -50%); }
+#node-chest { top: 38%; left: 12%; transform: translate(-50%, -50%); }
+#node-hands { top: 50%; left: 88%; transform: translate(-50%, -50%); }
+#node-body { top: 62%; left: 12%; transform: translate(-50%, -50%); }
+#node-feet { top: 86%; left: 88%; transform: translate(-50%, -50%); }
+
+/* Круглый слот callout */
+.mbs-node__circle {
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  transition: all var(--transition-fast);
+  border: 1.5px dashed rgba(0, 240, 255, 0.35);
+  background: rgba(6, 7, 9, 0.9);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-normal);
+  overflow: hidden;
 }
 
-/* Пульсация точки */
-.mbs-node::after {
+.mbs-node__circle::after {
   content: '';
   position: absolute;
-  width: 24px;
-  height: 24px;
-  border: 1px solid var(--color-text-muted);
-  border-radius: 50%;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.mbs-node__placeholder {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: var(--color-text-muted);
+  letter-spacing: 0.05em;
   transition: all var(--transition-fast);
+  z-index: 2;
 }
 
-.mbs-node--active .mbs-node__dot {
-  border-color: var(--color-accent-blue);
-  background: var(--color-accent-blue);
-  box-shadow: var(--glow-blue);
-}
-
-.mbs-node--active::after {
-  border-color: var(--color-accent-blue);
-  animation: node-pulse 1.8s infinite ease-out;
-  opacity: 1;
-}
-
-/* Если модуль экипирован, заменяем точку на миниатюру */
-.mbs-node__thumb {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 2px solid var(--color-accent-blue);
-  box-shadow: var(--glow-blue);
-  background: var(--color-bg-main);
-  overflow: hidden;
+.mbs-node__img {
   position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  display: none;
-  transition: transform var(--transition-fast);
-}
-
-.mbs-node__thumb:hover {
-  transform: translate(-50%, -50%) scale(1.15);
-}
-
-.mbs-node__thumb img {
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
+  opacity: 0;
+  z-index: 3;
+  transition: opacity var(--transition-normal);
 }
 
-.mbs-node--equipped .mbs-node__thumb {
-  display: block;
-}
-.mbs-node--equipped .mbs-node__dot,
-.mbs-node--equipped::after {
-  display: none;
-}
-
-@keyframes node-pulse {
-  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.9; }
-  100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
-}
-
-/* Линии связи на чертеже */
-.mbs-blueprint__line {
-  position: absolute;
-  stroke: var(--border-color);
-  stroke-dasharray: 4;
-  stroke-width: 1;
+.mbs-node__label {
+  font-family: monospace;
+  font-size: 0.48rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-top: 3px;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
   pointer-events: none;
-  transition: stroke var(--transition-fast);
 }
 
-.mbs-blueprint__line--active {
-  stroke: var(--color-accent-blue);
-  stroke-dasharray: none;
-  stroke-width: 1.5;
+/* Эффекты при наведении */
+.mbs-node:hover .mbs-node__circle {
+  transform: scale(1.1);
+  border-color: var(--color-accent-blue);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.45);
 }
 
-/* Координаты точек на холсте 200x300 */
-#node-head { top: 12%; left: 50%; }
-#node-body { top: 38%; left: 50%; }
-#node-chest { top: 48%; left: 50%; }
-#node-back { top: 35%; left: 80%; }
-#node-hands { top: 58%; left: 20%; }
-#node-feet { top: 90%; left: 50%; }
+/* Выбранный активный слот */
+.mbs-node--active .mbs-node__circle {
+  border-style: solid;
+  border-color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue), inset 0 0 8px rgba(0, 240, 255, 0.35);
+  animation: node-pulse-ring-callout 2s infinite ease-out;
+}
+
+.mbs-node--active .mbs-node__placeholder {
+  color: var(--color-accent-blue);
+  text-shadow: var(--glow-blue);
+}
+
+.mbs-node--active .mbs-node__label {
+  color: var(--color-accent-blue);
+  text-shadow: var(--glow-blue);
+}
+
+@keyframes node-pulse-ring-callout {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.4), inset 0 0 8px rgba(0, 240, 255, 0.3);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(0, 240, 255, 0), inset 0 0 8px rgba(0, 240, 255, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 240, 255, 0), inset 0 0 8px rgba(0, 240, 255, 0.3);
+  }
+}
+
+/* Экипированное состояние */
+.mbs-node--equipped .mbs-node__img {
+  opacity: 1;
+}
+
+.mbs-node--equipped .mbs-node__placeholder {
+  opacity: 0;
+}
+
+.mbs-node--equipped .mbs-node__circle {
+  border-style: solid;
+  border-width: 1.5px;
+}
+
+/* Разделение свечения по ролям модулей при экипировке */
+#node-head.mbs-node--equipped .mbs-node__circle,
+#node-hands.mbs-node--equipped .mbs-node__circle,
+#node-body.mbs-node--equipped .mbs-node__circle {
+  border-color: var(--color-accent-blue);
+  box-shadow: var(--glow-blue);
+}
+
+#node-chest.mbs-node--equipped .mbs-node__circle {
+  border-color: var(--color-accent-pink);
+  box-shadow: var(--glow-pink);
+}
+
+#node-back.mbs-node--equipped .mbs-node__circle,
+#node-feet.mbs-node--equipped .mbs-node__circle {
+  border-color: var(--color-accent-green);
+  box-shadow: var(--glow-green);
+}
 
 /* Правая колонка: Настройки слотов */
 .mbs-controls {
@@ -562,4 +698,44 @@
   border-color: var(--color-accent-blue);
   color: var(--color-accent-blue);
   box-shadow: var(--glow-blue);
+}
+
+/* Адаптивные медиа-запросы для MBS Customizer */
+@media (max-width: 600px) {
+  .mbs-modal {
+    padding: var(--space-md);
+    height: 95vh;
+    min-height: auto;
+  }
+  .mbs-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .mbs-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .mbs-mannequin-container {
+    min-height: 320px;
+  }
+  .mbs-node__circle {
+    width: 36px;
+    height: 36px;
+  }
+  .mbs-node__placeholder {
+    font-size: 0.55rem;
+  }
+  .mbs-node__label {
+    font-size: 0.42rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .mbs-controls {
+    border-top: none;
+    padding-top: 0;
+  }
 }
