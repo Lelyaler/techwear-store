@@ -1,36 +1,26 @@
-(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin===`use-credentials`?t.credentials=`include`:e.crossOrigin===`anonymous`?t.credentials=`omit`:t.credentials=`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();var e=null;localStorage.getItem(`techwear_sound`),localStorage.getItem(`techwear_ambient`);var t=[],n=null,r=!1,i=null,a=()=>(e||=new(window.AudioContext||window.webkitAudioContext),e.state===`suspended`&&e.resume(),e),o=(e,t,n,r,i=.001)=>{let o=a(),s=o.createOscillator(),c=o.createGain();return s.type=e,s.frequency.setValueAtTime(t,o.currentTime),c.gain.setValueAtTime(r,o.currentTime),c.gain.exponentialRampToValueAtTime(i,o.currentTime+n),s.connect(c),c.connect(o.destination),{osc:s,gainNode:c,ctx:o}},s={isEnabled(){return localStorage.getItem(`techwear_sound`)!==`false`},toggle(){let e=localStorage.getItem(`techwear_sound`)===`false`;return localStorage.setItem(`techwear_sound`,e?`true`:`false`),console.log(`🔊 [Audio] Sound effects active: ${e}`),e},playClick(){if(localStorage.getItem(`techwear_sound`)!==`false`)try{let{osc:e,ctx:t}=o(`sine`,1200,.05,.08);e.frequency.exponentialRampToValueAtTime(300,t.currentTime+.05),e.start(),e.stop(t.currentTime+.05)}catch(e){console.warn(`⚠️ [Audio] Click synthesis failed:`,e)}},playSuccess(){if(localStorage.getItem(`techwear_sound`)!==`false`)try{let e=a(),t=e.currentTime,n=(n,r,i)=>{let a=e.createOscillator(),o=e.createGain();a.type=`triangle`,a.frequency.setValueAtTime(n,t+r),o.gain.setValueAtTime(0,t+r),o.gain.linearRampToValueAtTime(.12,t+r+.02),o.gain.exponentialRampToValueAtTime(.001,t+r+i),a.connect(o),o.connect(e.destination),a.start(t+r),a.stop(t+r+i)};n(523.25,0,.15),n(783.99,.07,.25)}catch(e){console.warn(`⚠️ [Audio] Success synthesis failed:`,e)}},playError(){if(localStorage.getItem(`techwear_sound`)!==`false`)try{let{osc:e,ctx:t}=o(`sawtooth`,130,.25,.05);e.frequency.linearRampToValueAtTime(70,t.currentTime+.25),e.start(),e.stop(t.currentTime+.25)}catch(e){console.warn(`⚠️ [Audio] Error synthesis failed:`,e)}},playOpen(){if(localStorage.getItem(`techwear_sound`)!==`false`)try{let{osc:e,ctx:t}=o(`triangle`,320,.25,.1);e.frequency.exponentialRampToValueAtTime(880,t.currentTime+.2),e.start(),e.stop(t.currentTime+.25)}catch(e){console.warn(`⚠️ [Audio] Open sound synthesis failed:`,e)}},isAmbientActive(){return r},startAmbient(){if(!r){i&&=(clearTimeout(i),null),t.forEach(e=>{try{e.stop()}catch{}}),t=[];try{let e=a();n=e.createGain(),n.gain.setValueAtTime(0,e.currentTime),n.gain.linearRampToValueAtTime(.12,e.currentTime+2);let i=e.createBiquadFilter();i.type=`lowpass`,i.frequency.setValueAtTime(180,e.currentTime),i.Q.setValueAtTime(2.2,e.currentTime);let o=e.createOscillator(),s=e.createGain();o.frequency.value=.08,s.gain.value=45,o.connect(s),s.connect(i.frequency);let c=[],l=e.createOscillator();l.type=`sawtooth`,l.frequency.value=55;let u=e.createOscillator();u.type=`sawtooth`,u.frequency.value=55.4;let d=e.createOscillator();d.type=`sawtooth`,d.frequency.value=110;let f=e.createOscillator();f.type=`sawtooth`,f.frequency.value=110.8;let p=e.createOscillator();p.type=`triangle`,p.frequency.value=220,[l,u,d,f,p].forEach(e=>{e.connect(i),e.start(),c.push(e)}),o.start(),c.push(o),i.connect(n),n.connect(e.destination),t=c,r=!0,document.dispatchEvent(new CustomEvent(`ambient-status-updated`,{detail:{active:!0}}))}catch(e){console.warn(`⚠️ [Audio] Ambient hum synthesis failed:`,e)}}},stopAmbient(){if(r){r=!1,i&&=(clearTimeout(i),null);try{let e=a();n&&(n.gain.cancelScheduledValues(e.currentTime),n.gain.setValueAtTime(n.gain.value,e.currentTime),n.gain.exponentialRampToValueAtTime(.001,e.currentTime+1.2));let r=t;t=[],i=setTimeout(()=>{r.forEach(e=>{try{e.stop()}catch{}}),i=null},1250),document.dispatchEvent(new CustomEvent(`ambient-status-updated`,{detail:{active:!1}}))}catch(e){console.warn(`⚠️ [Audio] Ambient stopping failed:`,e)}}},toggleAmbient(){return r?(this.stopAmbient(),localStorage.setItem(`techwear_ambient`,`false`)):(this.startAmbient(),localStorage.setItem(`techwear_ambient`,`true`)),r}},c={render(e=0,t=!1,n=!1){return`
+(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin===`use-credentials`?t.credentials=`include`:e.crossOrigin===`anonymous`?t.credentials=`omit`:t.credentials=`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();var e=null;localStorage.getItem(`techwear_sound`),localStorage.getItem(`techwear_ambient`);var t=[],n=null,r=!1,i=null,a=()=>(e||=new(window.AudioContext||window.webkitAudioContext),e.state===`suspended`&&e.resume().catch(()=>{}),e),o=(e,t,n,r,i=.001)=>{let o=a(),s=o.createOscillator(),c=o.createGain();return s.type=e,s.frequency.setValueAtTime(t,o.currentTime),c.gain.setValueAtTime(r,o.currentTime),c.gain.exponentialRampToValueAtTime(i,o.currentTime+n),s.connect(c),c.connect(o.destination),{osc:s,gainNode:c,ctx:o}},s={isEnabled(){return localStorage.getItem(`techwear_sound`)!==`false`},toggle(){let e=localStorage.getItem(`techwear_sound`)===`false`;return localStorage.setItem(`techwear_sound`,e?`true`:`false`),e},playClick(){if(localStorage.getItem(`techwear_sound`)!==`false`)try{let{osc:e,ctx:t}=o(`sine`,1200,.05,.08);e.frequency.exponentialRampToValueAtTime(300,t.currentTime+.05),e.start(),e.stop(t.currentTime+.05)}catch{}},playSuccess(){if(localStorage.getItem(`techwear_sound`)!==`false`)try{let e=a(),t=e.currentTime,n=(n,r,i)=>{let a=e.createOscillator(),o=e.createGain();a.type=`triangle`,a.frequency.setValueAtTime(n,t+r),o.gain.setValueAtTime(0,t+r),o.gain.linearRampToValueAtTime(.12,t+r+.02),o.gain.exponentialRampToValueAtTime(.001,t+r+i),a.connect(o),o.connect(e.destination),a.start(t+r),a.stop(t+r+i)};n(523.25,0,.15),n(783.99,.07,.25)}catch{}},playError(){if(localStorage.getItem(`techwear_sound`)!==`false`)try{let{osc:e,ctx:t}=o(`sawtooth`,130,.25,.05);e.frequency.linearRampToValueAtTime(70,t.currentTime+.25),e.start(),e.stop(t.currentTime+.25)}catch{}},playOpen(){if(localStorage.getItem(`techwear_sound`)!==`false`)try{let{osc:e,ctx:t}=o(`triangle`,320,.25,.1);e.frequency.exponentialRampToValueAtTime(880,t.currentTime+.2),e.start(),e.stop(t.currentTime+.25)}catch{}},isAmbientActive(){return r},startAmbient(){if(!r){i&&=(clearTimeout(i),null),t.forEach(e=>{try{e.stop()}catch{}}),t=[];try{let e=a();n=e.createGain(),n.gain.setValueAtTime(0,e.currentTime),n.gain.linearRampToValueAtTime(.12,e.currentTime+2);let i=e.createBiquadFilter();i.type=`lowpass`,i.frequency.setValueAtTime(180,e.currentTime),i.Q.setValueAtTime(2.2,e.currentTime);let o=e.createOscillator(),s=e.createGain();o.frequency.value=.08,s.gain.value=45,o.connect(s),s.connect(i.frequency);let c=[],l=e.createOscillator();l.type=`sawtooth`,l.frequency.value=55;let u=e.createOscillator();u.type=`sawtooth`,u.frequency.value=55.4;let d=e.createOscillator();d.type=`sawtooth`,d.frequency.value=110;let f=e.createOscillator();f.type=`sawtooth`,f.frequency.value=110.8;let p=e.createOscillator();p.type=`triangle`,p.frequency.value=220,[l,u,d,f,p].forEach(e=>{e.connect(i),e.start(),c.push(e)}),o.start(),c.push(o),i.connect(n),n.connect(e.destination),t=c,r=!0,document.dispatchEvent(new CustomEvent(`ambient-status-updated`,{detail:{active:!0}}))}catch{}}},stopAmbient(){if(r){r=!1,i&&=(clearTimeout(i),null);try{let e=a();n&&(n.gain.cancelScheduledValues(e.currentTime),n.gain.setValueAtTime(n.gain.value,e.currentTime),n.gain.exponentialRampToValueAtTime(.001,e.currentTime+1.2));let r=t;t=[],i=setTimeout(()=>{r.forEach(e=>{try{e.stop()}catch{}}),i=null},1250),document.dispatchEvent(new CustomEvent(`ambient-status-updated`,{detail:{active:!1}}))}catch{}}},toggleAmbient(){return r?(this.stopAmbient(),localStorage.setItem(`techwear_ambient`,`false`)):(this.startAmbient(),localStorage.setItem(`techwear_ambient`,`true`)),r}},c={render(e=0,t=!1,n=!1){return`
       <header class="header">
         <div class="header__container">
-          <!-- Логотип бренда -->
           <div class="header__logo" id="header-logo" title="На главную">
             <span class="header__logo-brand">TECHWEAR</span>
             <span class="header__logo-sub">// MODULE</span>
           </div>
           
-          <!-- Действия в шапке -->
           <div class="header__actions">
-            
-            <!-- Десктопная навигация (скрывается на мобилках) -->
             <div class="header__desktop-nav">
-              <!-- Кнопка установки PWA -->
               <button class="header__btn header__btn--install" id="pwa-install-btn" aria-label="Установить PWA">
                 INSTALL //
               </button>
 
-              <!-- Кнопка MBS конструктора -->
               <button class="header__btn header__btn--builder" id="builder-toggle-btn" aria-label="Открыть конструктор">
                 MBS BUILDER //
               </button>
               
-              <!-- Кнопка Личного Кабинета -->
               <button class="header__btn header__btn--profile" id="profile-toggle-btn" aria-label="Открыть личный кабинет">
                 NEURAL ID //
               </button>
             </div>
-
-            <!-- Общие кнопки для мобилок и ПК (Поиск, Корзина, Бургер-Меню) -->
             
-            <!-- Кнопка поиска -->
             <button class="header__btn header__btn--search js-interactive" id="search-trigger" aria-label="Открыть поиск">
               <svg class="header__icon" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8"></circle>
@@ -38,7 +28,6 @@
               </svg>
             </button>
             
-            <!-- Иконка Корзины -->
             <button class="header__btn header__btn--cart js-interactive" id="cart-trigger" aria-label="Открыть корзину">
               <svg class="header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -50,7 +39,6 @@
               </span>
             </button>
 
-            <!-- Кнопка Мобильного Бургер-меню (скрыта на ПК) -->
             <button class="header__btn header__btn--menu js-interactive" id="menu-toggle-btn" aria-label="Открыть меню">
               <svg class="header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -58,11 +46,9 @@
                 <line x1="3" y1="18" x2="21" y2="18"></line>
               </svg>
             </button>
-
           </div>
         </div>
 
-        <!-- Оверлей Мобильного Меню (Drawer) -->
         <div class="menu-overlay" id="menu-overlay">
           <div class="menu-drawer">
             <div class="menu-drawer__header">
@@ -94,11 +80,9 @@
             </div>
           </div>
         </div>
-
       </header>
     `},initListeners(){let e=document.querySelector(`#search-trigger`),t=document.querySelector(`#cart-trigger`),n=document.querySelector(`#header-logo`),r=document.querySelector(`#theme-toggle-btn`),i=document.querySelector(`#sound-toggle-btn`),a=document.querySelector(`#ambient-toggle-btn`),o=document.querySelector(`#builder-toggle-btn`),c=document.querySelector(`#profile-toggle-btn`),l=document.querySelector(`#menu-toggle-btn`),u=document.querySelector(`#menu-overlay`),d=document.querySelector(`#menu-close-btn`),f=document.querySelector(`#menu-item-profile`),p=document.querySelector(`#menu-item-builder`),m=document.querySelector(`#menu-item-theme`),h=document.querySelector(`#menu-item-sound`),g=document.querySelector(`#menu-item-ambient`),_=document.querySelector(`#menu-item-install`),v=()=>{u&&(u.classList.add(`menu-overlay--open`),document.body.style.overflow=`hidden`,s.playOpen())},y=()=>{u&&(u.classList.remove(`menu-overlay--open`),document.body.style.overflow=``)};l&&l.addEventListener(`click`,v),d&&d.addEventListener(`click`,y),u&&u.addEventListener(`click`,e=>{e.target===u&&y()}),f&&f.addEventListener(`click`,()=>{y(),document.dispatchEvent(new CustomEvent(`toggle-profile`))}),p&&p.addEventListener(`click`,()=>{y(),document.dispatchEvent(new CustomEvent(`toggle-builder`))}),m&&m.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-theme`))}),h&&h.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-sound`))}),g&&g.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-ambient`))}),_&&_.addEventListener(`click`,()=>{y(),document.dispatchEvent(new CustomEvent(`install-app`))}),r&&r.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-theme`))}),o&&o.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-builder`))}),c&&c.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-profile`))}),i&&i.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-sound`))}),a&&a.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-ambient`))}),e&&e.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-search`))}),t&&t.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-cart`))}),n&&n.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`navigate-home`))})},updateCartCount(e){let t=document.querySelector(`#header-cart-count`);t&&(t.textContent=e,e>0?t.classList.add(`header__cart-count--active`):t.classList.remove(`header__cart-count--active`))},updateSoundBtn(e){document.querySelectorAll(`#sound-toggle-btn, #menu-item-sound`).forEach(t=>{t.id===`sound-toggle-btn`?(t.textContent=e?`SOUND // ON`:`SOUND // OFF`,e?t.classList.add(`header__btn--sound--active`):t.classList.remove(`header__btn--sound--active`)):(t.textContent=e?`SOUND EFFECTS // ON`:`SOUND EFFECTS // OFF`,e?t.classList.add(`menu-drawer__item--active`):t.classList.remove(`menu-drawer__item--active`))})},updateAmbientBtn(e){document.querySelectorAll(`#ambient-toggle-btn, #menu-item-ambient`).forEach(t=>{t.id===`ambient-toggle-btn`?(t.textContent=e?`SYS_HUM // ON`:`SYS_HUM // OFF`,e?t.classList.add(`header__btn--ambient--active`):t.classList.remove(`header__btn--ambient--active`)):(t.textContent=e?`SYSTEM HUM (AMBIENT) // ON`:`SYSTEM HUM (AMBIENT) // OFF`,e?t.classList.add(`menu-drawer__item--active`):t.classList.remove(`menu-drawer__item--active`))})}},l={render(e,t=0){let{id:n,name:r,price:i,image:a,badge:o,badgeClass:s,specs:c=[]}=e,l=t*.04,u=c.map(e=>`<span class="product-card__spec">${e}</span>`).join(``),d=s?`product-card__badge--${s}`:``,f=o?`<div class="product-card__badge ${d}">${o}</div>`:``,p=localStorage.getItem(`fit_size_${n}`);return`
       <article class="product-card" data-id="${n}" style="animation-delay: ${l}s">
-        <!-- Обертка для изображения с бейджем -->
         <div class="product-card__image-wrapper">
           ${f}
           <img 
@@ -112,24 +96,19 @@
           />
         </div>
         
-        <!-- Контентная часть карточки -->
         <div class="product-card__body">
           <h3 class="product-card__title" title="${r}">${r}</h3>
           
-          <!-- Теги характеристик -->
           <div class="product-card__specs">
             ${u}
           </div>
 
-          <!-- Рекомендованный размер (если отсканирован) -->
           ${p?`<div class="product-card__fit-badge">YOUR FIT: ${p}</div>`:``}
 
-          <!-- Кнопка запуска сканера размеров -->
           <button class="product-card__scan-link js-fit-scan" data-id="${n}" data-name="${r}">
             FIT SCANNER //
           </button>
           
-          <!-- Футер карточки (Цена + Добавить в корзину) -->
           <div class="product-card__footer">
             <span class="product-card__price">${i}</span>
             <button 
@@ -146,14 +125,13 @@
           </div>
         </div>
       </article>
-    `}},u=`techwear_cart_gear`,d={items:[]},f=()=>{try{let e=localStorage.getItem(u);e&&(d.items=JSON.parse(e))}catch(e){console.error(`❌ [Cart State] Failed to load cart from LocalStorage:`,e),d.items=[]}},p=()=>{try{localStorage.setItem(u,JSON.stringify(d.items))}catch(e){console.error(`❌ [Cart State] Failed to save cart to LocalStorage:`,e)}},m=()=>{let e=new CustomEvent(`cart-updated`,{detail:{items:d.items,count:h.getCount(),total:h.getTotal()}});document.dispatchEvent(e)},h={init(){f(),console.log(`📦 [Cart State] Initialized with items:`,d.items),m()},getItems(){return d.items.map(e=>({...e}))},addToCart(e){let t=d.items.find(t=>t.id===e.id);t?t.quantity+=1:d.items.push({id:e.id,name:e.name,price:e.price,image:e.image,quantity:1}),p(),m(),console.log(`📥 [Cart State] Item added: ${e.name}. Current count: ${this.getCount()}`)},removeFromCart(e){d.items=d.items.filter(t=>t.id!==e),p(),m(),console.log(`📤 [Cart State] Item removed ID: ${e}. Current count: ${this.getCount()}`)},updateQuantity(e,t){let n=d.items.find(t=>t.id===e);if(n){if(n.quantity=parseInt(t,10),n.quantity<=0){this.removeFromCart(e);return}p(),m(),console.log(`⚙️ [Cart State] Quantity updated for ID: ${e} to ${n.quantity}`)}},clearCart(){d.items=[],p(),m(),console.log(`🧹 [Cart State] Cart cleared.`)},getCount(){return d.items.reduce((e,t)=>e+t.quantity,0)},getTotal(){return d.items.reduce((e,t)=>e+t.price*t.quantity,0)}},g={getContainer(){let e=document.querySelector(`.toast-container`);return e||(e=document.createElement(`div`),e.className=`toast-container`,document.body.appendChild(e)),e},show(e,t=`SYSTEM //`,n=`blue`){let r=this.getContainer(),i=document.createElement(`div`);i.className=`toast toast--${n}`,i.innerHTML=`
+    `}},u=`techwear_cart_gear`,d={items:[]},f=()=>{try{let e=localStorage.getItem(u);e&&(d.items=JSON.parse(e))}catch{d.items=[]}},p=()=>{try{localStorage.setItem(u,JSON.stringify(d.items))}catch{}},m=()=>{let e=new CustomEvent(`cart-updated`,{detail:{items:d.items,count:h.getCount(),total:h.getTotal()}});document.dispatchEvent(e)},h={init(){f(),m()},getItems(){return d.items.map(e=>({...e}))},addToCart(e){let t=d.items.find(t=>t.id===e.id);t?t.quantity+=1:d.items.push({id:e.id,name:e.name,price:e.price,image:e.image,quantity:1}),p(),m()},removeFromCart(e){d.items=d.items.filter(t=>t.id!==e),p(),m()},updateQuantity(e,t){let n=d.items.find(t=>t.id===e);if(n){if(n.quantity=parseInt(t,10),n.quantity<=0){this.removeFromCart(e);return}p(),m()}},clearCart(){d.items=[],p(),m()},getCount(){return d.items.reduce((e,t)=>e+t.quantity,0)},getTotal(){return d.items.reduce((e,t)=>e+t.price*t.quantity,0)}},g={getContainer(){let e=document.querySelector(`.toast-container`);return e||(e=document.createElement(`div`),e.className=`toast-container`,document.body.appendChild(e)),e},show(e,t=`SYSTEM //`,n=`blue`){let r=this.getContainer(),i=document.createElement(`div`);i.className=`toast toast--${n}`,i.innerHTML=`
       <div class="toast__header">${t}</div>
       <div class="toast__message">${e}</div>
-    `,r.appendChild(i),setTimeout(()=>{i.classList.add(`toast--show`)},50),setTimeout(()=>{i.classList.remove(`toast--show`),setTimeout(()=>{i.remove(),r.querySelectorAll(`.toast`).length===0&&r.remove()},300)},3e3)}},_=`techwear_cyber_profile`,v={faction:`NETRUNNER`,credits:100,decryptedCodes:[],orders:[],xp:0,level:1},y=()=>{try{let e=localStorage.getItem(_);e&&(v={...v,...JSON.parse(e)})}catch(e){console.error(`❌ [Profile State] Failed to load profile:`,e)}},b=()=>{try{localStorage.setItem(_,JSON.stringify(v))}catch(e){console.error(`❌ [Profile State] Failed to save profile:`,e)}},x={init(){y(),console.log(`👤 [Profile State] Loaded profile:`,v)},getFaction(){return v.faction},setFaction(e){v.faction=e,b(),document.dispatchEvent(new CustomEvent(`profile-updated`,{detail:v}))},getXP(){return v.xp||0},getLevel(){return v.level||1},addXP(e){v.xp===void 0&&(v.xp=0),v.level===void 0&&(v.level=1),v.xp+=e;let t=!1,n=v.level,r=v.level*100;for(;v.xp>=r;)v.xp-=r,v.level++,t=!0,r=v.level*100;b(),document.dispatchEvent(new CustomEvent(`profile-updated`,{detail:v})),t&&document.dispatchEvent(new CustomEvent(`level-up`,{detail:{level:v.level,oldLevel:n}}))},getCredits(){return v.credits},addCredits(e){v.credits+=e,b(),document.dispatchEvent(new CustomEvent(`profile-updated`,{detail:v}))},spendCredits(e){return v.credits>=e?(v.credits-=e,b(),document.dispatchEvent(new CustomEvent(`profile-updated`,{detail:v})),!0):!1},getDecryptedCodes(){return v.decryptedCodes},addDecryptedCode(e){v.decryptedCodes.includes(e)||(v.decryptedCodes.push(e),b(),document.dispatchEvent(new CustomEvent(`profile-updated`,{detail:v})))},getOrders(){return[...v.orders]},addOrder(e,t,n,r=!1){v.orders.unshift({id:e,date:new Date().toLocaleDateString(`ru-RU`),total:t,itemsCount:n});let i=0;return r||(i=Math.round(t*.1),v.credits+=i),this.addXP(100),b(),document.dispatchEvent(new CustomEvent(`profile-updated`,{detail:v})),i}},S={currentStep:0,userData:{address:``,phone:``,email:``},promoDiscount:0,finalTotal:0,paymentMethod:`card`,render(){return`
+    `,r.appendChild(i),setTimeout(()=>{i.classList.add(`toast--show`)},50),setTimeout(()=>{i.classList.remove(`toast--show`),setTimeout(()=>{i.remove(),r.querySelectorAll(`.toast`).length===0&&r.remove()},300)},3e3)}},_=`techwear_cyber_profile`,v={faction:`NETRUNNER`,credits:100,decryptedCodes:[],orders:[],xp:0,level:1},y=()=>{try{let e=localStorage.getItem(_);e&&(v={...v,...JSON.parse(e)})}catch{}},b=()=>{try{localStorage.setItem(_,JSON.stringify(v))}catch{}},x={init(){y()},getFaction(){return v.faction},setFaction(e){v.faction=e,b(),document.dispatchEvent(new CustomEvent(`profile-updated`,{detail:v}))},getXP(){return v.xp||0},getLevel(){return v.level||1},addXP(e){v.xp===void 0&&(v.xp=0),v.level===void 0&&(v.level=1),v.xp+=e;let t=!1,n=v.level,r=v.level*100;for(;v.xp>=r;)v.xp-=r,v.level++,t=!0,r=v.level*100;b(),document.dispatchEvent(new CustomEvent(`profile-updated`,{detail:v})),t&&document.dispatchEvent(new CustomEvent(`level-up`,{detail:{level:v.level,oldLevel:n}}))},getCredits(){return v.credits},addCredits(e){v.credits+=e,b(),document.dispatchEvent(new CustomEvent(`profile-updated`,{detail:v}))},spendCredits(e){return v.credits>=e?(v.credits-=e,b(),document.dispatchEvent(new CustomEvent(`profile-updated`,{detail:v})),!0):!1},getDecryptedCodes(){return v.decryptedCodes},addDecryptedCode(e){v.decryptedCodes.includes(e)||(v.decryptedCodes.push(e),b(),document.dispatchEvent(new CustomEvent(`profile-updated`,{detail:v})))},getOrders(){return[...v.orders]},addOrder(e,t,n,r=!1){v.orders.unshift({id:e,date:new Date().toLocaleDateString(`ru-RU`),total:t,itemsCount:n});let i=0;return r||(i=Math.round(t*.1),v.credits+=i),this.addXP(100),b(),document.dispatchEvent(new CustomEvent(`profile-updated`,{detail:v})),i}},S={currentStep:0,userData:{address:``,phone:``,email:``},promoDiscount:0,finalTotal:0,paymentMethod:`card`,render(){return`
       <div class="checkout-terminal-overlay" id="checkout-terminal-overlay" aria-modal="true" role="dialog">
         <div class="checkout-terminal" id="terminal-container">
           
-          <!-- Шапка терминала -->
           <div class="checkout-terminal__header">
             <span>SECURE_COMM_TERMINAL // PORT: 922</span>
             <div class="checkout-terminal__window-controls">
@@ -163,12 +141,8 @@
             </div>
           </div>
 
-          <!-- Тело логов консоли -->
-          <div class="checkout-terminal__body" id="terminal-output">
-            <!-- Здесь генерируются логи -->
-          </div>
+          <div class="checkout-terminal__body" id="terminal-output"></div>
 
-          <!-- Интерактивная строка ввода -->
           <div class="checkout-terminal__input-line" id="terminal-input-row">
             <span class="checkout-terminal__prompt" id="terminal-prompt-prefix">operator@techwear_os:~$</span>
             <input 
@@ -244,12 +218,9 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
 ***************************************************`),this.printLine(`*          ORDER SUCCESSFULLY DEPLOYED            *`),this.printLine(`*          SECURE ID KEY: #${e}          *`),this.printLine(`*          METHOD: ${a.padEnd(30)} *`),r?this.printLine(`*          CREDITS SPENT: -₵${n.toString().padEnd(20)} *`):this.printLine(`*          CASHBACK AWARDED: +₵${i.toString().padEnd(17)} *`),this.printLine(`*          NEURAL XP REWARD: +100 XP              *`),this.printLine(`***************************************************`),this.printLine(`
 [SYS] Closing link. Stay tactical.`),s.playSuccess(),g.show(`ORDER DISPATCHED: #${e} // DRONE DEPLOYED`,`TACTICAL UPDATE //`,`green`),h.clearCart();let o=document.getElementById(`terminal-output`);if(o){let e=document.createElement(`button`);e.className=`fit-scanner__btn fit-scanner__btn--primary js-interactive`,e.style.marginTop=`20px`,e.style.maxWidth=`250px`,e.textContent=`DISCONNECT TERMINAL //`,e.addEventListener(`click`,()=>{this.close()}),o.appendChild(e),o.scrollTop=o.scrollHeight}},initListeners(){let e=document.getElementById(`checkout-terminal-overlay`),t=document.getElementById(`terminal-container`),n=document.getElementById(`terminal-close-btn`),r=document.getElementById(`terminal-input`),i=document.getElementById(`terminal-input-row`);e&&e.addEventListener(`click`,t=>{t.target===e&&this.currentStep!==5&&this.close()}),n&&n.addEventListener(`click`,()=>{this.currentStep!==5&&this.close()}),t&&r&&t.addEventListener(`click`,()=>{this.currentStep!==5&&r.focus()}),r&&r.addEventListener(`keypress`,e=>{if(e.key===`Enter`){let e=r.value;r.value=``,this.handleInput(e)}}),document.addEventListener(`checkout-opened`,()=>{i&&(i.style.display=`flex`)})}},C={render(){return`
       <div class="cart-drawer" id="cart-drawer">
-        <!-- Затеняющая подложка -->
         <div class="cart-drawer__overlay" id="cart-overlay"></div>
         
-        <!-- Сама выдвижная панель -->
         <div class="cart-drawer__panel">
-          <!-- Шапка корзины -->
           <div class="cart-drawer__header">
             <h3 class="cart-drawer__title">YOUR GEAR //</h3>
             <button class="cart-drawer__close" id="cart-close-btn" aria-label="Закрыть корзину">
@@ -257,12 +228,8 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
             </button>
           </div>
           
-          <!-- Зона списка товаров (динамический рендеринг) -->
-          <div class="cart-drawer__content" id="cart-drawer-content">
-            <!-- Рендерится динамически методом update() -->
-          </div>
+          <div class="cart-drawer__content" id="cart-drawer-content"></div>
           
-          <!-- Подвал корзины (Итог + Кнопка оформления) -->
           <div class="cart-drawer__footer">
             <div class="cart-drawer__total">
               <span class="cart-drawer__total-label">SUBTOTAL:</span>
@@ -285,21 +252,17 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
         </div>
       `;return}i.disabled=!1,n.innerHTML=e.map(e=>`
         <div class="cart-item" data-id="${e.id}">
-          <!-- Миниатюра товара -->
           <div class="cart-item__img-wrapper">
             <img class="cart-item__img" src="${e.image}" alt="${e.name}" />
           </div>
           
-          <!-- Детали и контролы управления -->
           <div class="cart-item__body">
             <div class="cart-item__title" title="${e.name}">${e.name}</div>
             
             <div class="cart-item__info">
-              <!-- Итоговая стоимость конкретной позиции (цена * количество) -->
               <span class="cart-item__price">${e.price*e.quantity}</span>
               
               <div style="display: flex; align-items: center; gap: var(--space-xs);">
-                <!-- Управление количеством -->
                 <div class="cart-item__controls">
                   <button 
                     class="cart-item__btn js-cart-qty-dec" 
@@ -314,7 +277,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
                   >+</button>
                 </div>
                 
-                <!-- Удаление позиции -->
                 <button 
                   class="cart-item__remove-btn js-cart-remove" 
                   data-id="${e.id}" 
@@ -335,7 +297,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
       <div class="fit-scanner-overlay" id="fit-scanner-overlay" aria-modal="true" role="dialog">
         <div class="fit-scanner-modal">
           
-          <!-- Шапка -->
           <div class="fit-scanner__header">
             <div class="fit-scanner__title-group">
               <span class="fit-scanner__title">FIT SCANNER // v2.9</span>
@@ -349,13 +310,9 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
             </button>
           </div>
 
-          <!-- Основное тело модального окна -->
           <div class="fit-scanner__body">
             
-            <!-- ШАГ 1: Ввод параметров -->
             <div class="fit-scanner__step fit-scanner__step--active" id="fit-scanner-step-input">
-              
-              <!-- Набор полей для Apparel (одежда) -->
               <div class="js-scanner-inputs" data-type="apparel" style="display: flex; flex-direction: column; gap: var(--space-md);">
                 <div class="fit-scanner__field">
                   <div class="fit-scanner__label-row">
@@ -373,7 +330,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
                 </div>
               </div>
 
-              <!-- Набор полей для Sneakers (обувь) -->
               <div class="js-scanner-inputs" data-type="sneakers" style="display: none; flex-direction: column; gap: var(--space-md);">
                 <div class="fit-scanner__field">
                   <div class="fit-scanner__label-row">
@@ -384,7 +340,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
                 </div>
               </div>
 
-              <!-- Набор полей для Gloves (перчатки) -->
               <div class="js-scanner-inputs" data-type="gloves" style="display: none; flex-direction: column; gap: var(--space-md);">
                 <div class="fit-scanner__field">
                   <div class="fit-scanner__label-row">
@@ -395,7 +350,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
                 </div>
               </div>
 
-              <!-- Набор полей для One Size (универсальный) -->
               <div class="js-scanner-inputs" data-type="onesize" style="display: none; text-align: center; color: var(--color-text-secondary); padding: var(--space-md) 0;">
                 <p style="font-size: 0.8rem; line-height: 1.5;">
                   THIS MODULE HAS AN ADJUSTABLE FIT SYSTEM.<br>
@@ -410,23 +364,18 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
               </div>
             </div>
 
-            <!-- ШАГ 2: Анимация сканирования -->
             <div class="fit-scanner__step" id="fit-scanner-step-process">
               <div class="fit-scanner__scanning-box">
                 <div class="fit-scanner__hologram"></div>
                 <div class="fit-scanner__laser"></div>
                 
-                <!-- SVG силуэт человека для сканирования -->
                 <svg class="fit-scanner__silhouette" viewBox="0 0 100 100">
                   <path d="M50,15 C54,15 54,23 50,23 C46,23 46,15 50,15 Z M42,25 C45,24 55,24 58,25 C64,26 64,45 61,45 C59,45 59,33 58,33 L57,55 L58,85 L54,85 L51,60 L49,60 L46,85 L42,85 L43,55 L42,33 C41,33 41,45 39,45 C36,45 36,26 42,25 Z"></path>
                 </svg>
               </div>
-              <div class="fit-scanner__logs" id="fit-scanner-log-console">
-                <!-- Сюда вставляются строки логов -->
-              </div>
+              <div class="fit-scanner__logs" id="fit-scanner-log-console"></div>
             </div>
 
-            <!-- ШАГ 3: Результат -->
             <div class="fit-scanner__step" id="fit-scanner-step-results">
               <div class="fit-scanner__results-box">
                 <span class="fit-scanner__result-title" id="fit-product-title">COMPATIBLE SIZE</span>
@@ -454,7 +403,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
       <div class="mbs-overlay" id="mbs-overlay" aria-modal="true" role="dialog">
         <div class="mbs-modal">
           
-          <!-- Шапка -->
           <div class="mbs-header">
             <div class="mbs-title-group">
               <span class="mbs-title">MBS CUSTOMIZER // v1.4</span>
@@ -468,19 +416,14 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
             </button>
           </div>
 
-          <!-- Рабочее пространство -->
           <div class="mbs-workspace">
             
-            <!-- Левая колонка: Интерактивный чертеж -->
             <div class="mbs-blueprint">
               <div class="mbs-grid"></div>
               
-              <!-- Интерактивная тактическая примерочная с манекеном и кружочками-указателями -->
               <div class="mbs-mannequin-container">
-                <!-- Лазерная линия сканирования -->
                 <div class="mbs-scanner-line"></div>
 
-                <!-- HUD диагностика в углу -->
                 <div class="mbs-hud-diagnostics">
                   <div class="mbs-hud-diagnostics__header">SYSTEM INTEGRITY SCAN //</div>
                   <div class="mbs-hud-diagnostics__row" id="hud-diag-slot">SLOT: NONE</div>
@@ -488,28 +431,19 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
                   <div class="mbs-hud-diagnostics__row" id="hud-diag-weight">WEIGHT: -- KG</div>
                 </div>
                 
-                <!-- Фоновое изображение сгенерированного кибер-манекена -->
                 <img class="mbs-mannequin-image" src="${R}" alt="MANNEQUIN SYSTEM PROTOCOL" width="600" height="894" loading="lazy" decoding="async" />
 
-                <!-- SVG направляющих линий (ответвления) -->
                 <svg class="mbs-mannequin-svg" viewBox="0 0 100 150">
                   <g stroke="var(--color-accent-blue)" stroke-width="0.8" stroke-dasharray="2,2" opacity="0.45">
-                    <!-- Head: Node(12, 22) -> Helmet(50, 24) -->
                     <line x1="12" y1="22" x2="50" y2="24" id="line-head"></line>
-                    <!-- Back: Node(88, 37) -> Shoulder/Backpack(68, 45) -->
                     <line x1="88" y1="37" x2="68" y2="45" id="line-back"></line>
-                    <!-- Chest: Node(12, 57) -> Armor(49, 48) -->
                     <line x1="12" y1="57" x2="49" y2="48" id="line-chest"></line>
-                    <!-- Hands: Node(88, 75) -> Glove/Arm(68, 68) -->
                     <line x1="88" y1="75" x2="68" y2="68" id="line-hands"></line>
-                    <!-- Body: Node(12, 93) -> Torso Shell(48, 75) -->
                     <line x1="12" y1="93" x2="48" y2="75" id="line-body"></line>
-                    <!-- Feet: Node(88, 129) -> Boots(50, 132) -->
                     <line x1="88" y1="129" x2="50" y2="132" id="line-feet"></line>
                   </g>
                 </svg>
 
-                <!-- Слоты в виде кружочков (Nodes) по бокам от манекена -->
                 <div class="mbs-node" id="node-head" data-slot="head">
                   <div class="mbs-node__circle">
                     <span class="mbs-node__placeholder">HD</span>
@@ -561,12 +495,9 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
               </div>
             </div>
 
-            <!-- Правая колонка: Управление -->
             <div class="mbs-controls">
               
-              <!-- Селектор слотов -->
               <div class="mbs-slots-list">
-                
                 <div class="mbs-slot-card" data-slot="head">
                   <div class="mbs-slot-info">
                     <span class="mbs-slot-label">Head Module //</span>
@@ -614,22 +545,17 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
                   </div>
                   <span class="mbs-slot-status-badge" id="slot-feet-badge">EMPTY</span>
                 </div>
-
               </div>
 
-              <!-- Панель выбора опций -->
               <div class="mbs-selection-panel">
                 <span class="mbs-selection-title" id="mbs-selection-title">AVAILABLE SHELL MODS //</span>
-                <div class="mbs-options-list" id="mbs-options-list">
-                  <!-- Заполняется динамически -->
-                </div>
+                <div class="mbs-options-list" id="mbs-options-list"></div>
               </div>
 
             </div>
 
           </div>
 
-          <!-- Подвал / Итоги -->
           <div class="mbs-footer">
             <div class="mbs-summary">
               <div class="mbs-summary-item">
@@ -658,7 +584,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
         </div>
       </div>
     `},open(){let e=document.getElementById(`mbs-overlay`);e&&(e.classList.add(`mbs-overlay--open`),document.body.style.overflow=`hidden`,s.playOpen()),this.updateUI(),this.selectSlot(`body`)},close(){let e=document.getElementById(`mbs-overlay`);e&&(e.classList.remove(`mbs-overlay--open`),document.body.style.overflow=``,s.playClick())},selectSlot(e){this.activeSlot=e,document.querySelectorAll(`.mbs-slot-card`).forEach(t=>{t.dataset.slot===e?t.classList.add(`mbs-slot-card--active`):t.classList.remove(`mbs-slot-card--active`)}),document.querySelectorAll(`.mbs-node`).forEach(t=>{t.dataset.slot===e?t.classList.add(`mbs-node--active`):t.classList.remove(`mbs-node--active`)}),document.querySelectorAll(`.mbs-mannequin-svg line`).forEach(e=>{e.setAttribute(`stroke`,`var(--color-accent-blue)`),e.setAttribute(`stroke-width`,`0.8`),e.setAttribute(`opacity`,`0.45`),e.setAttribute(`stroke-dasharray`,`2,2`)});let t=document.getElementById(`line-${e}`);t&&(t.setAttribute(`stroke`,`var(--color-accent-pink)`),t.setAttribute(`stroke-width`,`1.5`),t.setAttribute(`opacity`,`1`),t.removeAttribute(`stroke-dasharray`));let n=this.equippedItems[e],r=document.getElementById(`hud-diag-slot`),i=document.getElementById(`hud-diag-item`),a=document.getElementById(`hud-diag-weight`);r&&(r.textContent=`SLOT: ${e.toUpperCase()}`),i&&(i.textContent=`ITEM: ${n?n.name.toUpperCase():`EMPTY`}`),a&&(a.textContent=`WEIGHT: ${n?n.weight.toFixed(1)+` KG`:`0.0 KG`}`);let o=document.getElementById(`mbs-selection-title`);o&&(o.textContent=`AVAILABLE ${e.toUpperCase()} MODULES //`),this.renderOptionsList()},renderOptionsList(){let e=document.getElementById(`mbs-options-list`);if(!e)return;let t=z.filter(e=>e.slot===this.activeSlot),n=this.equippedItems[this.activeSlot],r=`
-      <!-- Опция "Пустой слот" -->
       <div class="mbs-option-row ${n?``:`mbs-option-row--selected`}" data-id="none">
         <div class="mbs-option-thumb" style="display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.4);">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="2.5">
@@ -681,7 +606,7 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
             <span class="mbs-option-price">$${e.price} // ${e.weight} KG</span>
           </div>
         </div>
-      `}),e.innerHTML=r},equipItem(e){if(e===`none`)this.equippedItems[this.activeSlot]=null;else{let t=z.find(t=>t.id===e);t&&(this.equippedItems[this.activeSlot]=t)}s.playClick(),this.updateUI(),this.renderOptionsList()},updateUI(){let e=0,t=0,n=0;Object.keys(this.equippedItems).forEach(r=>{let i=this.equippedItems[r],a=document.getElementById(`slot-${r}-text`),o=document.getElementById(`slot-${r}-badge`),s=document.getElementById(`node-${r}`),c=document.getElementById(`node-${r}-img`),l=document.getElementById(`line-${r}`);i?(e+=i.price,t+=i.weight,n++,a&&(a.textContent=i.name),o&&(o.textContent=`EQUIPPED`,o.className=`mbs-slot-status-badge mbs-slot-status-badge--equipped`),s&&s.classList.add(`mbs-node--equipped`),c&&(c.src=i.image),l&&(l.setAttribute(`stroke`,{head:`var(--color-accent-blue)`,body:`var(--color-accent-blue)`,hands:`var(--color-accent-blue)`,chest:`var(--color-accent-pink)`,back:`var(--color-accent-green)`,feet:`var(--color-accent-green)`}[r]),l.setAttribute(`opacity`,`0.75`),l.classList.add(`line--flowing`))):(a&&(a.textContent=`Empty slot`),o&&(o.textContent=`EMPTY`,o.className=`mbs-slot-status-badge mbs-slot-status-badge--empty`),s&&s.classList.remove(`mbs-node--equipped`),l&&(l.setAttribute(`stroke`,`var(--color-accent-blue)`),l.setAttribute(`opacity`,`0.35`),l.classList.remove(`line--flowing`)))});let r=this.equippedItems[this.activeSlot],i=document.getElementById(`hud-diag-slot`),a=document.getElementById(`hud-diag-item`),o=document.getElementById(`hud-diag-weight`);i&&(i.textContent=`SLOT: ${this.activeSlot.toUpperCase()}`),a&&(a.textContent=`ITEM: ${r?r.name.toUpperCase():`EMPTY`}`),o&&(o.textContent=`WEIGHT: ${r?r.weight.toFixed(1)+` KG`:`0.0 KG`}`);let s=document.getElementById(`mbs-total-price`),c=document.getElementById(`mbs-total-weight`),l=document.getElementById(`mbs-deploy-btn`);s&&(s.textContent=`$${e}`),c&&(c.textContent=`${t.toFixed(1)} KG`),l&&(l.disabled=n===0)},reset(){Object.keys(this.equippedItems).forEach(e=>{this.equippedItems[e]=null}),s.playError(),this.updateUI(),this.renderOptionsList()},deployToCart(){let e=0;Object.keys(this.equippedItems).forEach(t=>{let n=this.equippedItems[t];n&&(h.addToCart({id:n.id,name:n.name,price:n.price,image:n.image}),e++)}),e>0&&(s.playSuccess(),g.show(`DEPLOYED MODULE SUITE // ${e} ITEMS ENGAGED //`,`MBS CONFIG SYNC //`,`blue`),x.addXP(50),this.close())},shareLoadout(){let e=[];if(Object.keys(this.equippedItems).forEach(t=>{let n=this.equippedItems[t];n&&e.push(`${t}:${n.id}`)}),e.length===0){s.playError(),g.show(`NO MODULES EQUIPPED TO SHARE //`,`MBS SYNC ERROR //`,`pink`);return}let t=e.join(`,`),n=new URL(window.location.href);n.searchParams.set(`loadout`,t),navigator.clipboard.writeText(n.toString()).then(()=>{s.playSuccess(),g.show(`CONFIG COPIED TO CLIPBOARD //`,`MBS LINK LINKED //`,`green`)}).catch(e=>{console.error(`Failed to copy loadout url: `,e),s.playError()})},loadFromUrl(){let e=new URLSearchParams(window.location.search).get(`loadout`);if(!e)return;let t=e.split(`,`),n=0;if(t.forEach(e=>{let[t,r]=e.split(`:`);if(t&&r&&t in this.equippedItems){let e=z.find(e=>e.id===r);e&&(this.equippedItems[t]=e,n++)}}),n>0){this.updateUI(),setTimeout(()=>{this.open(),g.show(`LOADED ${n} MODULES FROM LINK //`,`MBS CONFIG SYNC //`,`blue`)},500);let e=new URL(window.location.href);e.searchParams.delete(`loadout`),window.history.replaceState({},document.title,e.toString())}},initListeners(){let e=document.getElementById(`mbs-overlay`),t=document.getElementById(`mbs-close-btn`),n=document.getElementById(`mbs-share-btn`),r=document.getElementById(`mbs-reset-btn`),i=document.getElementById(`mbs-deploy-btn`);e&&e.addEventListener(`click`,t=>{t.target===e&&this.close()}),t&&t.addEventListener(`click`,()=>this.close()),n&&n.addEventListener(`click`,()=>this.shareLoadout()),r&&r.addEventListener(`click`,()=>this.reset()),i&&i.addEventListener(`click`,()=>this.deployToCart()),document.querySelectorAll(`.mbs-node`).forEach(e=>{e.addEventListener(`click`,t=>{let n=e.dataset.slot;n&&(s.playClick(),this.selectSlot(n))})}),document.querySelectorAll(`.mbs-slot-card`).forEach(e=>{e.addEventListener(`click`,()=>{let t=e.dataset.slot;t&&(s.playClick(),this.selectSlot(t))})});let a=document.getElementById(`mbs-options-list`);a&&a.addEventListener(`click`,e=>{let t=e.target.closest(`.mbs-option-row`);if(t){let e=t.dataset.id;this.equipItem(e)}})}},V={NETRUNNER:{title:`NETRUNNER // SEC-LEVEL 4`,desc:`Специалист по виртуальному взлому и обходу сетевых брандмауэров. Легко расшифровывает закрытые корпоративные узлы.`,perk:`Hacking decryption time -50%`},CYBORG:{title:`CYBORG // AUG-LEVEL 8`,desc:`Высокотехнологичный боевой юнит с аугментациями суставов и когнитивных функций. Предпочитает тяжелую модульную броню.`,perk:`Armor module sync +20%`},RECON:{title:`RECON AGENT // COLD-OPS`,desc:`Разведчик скрытого проникновения. Легкая бесшумная экипировка, маскировка в тепловом и визуальном спектрах.`,perk:`Stealth modules efficiency +30%`},OPERATIVE:{title:`OPERATIVE // SHADOW SPEC`,desc:`Универсальный тактический специалист городского боя. Оптимизирован для координации всех MBS модулей.`,perk:`MBS modular load capacity +15%`}},H={terminalHistory:[`[SYS] Neural link established.`,`[SYS] Welcome to DECRYPTOR terminal. Type "help" to start.`],render(){let e=x.getFaction(),t=x.getCredits(),n=x.getOrders(),r=x.getLevel(),i=x.getXP(),a=r*100,o=Math.min(100,Math.round(i/a*100)),s=V[e]||V.NETRUNNER,c=``;return c=n.length===0?`
+      `}),e.innerHTML=r},equipItem(e){if(e===`none`)this.equippedItems[this.activeSlot]=null;else{let t=z.find(t=>t.id===e);t&&(this.equippedItems[this.activeSlot]=t)}s.playClick(),this.updateUI(),this.renderOptionsList()},updateUI(){let e=0,t=0,n=0;Object.keys(this.equippedItems).forEach(r=>{let i=this.equippedItems[r],a=document.getElementById(`slot-${r}-text`),o=document.getElementById(`slot-${r}-badge`),s=document.getElementById(`node-${r}`),c=document.getElementById(`node-${r}-img`),l=document.getElementById(`line-${r}`);i?(e+=i.price,t+=i.weight,n++,a&&(a.textContent=i.name),o&&(o.textContent=`EQUIPPED`,o.className=`mbs-slot-status-badge mbs-slot-status-badge--equipped`),s&&s.classList.add(`mbs-node--equipped`),c&&(c.src=i.image),l&&(l.setAttribute(`stroke`,{head:`var(--color-accent-blue)`,body:`var(--color-accent-blue)`,hands:`var(--color-accent-blue)`,chest:`var(--color-accent-pink)`,back:`var(--color-accent-green)`,feet:`var(--color-accent-green)`}[r]),l.setAttribute(`opacity`,`0.75`),l.classList.add(`line--flowing`))):(a&&(a.textContent=`Empty slot`),o&&(o.textContent=`EMPTY`,o.className=`mbs-slot-status-badge mbs-slot-status-badge--empty`),s&&s.classList.remove(`mbs-node--equipped`),l&&(l.setAttribute(`stroke`,`var(--color-accent-blue)`),l.setAttribute(`opacity`,`0.35`),l.classList.remove(`line--flowing`)))});let r=this.equippedItems[this.activeSlot],i=document.getElementById(`hud-diag-slot`),a=document.getElementById(`hud-diag-item`),o=document.getElementById(`hud-diag-weight`);i&&(i.textContent=`SLOT: ${this.activeSlot.toUpperCase()}`),a&&(a.textContent=`ITEM: ${r?r.name.toUpperCase():`EMPTY`}`),o&&(o.textContent=`WEIGHT: ${r?r.weight.toFixed(1)+` KG`:`0.0 KG`}`);let s=document.getElementById(`mbs-total-price`),c=document.getElementById(`mbs-total-weight`),l=document.getElementById(`mbs-deploy-btn`);s&&(s.textContent=`$${e}`),c&&(c.textContent=`${t.toFixed(1)} KG`),l&&(l.disabled=n===0)},reset(){Object.keys(this.equippedItems).forEach(e=>{this.equippedItems[e]=null}),s.playError(),this.updateUI(),this.renderOptionsList()},deployToCart(){let e=0;Object.keys(this.equippedItems).forEach(t=>{let n=this.equippedItems[t];n&&(h.addToCart({id:n.id,name:n.name,price:n.price,image:n.image}),e++)}),e>0&&(s.playSuccess(),g.show(`DEPLOYED MODULE SUITE // ${e} ITEMS ENGAGED //`,`MBS CONFIG SYNC //`,`blue`),x.addXP(50),this.close())},shareLoadout(){let e=[];if(Object.keys(this.equippedItems).forEach(t=>{let n=this.equippedItems[t];n&&e.push(`${t}:${n.id}`)}),e.length===0){s.playError(),g.show(`NO MODULES EQUIPPED TO SHARE //`,`MBS SYNC ERROR //`,`pink`);return}let t=e.join(`,`),n=new URL(window.location.href);n.searchParams.set(`loadout`,t),navigator.clipboard.writeText(n.toString()).then(()=>{s.playSuccess(),g.show(`CONFIG COPIED TO CLIPBOARD //`,`MBS LINK LINKED //`,`green`)}).catch(e=>{console.error(`Failed to copy loadout url: `,e),s.playError()})},loadFromUrl(){let e=new URLSearchParams(window.location.search).get(`loadout`);if(!e)return;let t=e.split(`,`),n=0;if(t.forEach(e=>{let[t,r]=e.split(`:`);if(t&&r&&t in this.equippedItems){let e=z.find(e=>e.id===r);e&&(this.equippedItems[t]=e,n++)}}),n>0){this.updateUI(),setTimeout(()=>{this.open(),g.show(`LOADED ${n} MODULES FROM LINK //`,`MBS CONFIG SYNC //`,`blue`)},500);let e=new URL(window.location.href);e.searchParams.delete(`loadout`),window.history.replaceState({},document.title,e.toString())}},initListeners(){let e=document.getElementById(`mbs-overlay`),t=document.getElementById(`mbs-close-btn`),n=document.getElementById(`mbs-share-btn`),r=document.getElementById(`mbs-reset-btn`),i=document.getElementById(`mbs-deploy-btn`);e&&e.addEventListener(`click`,t=>{t.target===e&&this.close()}),t&&t.addEventListener(`click`,()=>this.close()),n&&n.addEventListener(`click`,()=>this.shareLoadout()),r&&r.addEventListener(`click`,()=>this.reset()),i&&i.addEventListener(`click`,()=>this.deployToCart()),document.querySelectorAll(`.mbs-node`).forEach(e=>{e.addEventListener(`click`,()=>{let t=e.dataset.slot;t&&(s.playClick(),this.selectSlot(t))})}),document.querySelectorAll(`.mbs-slot-card`).forEach(e=>{e.addEventListener(`click`,()=>{let t=e.dataset.slot;t&&(s.playClick(),this.selectSlot(t))})});let a=document.getElementById(`mbs-options-list`);a&&a.addEventListener(`click`,e=>{let t=e.target.closest(`.mbs-option-row`);if(t){let e=t.dataset.id;this.equipItem(e)}})}},V={NETRUNNER:{title:`NETRUNNER // SEC-LEVEL 4`,desc:`Специалист по виртуальному взлому и обходу сетевых брандмауэров. Легко расшифровывает закрытые корпоративные узлы.`,perk:`Hacking decryption time -50%`},CYBORG:{title:`CYBORG // AUG-LEVEL 8`,desc:`Высокотехнологичный боевой юнит с аугментациями суставов и когнитивных функций. Предпочитает тяжелую модульную броню.`,perk:`Armor module sync +20%`},RECON:{title:`RECON AGENT // COLD-OPS`,desc:`Разведчик скрытого проникновения. Легкая бесшумная экипировка, маскировка в тепловом и визуальном спектрах.`,perk:`Stealth modules efficiency +30%`},OPERATIVE:{title:`OPERATIVE // SHADOW SPEC`,desc:`Универсальный тактический специалист городского боя. Оптимизирован для координации всех MBS модулей.`,perk:`MBS modular load capacity +15%`}},H={terminalHistory:[`[SYS] Neural link established.`,`[SYS] Welcome to DECRYPTOR terminal. Type "help" to start.`],render(){let e=x.getFaction(),t=x.getCredits(),n=x.getOrders(),r=x.getLevel(),i=x.getXP(),a=r*100,o=Math.min(100,Math.round(i/a*100)),s=V[e]||V.NETRUNNER,c=``;return c=n.length===0?`
         <div class="profile-orders__empty">
           NO DISPATCH LOGS FOUND //
         </div>
@@ -697,7 +622,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
       <div class="profile-overlay" id="profile-overlay" aria-modal="true" role="dialog">
         <div class="profile-container" id="profile-container">
           
-          <!-- Шапка -->
           <div class="profile-header">
             <span>NEURAL_LINK // CUSTOMER ID CARD</span>
             <div class="profile-window-controls">
@@ -707,13 +631,10 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
             </div>
           </div>
 
-          <!-- Контент -->
           <div class="profile-body">
             
-            <!-- Левая колонка: ID Card -->
             <div class="profile-card-section">
               <div class="profile-card">
-                <!-- Аватар (ASCII) -->
                 <div class="profile-card__avatar-container">
                   <pre class="profile-card__avatar">
    .---.
@@ -726,7 +647,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
                   <div class="profile-card__avatar-overlay"></div>
                 </div>
 
-                <!-- Детали -->
                 <div class="profile-card__details">
                   <div class="profile-card__label">CODENAME:</div>
                   <div class="profile-card__val">OPERATOR_LELYALER</div>
@@ -736,7 +656,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
                     LEVEL ${r} // <span style="font-size: 0.65rem; color: var(--color-text-secondary);">${i} / ${a} XP</span>
                   </div>
 
-                  <!-- XP Progress Bar -->
                   <div class="profile-xp-bar" title="Neural Experience Progress">
                     <div class="profile-xp-bar__fill" style="width: ${o}%;"></div>
                   </div>
@@ -752,7 +671,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
                 </div>
               </div>
 
-              <!-- Фракция -->
               <div class="profile-faction">
                 <h4 class="profile-section-title">CHOOSE SPECIALIZATION //</h4>
                 <div class="profile-faction__grid">
@@ -773,9 +691,7 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
               </div>
             </div>
 
-            <!-- Правая колонка: Терминал взлома и Заказы -->
             <div class="profile-interact-section">
-              <!-- Терминал -->
               <div class="hacker-terminal">
                 <div class="hacker-terminal__header">SYSTEM DECRYPTOR PROMPT //</div>
                 <div class="hacker-terminal__body" id="hacker-output">
@@ -794,7 +710,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
                 </div>
               </div>
 
-              <!-- Логи заказов -->
               <div class="profile-orders">
                 <h4 class="profile-section-title">SECURE DISPATCH LOGS //</h4>
                 <div class="profile-orders__list" id="profile-orders-list">
@@ -806,12 +721,11 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
           </div>
         </div>
       </div>
-    `},open(){if(!document.getElementById(`profile-overlay`))return;document.querySelector(`#app`);let e=document.getElementById(`profile-overlay`);e&&(e.outerHTML=this.render()),document.getElementById(`profile-overlay`).classList.add(`profile-overlay--open`),document.body.style.overflow=`hidden`,s.playOpen(),this.initListeners();let t=document.getElementById(`hacker-output`);t&&(t.scrollTop=t.scrollHeight)},close(){let e=document.getElementById(`profile-overlay`);e&&(e.classList.remove(`profile-overlay--open`),document.body.style.overflow=``,s.playClick())},printLine(e){let t=document.getElementById(`hacker-output`);if(!t)return;this.terminalHistory.push(e),this.terminalHistory.length>50&&this.terminalHistory.shift();let n=document.createElement(`div`);n.textContent=e,t.appendChild(n),t.scrollTop=t.scrollHeight},handleCommand(e){let t=e.trim();if(!t)return;this.printLine(`> ${t}`),s.playClick();let n=t.split(` `),r=n[0].toLowerCase(),i=n[1]?n[1].toUpperCase():null;if(r===`help`)this.printLine(`SUPPORTED PROTOCOLS:`),this.printLine(`  scan               - Scan network for vulnerable Corp Nodes.`),this.printLine(`  decrypt [node_id]  - Decrypt specific node to bypass price firewalls.`),this.printLine(`  inject             - Inject system exploit to gain ₵50 credits.`),this.printLine(`  clear              - Wipe terminal history.`);else if(r===`scan`)this.printLine(`[SYS] Scanning local sectors...`),setTimeout(()=>{this.printLine(`FOUND VULNERABLE CORPNETS //`),this.printLine(`  NODE: CORP_SHIELD_V4 [FIREWALL: SECURE] [GEO: LOCAL]`),this.printLine(`  NODE: TACTICAL_NODE_9 [FIREWALL: NORMAL] [GEO: LOCAL]`),this.printLine(`Use "decrypt [node]" command to start security bypass.`),s.playSuccess()},500);else if(r===`decrypt`){if(!i){this.printLine(`[ERR] SPECIFY TARGET NODE ID (e.g. "decrypt TACTICAL_NODE_9")`),s.playError();return}i===`CORP_SHIELD_V4`?(this.printLine(`[SYS] TARGET: CORP_SHIELD_V4 // STARTING BYPASS...`),this.runDecryptionSequence(`NEOHACK20`,20)):i===`TACTICAL_NODE_9`?(this.printLine(`[SYS] TARGET: TACTICAL_NODE_9 // STARTING BYPASS...`),this.runDecryptionSequence(`TACTICAL15`,15)):(this.printLine(`[ERR] TARGET "${i}" NOT FOUND IN LOCAL SCAN.`),s.playError())}else if(r===`inject`)this.printLine(`[SYS] Running kernel exploit...`),setTimeout(()=>{x.addCredits(50),x.addXP(15),this.printLine(`[SYS] EXPLOIT CONFIRMED. +₵50 Cyber Credits added.`),g.show(`₵50 INJECTED // EXPLOIT CONFIRMED`,`SECURITY BYPASS //`,`pink`),s.playSuccess();let e=document.getElementById(`profile-credits-value`);e&&(e.textContent=x.getCredits())},600);else if(r===`clear`){this.terminalHistory=[];let e=document.getElementById(`hacker-output`);e&&(e.innerHTML=``)}else this.printLine(`[ERR] COMMAND "${r.toUpperCase()}" REJECTED BY HOST.`),s.playError()},runDecryptionSequence(e,t){let n=document.getElementById(`hacker-input`);n&&(n.disabled=!0);let r=[`  Connecting... [OK]`,`  Bypassing TLS handshake... [OK]`,`  Injecting Buffer Overflow payload... [OK]`,`  Extracting cypher key... 30%`,`  Extracting cypher key... 70%`,`  Extracting cypher key... 100% [SUCCESS]`,`  DECRYPTED ACCESS CODE: [${e}]`],i=0,a=setInterval(()=>{i<r.length?(this.printLine(r[i]),s.playClick(),i++):(clearInterval(a),x.addDecryptedCode(e),x.addXP(30),this.printLine(`[SYS] Promo code [${e}] is now unlocked in checkout! (-${t}%)`),g.show(`UNLOCKED PROMO CODE: ${e}`,`DECRYPTION COMPLETE //`,`green`),s.playSuccess(),n&&(n.disabled=!1,n.focus()))},400)},initListeners(){let e=document.getElementById(`profile-overlay`),t=document.getElementById(`profile-close-btn`),n=document.getElementById(`hacker-input`),r=document.querySelectorAll(`.js-faction-select`);e&&e.addEventListener(`click`,t=>{t.target===e&&this.close()}),t&&t.addEventListener(`click`,()=>this.close()),n&&n.addEventListener(`keypress`,e=>{if(e.key===`Enter`){let e=n.value;n.value=``,this.handleCommand(e)}}),r.forEach(e=>{e.addEventListener(`click`,e=>{let t=e.target.dataset.faction;x.setFaction(t),x.addXP(10),s.playClick(),r.forEach(e=>e.classList.remove(`profile-faction__btn--active`)),e.target.classList.add(`profile-faction__btn--active`);let n=V[t],i=document.getElementById(`faction-desc-box`);i&&n&&(i.innerHTML=`
+    `},open(){if(!document.getElementById(`profile-overlay`))return;let e=document.getElementById(`profile-overlay`);e&&(e.outerHTML=this.render()),document.getElementById(`profile-overlay`).classList.add(`profile-overlay--open`),document.body.style.overflow=`hidden`,s.playOpen(),this.initListeners();let t=document.getElementById(`hacker-output`);t&&(t.scrollTop=t.scrollHeight)},close(){let e=document.getElementById(`profile-overlay`);e&&(e.classList.remove(`profile-overlay--open`),document.body.style.overflow=``,s.playClick())},printLine(e){let t=document.getElementById(`hacker-output`);if(!t)return;this.terminalHistory.push(e),this.terminalHistory.length>50&&this.terminalHistory.shift();let n=document.createElement(`div`);n.textContent=e,t.appendChild(n),t.scrollTop=t.scrollHeight},handleCommand(e){let t=e.trim();if(!t)return;this.printLine(`> ${t}`),s.playClick();let n=t.split(` `),r=n[0].toLowerCase(),i=n[1]?n[1].toUpperCase():null;if(r===`help`)this.printLine(`SUPPORTED PROTOCOLS:`),this.printLine(`  scan               - Scan network for vulnerable Corp Nodes.`),this.printLine(`  decrypt [node_id]  - Decrypt specific node to bypass price firewalls.`),this.printLine(`  inject             - Inject system exploit to gain ₵50 credits.`),this.printLine(`  clear              - Wipe terminal history.`);else if(r===`scan`)this.printLine(`[SYS] Scanning local sectors...`),setTimeout(()=>{this.printLine(`FOUND VULNERABLE CORPNETS //`),this.printLine(`  NODE: CORP_SHIELD_V4 [FIREWALL: SECURE] [GEO: LOCAL]`),this.printLine(`  NODE: TACTICAL_NODE_9 [FIREWALL: NORMAL] [GEO: LOCAL]`),this.printLine(`Use "decrypt [node]" command to start security bypass.`),s.playSuccess()},500);else if(r===`decrypt`){if(!i){this.printLine(`[ERR] SPECIFY TARGET NODE ID (e.g. "decrypt TACTICAL_NODE_9")`),s.playError();return}i===`CORP_SHIELD_V4`?(this.printLine(`[SYS] TARGET: CORP_SHIELD_V4 // STARTING BYPASS...`),this.runDecryptionSequence(`NEOHACK20`,20)):i===`TACTICAL_NODE_9`?(this.printLine(`[SYS] TARGET: TACTICAL_NODE_9 // STARTING BYPASS...`),this.runDecryptionSequence(`TACTICAL15`,15)):(this.printLine(`[ERR] TARGET "${i}" NOT FOUND IN LOCAL SCAN.`),s.playError())}else if(r===`inject`)this.printLine(`[SYS] Running kernel exploit...`),setTimeout(()=>{x.addCredits(50),x.addXP(15),this.printLine(`[SYS] EXPLOIT CONFIRMED. +₵50 Cyber Credits added.`),g.show(`₵50 INJECTED // EXPLOIT CONFIRMED`,`SECURITY BYPASS //`,`pink`),s.playSuccess();let e=document.getElementById(`profile-credits-value`);e&&(e.textContent=x.getCredits())},600);else if(r===`clear`){this.terminalHistory=[];let e=document.getElementById(`hacker-output`);e&&(e.innerHTML=``)}else this.printLine(`[ERR] COMMAND "${r.toUpperCase()}" REJECTED BY HOST.`),s.playError()},runDecryptionSequence(e,t){let n=document.getElementById(`hacker-input`);n&&(n.disabled=!0);let r=[`  Connecting... [OK]`,`  Bypassing TLS handshake... [OK]`,`  Injecting Buffer Overflow payload... [OK]`,`  Extracting cypher key... 30%`,`  Extracting cypher key... 70%`,`  Extracting cypher key... 100% [SUCCESS]`,`  DECRYPTED ACCESS CODE: [${e}]`],i=0,a=setInterval(()=>{i<r.length?(this.printLine(r[i]),s.playClick(),i++):(clearInterval(a),x.addDecryptedCode(e),x.addXP(30),this.printLine(`[SYS] Promo code [${e}] is now unlocked in checkout! (-${t}%)`),g.show(`UNLOCKED PROMO CODE: ${e}`,`DECRYPTION COMPLETE //`,`green`),s.playSuccess(),n&&(n.disabled=!1,n.focus()))},400)},initListeners(){let e=document.getElementById(`profile-overlay`),t=document.getElementById(`profile-close-btn`),n=document.getElementById(`hacker-input`),r=document.querySelectorAll(`.js-faction-select`);e&&e.addEventListener(`click`,t=>{t.target===e&&this.close()}),t&&t.addEventListener(`click`,()=>this.close()),n&&n.addEventListener(`keypress`,e=>{if(e.key===`Enter`){let e=n.value;n.value=``,this.handleCommand(e)}}),r.forEach(e=>{e.addEventListener(`click`,e=>{let t=e.target.dataset.faction;x.setFaction(t),x.addXP(10),s.playClick(),r.forEach(e=>e.classList.remove(`profile-faction__btn--active`)),e.target.classList.add(`profile-faction__btn--active`);let n=V[t],i=document.getElementById(`faction-desc-box`);i&&n&&(i.innerHTML=`
             <div class="profile-faction__title">${n.title}</div>
             <div class="profile-faction__desc">${n.desc}</div>
             <div class="profile-faction__perk">SYSTEM PERK: ${n.perk}</div>
           `),g.show(`SPECIALIZATION ALIGNED: [${t}]`,`NEURAL UPDATE //`,`blue`)})})}},U=`/techwear-store/assets/techwear-banner-XSLfCPMP.webp`,W=`/techwear-store/assets/techwear-male-banner-ByKaVXgV.webp`,ee=`/techwear-store/assets/techwear-cyber-banner-BA7vWZ7l.webp`,te=`/techwear-store/assets/techwear-pilot-banner-B6twpLve.webp`,G={render(){return`
-      <!-- Главный баннер (Hero section) -->
       <section class="hero-banner reveal">
         <div class="hero-banner__image-wrapper">
           <img 
@@ -878,7 +792,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
         </div>
       </section>
 
-      <!-- Модалка Манифеста -->
       <div class="manifesto-overlay" id="manifesto-overlay">
         <div class="manifesto-modal">
           <div class="manifesto-header">
@@ -901,7 +814,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
         </div>
       </div>
     `},renderFeatures(){return`
-      <!-- Блок с описанием ключевых особенностей -->
       <section class="brand-features reveal">
         <div class="brand-feature js-interactive">
           <div class="brand-feature__icon-wrapper">
@@ -941,7 +853,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
         </div>
       </section>
     `},initListeners(){let e=document.getElementById(`manifesto-overlay`),t=document.querySelectorAll(`.js-open-manifesto`),n=document.querySelectorAll(`.js-close-manifesto`),r=[`female`,`male`,`cyber`,`pilot`],i=0,a=()=>{document.querySelectorAll(`.hero-banner__image[data-src]`).forEach(e=>{e.src=e.dataset.src,e.removeAttribute(`data-src`)})};document.readyState===`complete`?setTimeout(a,1500):window.addEventListener(`load`,()=>setTimeout(a,1500),{once:!0}),window.techwearBannerInterval&&clearInterval(window.techwearBannerInterval),window.techwearBannerInterval=setInterval(()=>{let e=(i+1)%r.length,t=r[e],n=document.getElementById(`hero-banner-img-${t}`);n&&n.dataset.src&&(n.src=n.dataset.src,n.removeAttribute(`data-src`)),r.forEach(e=>{let t=document.getElementById(`hero-banner-img-${e}`);t&&t.classList.remove(`hero-banner__image--active`)}),i=e;let a=document.getElementById(`hero-banner-img-${r[i]}`);a&&a.classList.add(`hero-banner__image--active`)},6e3),t.forEach(t=>{t.addEventListener(`click`,()=>{e&&(e.classList.add(`manifesto-overlay--open`),document.body.style.overflow=`hidden`,s.playOpen())})}),n.forEach(t=>{t.addEventListener(`click`,()=>{e&&(e.classList.remove(`manifesto-overlay--open`),document.body.style.overflow=``,s.playClick())})}),e&&e.addEventListener(`click`,t=>{t.target===e&&(e.classList.remove(`manifesto-overlay--open`),document.body.style.overflow=``,s.playClick())})}},K=`/techwear-store/assets/avatar-ghost-aUjY0a8D.webp`,q=`/techwear-store/assets/avatar-netrunner-CfkeMolR.webp`,J=`/techwear-store/assets/avatar-recon-ByquxoFk.webp`,ne=[{author:`GHOST_OPERATOR // SEC-UNIT 7`,avatar:K,text:`Shadow Shell Jacket — лучшая куртка для операций в дождливых секторах. Nanotech-мембрана действительно отталкивает кислотный дождь. 100% защита.`,rating:`SEC-LEVEL 5 // MAXIMUM`},{author:`NETRUNNER_0X // DECRYPTOR`,avatar:q,text:`Cyber Visor Specs спасли мои глаза при работе со светошумовыми глитч-экранами. HUD контрастный, HUD-проекция не лагает при быстром движении.`,rating:`SEC-LEVEL 5 // MAXIMUM`},{author:`RECON_STRIDER // COLD-OPS`,avatar:J,text:`C-3 Cyber Rig Harness сел идеально под тактическую разгрузку. Стропы прочные, замки Cobra надежные, быстро сбрасываются одной рукой.`,rating:`SEC-LEVEL 4 // SECURE`},{author:`PHANTOM_SPEC // TOKYO-NET`,avatar:K,text:`M-1 Cyber Rebreather Mask фильтрует любые токсичные аэрозоли в нижних уровнях мегаполиса. Рекомендую брать вместе со сменными HEPA-фильтрами.`,rating:`SEC-LEVEL 5 // MAXIMUM`},{author:`CYBORG_CORE_02 // AUG-HEAVY`,avatar:q,text:`B-5 Modular Pack V2 вмещает весь боезапас и дополнительные сменные линзы. Замки и швы усилены, молнии полностью влагозащитные. Проверен в боях.`,rating:`SEC-LEVEL 5 // MAXIMUM`},{author:`STEALTH_AGENT // MINSK-CORE`,avatar:J,text:`S-7 Cyber Sneakers имеют отличную амортизацию и превосходно светятся в темноте. Система автошнуровки работает без осечек. Подошва не скользит.`,rating:`SEC-LEVEL 4 // SECURE`}],re=[{q:`КАК РАБОТАЕТ МОДУЛЬНАЯ СИСТЕМА MBS //`,a:`MBS (Modular Belt System) — это наш фирменный стандарт крепления экипировки. Каждый модуль (сумка, кобура, разгрузка, карман) имеет стандартизированные магнитные крепления Fidlock или стропы Molle. Вы можете комбинировать и цеплять любые модули на куртки, рюкзаки или ремни в нашем конструкторе.`},{q:`ЧТО ТАКОЕ БЕСПИЛОТНАЯ UAV-ДОСТАВКА //`,a:`Доставка в сектор осуществляется автономными квадрокоптерами-курьерами серии UAV-200. После подтверждения заказа в терминале дрон стартует из ближайшего автоматизированного дока и сбрасывает посылку в герметичном контейнере в вашем секторе. Доставка занимает от 15 до 30 минут.`},{q:`ЧТО ТАКOЕ БИОМЕТРИЧЕСКИЙ FIT-СКАНЕР //`,a:`Это встроенная утилита, которая считывает весовые и ростовые параметры вашего тела, подбирая наиболее совместимый размер одежды (S, M, L, XL) под крой конкретного бренда. Вы найдете кнопку сканера на карточке каждого товара.`},{q:`КАК ПОЛУЧИТЬ СКИДОЧНЫЕ СИГНАТУРЫ (ПРОМОКОДЫ) //`,a:`Для получения скидок вы можете взломать защищенные сетевые узлы в интерактивном хакинг-терминале в вашем личном кабинете (кнопка "NEURAL ID //" в шапке). Выполняйте команды "scan" и "decrypt [node]", чтобы получить коды.`}],Y={render(){return`
-      <!-- Секция Отзывов -->
       <section class="info-section-wrapper reveal" style="margin-top: var(--space-xl);">
         <div class="reviews-header">
           <h2 class="info-section-title">USER // TRANSMISSION LOGS (REVIEWS)</h2>
@@ -970,7 +881,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
         </div>
       </section>
 
-      <!-- Секция FAQ -->
       <section class="info-section-wrapper reveal" style="margin-top: var(--space-xl); margin-bottom: var(--space-xl);">
         <h2 class="info-section-title">SYSTEM // DIRECTIVES FAQ</h2>
         <div class="faq-container">
@@ -993,7 +903,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
       <footer class="footer reveal">
         <div class="footer__container">
           
-          <!-- Левая секция: Брендинг и Копирайт -->
           <div class="footer__section">
             <div class="footer__logo">
               <span class="footer__logo-brand">TECHWEAR</span>
@@ -1005,7 +914,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
             </p>
           </div>
 
-          <!-- Средняя секция: Статус Телеметрии -->
           <div class="footer__section">
             <h4 class="footer__title">SYSTEM TELEMETRY //</h4>
             <div class="footer__telemetry">
@@ -1024,7 +932,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
             </div>
           </div>
 
-          <!-- Правая секция: Юридические директивы -->
           <div class="footer__section">
             <h4 class="footer__title">LEGAL PROTOCOLS //</h4>
             <ul class="footer__links">
@@ -1054,7 +961,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
       [NEURAL NETWORK] SIGNAL SYNC COMPLETED // ENCRYPTED promo codes decoded in profile terminal (NEURAL ID) // 
       [WEATHER CORE] ACID PRECIPITATION CURRENT TEMPERATURE: 14°C // ACID RATIO: 8.2pH // 
     `;return`
-      <!-- Бегущая строка предупреждений -->
       <div class="city-ticker reveal js-interactive" id="city-ticker">
         <div class="city-ticker__badge">SYSTEM ALERT //</div>
         <div class="city-ticker__body">
@@ -1063,17 +969,14 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
           </div>
         </div>
       </div>
-    `},initListeners(){let e=document.getElementById(`city-ticker`);e&&e.addEventListener(`click`,()=>{s.playError(),g.show(`ACID PRECIPITATION LEVEL 8.2pH INBOUND IN 15 MINUTES. LEVEL 3 SHIELD GEAR REQUIRED.`,`TACTICAL WEATHER RADAR //`,`pink`)})}},Q={isOpen:!1,messages:[{sender:`system`,text:`Neural link established. N.E.O.N. Cortex AI online // Ready to optimize your tactical loadout.`}],render(){return`
-      <!-- Launcher Button -->
+    `},initListeners(){let e=document.getElementById(`city-ticker`);e&&e.addEventListener(`click`,()=>{s.playError(),g.show(`ACID PRECIPITATION LEVEL 8.2pH INBOUND IN 15 MINUTES. LEVEL 3 SHIELD GEAR REQUIRED.`,`TACTICAL WEATHER RADAR //`,`pink`)})}},Q={isOpen:!1,messages:[{sender:`system`,text:`Neural link established. N.E.O.N. Cortex online // Ready to optimize your tactical loadout.`}],render(){return`
       <button class="neon-chat-trigger" id="neon-chat-trigger" aria-label="Open neural support link">
         <svg class="neon-chat-trigger__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         </svg>
       </button>
 
-      <!-- Chat Window -->
       <div class="neon-chat-window neon-chat-window--hidden" id="neon-chat-window">
-        <!-- Header -->
         <div class="neon-chat-header">
           <div class="neon-chat-title-group">
             <span class="neon-chat-title">N.E.O.N. CORTEX //</span>
@@ -1082,12 +985,10 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
           <button class="neon-chat-close" id="neon-chat-close-btn">X // DISCONNECT</button>
         </div>
 
-        <!-- Message logs -->
         <div class="neon-chat-messages" id="neon-chat-messages-container">
           ${this.renderMessages()}
         </div>
 
-        <!-- Input row -->
         <div class="neon-chat-input-row">
           <input 
             type="text" 
@@ -1104,25 +1005,17 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
         <div class="neon-chat-msg neon-chat-msg--${e.sender}">
           ${t}
         </div>
-      `}).join(``)},toggle(){this.isOpen=!this.isOpen;let e=document.getElementById(`neon-chat-window`),t=document.getElementById(`neon-chat-trigger`);if(!(!e||!t))if(this.isOpen){e.classList.remove(`neon-chat-window--hidden`),t.classList.add(`neon-chat-trigger--active`),s.playOpen();let n=document.getElementById(`neon-chat-messages-container`);n&&(n.scrollTop=n.scrollHeight);let r=document.getElementById(`neon-chat-input-field`);r&&r.focus()}else e.classList.add(`neon-chat-window--hidden`),t.classList.remove(`neon-chat-trigger--active`),s.playClick()},sendMessage(){let e=document.getElementById(`neon-chat-input-field`);if(!e)return;let t=e.value.trim();if(!t)return;e.value=``,s.playClick(),this.messages.push({sender:`user`,text:t}),this.updateMessagesUI();let n=document.getElementById(`neon-chat-messages-container`);if(!n)return;let r=document.createElement(`div`);r.className=`neon-chat-msg neon-chat-msg--system neon-chat-msg--typing`,r.id=`neon-chat-typing-indicator`,r.innerHTML=`Analyzing query...`,n.appendChild(r),n.scrollTop=n.scrollHeight,setTimeout(()=>{let e=document.getElementById(`neon-chat-typing-indicator`);e&&e.remove();let n=this.getBotReply(t);this.messages.push({sender:`system`,text:n}),this.updateMessagesUI(),s.playSuccess()},1e3)},updateMessagesUI(){let e=document.getElementById(`neon-chat-messages-container`);e&&(e.innerHTML=this.renderMessages(),e.scrollTop=e.scrollHeight)},getBotReply(e){let t=e.toLowerCase();if(t.includes(`размер`)||t.includes(`рост`)||t.includes(`вес`)||t.includes(`size`)||t.includes(`fit`)||t.includes(`размерная сетка`))return`Для идеального подбора размера рекомендую использовать интерактивный сканер Cyber-Fit Assistant (кнопка "FIT ASSISTANT" внутри карточки товара или кнопка "NEURAL PROFILE" в меню). Он рассчитает ваш размер на основе вашего роста и веса.`;if(t.includes(`скидк`)||t.includes(`промокод`)||t.includes(`купон`)||t.includes(`sale`)||t.includes(`discount`)||t.includes(`дешевле`))return`Внимание, Оператор. Доступ к скрытым секторам сети разрешен. Вы можете использовать промокод NEOHACK20 на этапе оформления заказа для получения скидки 20%. Также воспользуйтесь терминалом взлома в вашем NEURAL ID для разблокировки других кодов!`;if(t.includes(`доставк`)||t.includes(`доставит`)||t.includes(`shipping`)||t.includes(`delivery`)||t.includes(`почта`)||t.includes(`минск`))return`Доставка модулей осуществляется зашифрованными транспортными дронами TECH-DISPATCH по Минску и другим секторам. Стандартное время транзита — от 1 до 2 планетарных циклов. Бесплатный запуск дронов при заказе от $200.`;if(t.includes(`купит`)||t.includes(`заказ`)||t.includes(`checkout`)||t.includes(`buy`)||t.includes(`оформит`))return`Чтобы оформить заказ, добавьте необходимые модули в корзину и откройте её (иконка пакета вверху справа). Нажмите кнопку "CHECKOUT TERMINAL" для перехода к оформлению в стиле армейской тактической консоли.`;if(t.includes(`конструктор`)||t.includes(`builder`)||t.includes(`mbs`)||t.includes(`customizer`)||t.includes(`собрать`))return`Используйте интерактивный конструктор MBS BUILDER (кнопка в шапке сайта). Он позволяет собрать полную тактическую выкладку (куртка + шлем + жилет + рюкзак + ботинки) и перенести всю сборку в корзину в одно нажатие.`;if(t.includes(`кредит`)||t.includes(`credits`)||t.includes(`money`)||t.includes(`деньги`)||t.includes(`валюта`))return`За каждую покупку в магазине вам начисляется 10% кэшбэка в Cyber Credits (₵). Также вы можете получить кредиты, взламывая локальные узлы в личном кабинете через инъекции ядерных эксплойтов. Кредиты можно использовать для оплаты!`;if(t.includes(`привет`)||t.includes(`здравствуй`)||t.includes(`hello`)||t.includes(`hi`)||t.includes(`hey`)||t.includes(`салют`))return`Приветствую, Оператор. Нейросеть N.E.O.N. Cortex подключена к вашему терминалу. Ожидаю запросов по ассортименту, доставке, скидкам или конструктору модулей.`;if(t.includes(`фракция`)||t.includes(`faction`)||t.includes(`netrunner`)||t.includes(`cyborg`)||t.includes(`recon`)||t.includes(`operative`))return`В вашем Neural ID вы можете выбрать одну из 4 фракций: NETRUNNER (ускоренный взлом промокодов), CYBORG (+20% синхронизация брони), RECON (+30% эффективность легких модулей) или OPERATIVE (+15% грузоподъемность).`;let n=[`Анализ запроса... База данных TECHWEAR подтверждает наличие совместимых модулей в каталоге. Спросите меня о скидках, размерах или доставке.`,`Данные получены. Наш текущий ассортимент включает высокотехнологичные модули: от респираторов M-1 до экзоскелетных перчаток GL-5. Требуется ли помощь в конфигурации?`,`Внимание: Зафиксирован повышенный уровень электромагнитного шума. Связь стабильна. Чем я могу помочь ваческому тактическому комплекту?`,`Протокол связи Cortex v1.2 в режиме ожидания. Вы можете спросить о доставке, скидках, кредитах или о том, как использовать MBS Builder.`];return n[Math.floor(Math.random()*n.length)]},initListeners(){let e=document.getElementById(`neon-chat-trigger`),t=document.getElementById(`neon-chat-close-btn`),n=document.getElementById(`neon-chat-input-field`),r=document.getElementById(`neon-chat-send-btn`);e&&e.addEventListener(`click`,()=>this.toggle()),t&&t.addEventListener(`click`,()=>this.toggle()),r&&r.addEventListener(`click`,()=>this.sendMessage()),n&&n.addEventListener(`keypress`,e=>{e.key===`Enter`&&this.sendMessage()})}},$=[{id:`mod-jacket-x1`,name:`X-1 Shadow Shell Jacket`,price:289,image:E,badge:`Shell Module`,badgeClass:`blue`,specs:[`Waterproof`,`Cordura Shell`,`3 Attachments`]},{id:`mod-rig-c3`,name:`C-3 Cyber Rig Harness`,price:145,image:D,badge:`Core Module`,badgeClass:`pink`,specs:[`Tactical straps`,`Molle Grid`,`Quick-Release`]},{id:`mod-backpack-b5`,name:`B-5 Modular Pack V2`,price:195,image:O,badge:`Cargo Module`,badgeClass:`green`,specs:[`Waterproof zip`,`25L Capacity`,`Modular expansion`]},{id:`mod-visor-g9`,name:`G-9 Cyber Visor Specs`,price:95,image:k,badge:`Core Module`,badgeClass:`blue`,specs:[`HUD Display`,`Anti-Glare`,`UV Protection`]},{id:`mod-gloves-gl2`,name:`GL-2 Tactical Gloves`,price:75,image:A,badge:`Shell Module`,badgeClass:`pink`,specs:[`Carbon protection`,`Touch-screen tips`,`High Grip`]},{id:`mod-sneakers-s7`,name:`S-7 Cyber Sneakers`,price:220,image:j,badge:`Cargo Module`,badgeClass:`green`,specs:[`Glow-sole`,`Modular straps`,`Shock absorption`]},{id:`mod-mask-m1`,name:`M-1 Cyber Rebreather Mask`,price:120,image:M,badge:`Core Module`,badgeClass:`pink`,specs:[`HEPA Filter`,`Dual Intake`,`Magnetic straps`]},{id:`mod-trench-x2`,name:`X-2 Tactical Trench Coat`,price:310,image:N,badge:`Shell Module`,badgeClass:`blue`,specs:[`Nanotech Shell`,`Modular Collar`,`Magnetic Snaps`]},{id:`mod-vest-v8`,name:`V-8 Recon Tactical Vest`,price:180,image:P,badge:`Core Module`,badgeClass:`pink`,specs:[`Armor plate pockets`,`Laser cut Molle`,`Lightweight mesh`]},{id:`mod-sling-b6`,name:`B-6 Tactical Sling Bag`,price:135,image:F,badge:`Cargo Module`,badgeClass:`green`,specs:[`Sling strap`,`Quick release Cobra`,`Waterproof zip`]},{id:`mod-gloves-gl5`,name:`GL-5 Exo-Skeletal Gloves`,price:95,image:I,badge:`Shell Module`,badgeClass:`pink`,specs:[`Exo protection`,`Heated grip pads`,`Conductive fingertips`]},{id:`mod-boots-bt9`,name:`BT-9 Exo-Steel Boots`,price:260,image:L,badge:`Cargo Module`,badgeClass:`green`,specs:[`Steel toe armor`,`Exo-cushion sole`,`Auto-lacing locks`]},{id:`mod-jacket-j4`,name:`J-4 Storm Shell Windbreaker`,price:240,image:E,badge:`Shell Module`,badgeClass:`blue`,specs:[`Lightweight`,`Wind-Resistant`,`Packable`]},{id:`mod-mask-m2`,name:`M-2 Filtration Shield`,price:110,image:M,badge:`Core Module`,badgeClass:`pink`,specs:[`Level 2 HEPA`,`Breathable Mesh`,`Adjustable Fit`]},{id:`mod-backpack-b7`,name:`B-7 Cargo Rucksack`,price:215,image:O,badge:`Cargo Module`,badgeClass:`green`,specs:[`35L Volume`,`Laptop Pocket`,`Waterproof Zips`]},{id:`mod-rig-c4`,name:`C-4 Comm-Link Chest Plate`,price:155,image:D,badge:`Core Module`,badgeClass:`pink`,specs:[`Comms-Integrated`,`Laser-Cut Grid`,`FIDLOCK Buckles`]},{id:`mod-sneakers-s8`,name:`S-8 Street Ranger Shoes`,price:235,image:j,badge:`Cargo Module`,badgeClass:`green`,specs:[`Exo-Grip Outsole`,`Water-Resistant Upper`,`Quick-Lacing`]},{id:`mod-trench-x3`,name:`X-3 Cyberpunk Overcoat`,price:325,image:N,badge:`Shell Module`,badgeClass:`blue`,specs:[`Gore-Tex Shell`,`Reinforced Elbows`,`FIDLOCK Collar`]},{id:`mod-visor-shadow`,name:`M-9 Shadow-Link HUD Visor`,price:450,image:`/techwear-store/assets/shadow-visor-N7vo4O96.webp`,badge:`Black Market`,badgeClass:`pink`,specs:[`Military HUD`,`Synaptic Sync`,`Target Tracker`]},{id:`mod-leg-exo`,name:`EXO-7 Cybernetic Leg Augment`,price:750,image:`/techwear-store/assets/leg-exo-CjqxGHAn.webp`,badge:`Black Market`,badgeClass:`pink`,specs:[`Exo-steel frame`,`Sprint booster`,`Shock dampers`]},{id:`mod-cloak-stealth`,name:`N-3 Nano-Tech Stealth Cloak`,price:600,image:`/techwear-store/assets/stealth-cloak-nF1Tiaj5.webp`,badge:`Black Market`,badgeClass:`pink`,specs:[`Thermal invisibility`,`Active camouflage`,`Silent movement`]}],ie=(e,t)=>{let n;return(...r)=>{clearTimeout(n),n=setTimeout(()=>e(...r),t)}},ae=()=>{(localStorage.getItem(`techwear_theme`)===null||localStorage.getItem(`techwear_theme`)===`stealth`)&&localStorage.setItem(`techwear_theme`,`default`),localStorage.getItem(`techwear_sound`)===null&&localStorage.setItem(`techwear_sound`,`true`),localStorage.getItem(`techwear_ambient`)===null&&localStorage.setItem(`techwear_ambient`,`true`);let e=document.querySelector(`#app`);if(!e)return;let t=()=>x.getLevel()>=2?`<button class="catalog-filter__btn catalog-filter__btn--blackmarket" data-category="BLACKMARKET" id="blackmarket-filter-btn">⚡ Black Market //</button>`:`<button class="catalog-filter__btn catalog-filter__btn--locked" id="blackmarket-filter-btn" title="Reach Neural Level 2 to unlock">🔒 Locked //</button>`,n=()=>{let e=document.querySelector(`#blackmarket-filter-btn`);e&&(x.getLevel()>=2?(e.className=`catalog-filter__btn catalog-filter__btn--blackmarket`,e.dataset.category=`BLACKMARKET`,e.textContent=`⚡ Black Market //`,e.removeAttribute(`title`)):(e.className=`catalog-filter__btn catalog-filter__btn--locked`,e.dataset.category=``,e.textContent=`🔒 Locked //`,e.setAttribute(`title`,`Reach Neural Level 2 to unlock`)))};e.innerHTML=`
-    <!-- Эффект CRT-сканирования -->
+      `}).join(``)},toggle(){this.isOpen=!this.isOpen;let e=document.getElementById(`neon-chat-window`),t=document.getElementById(`neon-chat-trigger`);if(!(!e||!t))if(this.isOpen){e.classList.remove(`neon-chat-window--hidden`),t.classList.add(`neon-chat-trigger--active`),s.playOpen();let n=document.getElementById(`neon-chat-messages-container`);n&&(n.scrollTop=n.scrollHeight);let r=document.getElementById(`neon-chat-input-field`);r&&r.focus()}else e.classList.add(`neon-chat-window--hidden`),t.classList.remove(`neon-chat-trigger--active`),s.playClick()},sendMessage(){let e=document.getElementById(`neon-chat-input-field`);if(!e)return;let t=e.value.trim();if(!t)return;e.value=``,s.playClick(),this.messages.push({sender:`user`,text:t}),this.updateMessagesUI();let n=document.getElementById(`neon-chat-messages-container`);if(!n)return;let r=document.createElement(`div`);r.className=`neon-chat-msg neon-chat-msg--system neon-chat-msg--typing`,r.id=`neon-chat-typing-indicator`,r.innerHTML=`Analyzing query...`,n.appendChild(r),n.scrollTop=n.scrollHeight,setTimeout(()=>{let e=document.getElementById(`neon-chat-typing-indicator`);e&&e.remove();let n=this.getBotReply(t);this.messages.push({sender:`system`,text:n}),this.updateMessagesUI(),s.playSuccess()},1e3)},updateMessagesUI(){let e=document.getElementById(`neon-chat-messages-container`);e&&(e.innerHTML=this.renderMessages(),e.scrollTop=e.scrollHeight)},getBotReply(e){let t=e.toLowerCase();if(t.includes(`размер`)||t.includes(`рост`)||t.includes(`вес`)||t.includes(`size`)||t.includes(`fit`)||t.includes(`размерная сетка`))return`Для идеального подбора размера рекомендую использовать интерактивный сканер Cyber-Fit Assistant (кнопка "FIT ASSISTANT" внутри карточки товара или кнопка "NEURAL PROFILE" в меню). Он рассчитает ваш размер на основе вашего роста и веса.`;if(t.includes(`скидк`)||t.includes(`промокод`)||t.includes(`купон`)||t.includes(`sale`)||t.includes(`discount`)||t.includes(`дешевле`))return`Внимание, Оператор. Доступ к скрытым секторам сети разрешен. Вы можете использовать промокод NEOHACK20 на этапе оформления заказа для получения скидки 20%. Также воспользуйтесь терминалом взлома в вашем NEURAL ID для разблокировки других кодов!`;if(t.includes(`доставк`)||t.includes(`доставит`)||t.includes(`shipping`)||t.includes(`delivery`)||t.includes(`почта`)||t.includes(`минск`))return`Доставка модулей осуществляется зашифрованными транспортными дронами TECH-DISPATCH по Минску и другим секторам. Стандартное время транзита — от 1 до 2 планетарных циклов. Бесплатный запуск дронов при заказе от $200.`;if(t.includes(`купит`)||t.includes(`заказ`)||t.includes(`checkout`)||t.includes(`buy`)||t.includes(`оформит`))return`Чтобы оформить заказ, добавьте необходимые модули в корзину и откройте её (иконка пакета вверху справа). Нажмите кнопку "CHECKOUT TERMINAL" для перехода к оформлению в стиле армейской тактической консоли.`;if(t.includes(`конструктор`)||t.includes(`builder`)||t.includes(`mbs`)||t.includes(`customizer`)||t.includes(`собрать`))return`Используйте интерактивный конструктор MBS BUILDER (кнопка в шапке сайта). Он позволяет собрать полную тактическую выкладку (куртка + шлем + жилет + рюкзак + ботинки) и перенести всю сборку в корзину в одно нажатие.`;if(t.includes(`кредит`)||t.includes(`credits`)||t.includes(`money`)||t.includes(`деньги`)||t.includes(`валюта`))return`За каждую покупку в магазине вам начисляется 10% кэшбэка в Cyber Credits (₵). Также вы можете получить кредиты, взламывая локальные узлы в личном кабинете через инъекции ядерных эксплойтов. Кредиты можно использовать для оплаты!`;if(t.includes(`привет`)||t.includes(`здравствуй`)||t.includes(`hello`)||t.includes(`hi`)||t.includes(`hey`)||t.includes(`салют`))return`Приветствую, Оператор. Нейросеть N.E.O.N. Cortex подключена к вашему терминалу. Ожидаю запросов по ассортименту, доставке, скидкам или конструктору модулей.`;if(t.includes(`фракция`)||t.includes(`faction`)||t.includes(`netrunner`)||t.includes(`cyborg`)||t.includes(`recon`)||t.includes(`operative`))return`В вашем Neural ID вы можете выбрать одну из 4 фракций: NETRUNNER (ускоренный взлом промокодов), CYBORG (+20% синхронизация брони), RECON (+30% эффективность легких модулей) или OPERATIVE (+15% грузоподъемность).`;let n=[`Анализ запроса... База данных TECHWEAR подтверждает наличие совместимых модулей в каталоге. Спросите меня о скидках, размерах или доставке.`,`Данные получены. Наш текущий ассортимент включает высокотехнологичные модули: от респираторов M-1 до экзоскелетных перчаток GL-5. Требуется ли помощь в конфигурации?`,`Внимание: Зафиксирован повышенный уровень электромагнитного шума. Связь стабильна. Чем я могу помочь вашему тактическому комплекту?`,`Протокол связи Cortex v1.2 в режиме ожидания. Вы можете спросить о доставке, скидках, кредитах или о том, как использовать MBS Builder.`];return n[Math.floor(Math.random()*n.length)]},initListeners(){let e=document.getElementById(`neon-chat-trigger`),t=document.getElementById(`neon-chat-close-btn`),n=document.getElementById(`neon-chat-input-field`),r=document.getElementById(`neon-chat-send-btn`);e&&e.addEventListener(`click`,()=>this.toggle()),t&&t.addEventListener(`click`,()=>this.toggle()),r&&r.addEventListener(`click`,()=>this.sendMessage()),n&&n.addEventListener(`keypress`,e=>{e.key===`Enter`&&this.sendMessage()})}},$=[{id:`mod-jacket-x1`,name:`X-1 Shadow Shell Jacket`,price:289,image:E,badge:`Shell Module`,badgeClass:`blue`,specs:[`Waterproof`,`Cordura Shell`,`3 Attachments`]},{id:`mod-rig-c3`,name:`C-3 Cyber Rig Harness`,price:145,image:D,badge:`Core Module`,badgeClass:`pink`,specs:[`Tactical straps`,`Molle Grid`,`Quick-Release`]},{id:`mod-backpack-b5`,name:`B-5 Modular Pack V2`,price:195,image:O,badge:`Cargo Module`,badgeClass:`green`,specs:[`Waterproof zip`,`25L Capacity`,`Modular expansion`]},{id:`mod-visor-g9`,name:`G-9 Cyber Visor Specs`,price:95,image:k,badge:`Core Module`,badgeClass:`blue`,specs:[`HUD Display`,`Anti-Glare`,`UV Protection`]},{id:`mod-gloves-gl2`,name:`GL-2 Tactical Gloves`,price:75,image:A,badge:`Shell Module`,badgeClass:`pink`,specs:[`Carbon protection`,`Touch-screen tips`,`High Grip`]},{id:`mod-sneakers-s7`,name:`S-7 Cyber Sneakers`,price:220,image:j,badge:`Cargo Module`,badgeClass:`green`,specs:[`Glow-sole`,`Modular straps`,`Shock absorption`]},{id:`mod-mask-m1`,name:`M-1 Cyber Rebreather Mask`,price:120,image:M,badge:`Core Module`,badgeClass:`pink`,specs:[`HEPA Filter`,`Dual Intake`,`Magnetic straps`]},{id:`mod-trench-x2`,name:`X-2 Tactical Trench Coat`,price:310,image:N,badge:`Shell Module`,badgeClass:`blue`,specs:[`Nanotech Shell`,`Modular Collar`,`Magnetic Snaps`]},{id:`mod-vest-v8`,name:`V-8 Recon Tactical Vest`,price:180,image:P,badge:`Core Module`,badgeClass:`pink`,specs:[`Armor plate pockets`,`Laser cut Molle`,`Lightweight mesh`]},{id:`mod-sling-b6`,name:`B-6 Tactical Sling Bag`,price:135,image:F,badge:`Cargo Module`,badgeClass:`green`,specs:[`Sling strap`,`Quick release Cobra`,`Waterproof zip`]},{id:`mod-gloves-gl5`,name:`GL-5 Exo-Skeletal Gloves`,price:95,image:I,badge:`Shell Module`,badgeClass:`pink`,specs:[`Exo protection`,`Heated grip pads`,`Conductive fingertips`]},{id:`mod-boots-bt9`,name:`BT-9 Exo-Steel Boots`,price:260,image:L,badge:`Cargo Module`,badgeClass:`green`,specs:[`Steel toe armor`,`Exo-cushion sole`,`Auto-lacing locks`]},{id:`mod-jacket-j4`,name:`J-4 Storm Shell Windbreaker`,price:240,image:E,badge:`Shell Module`,badgeClass:`blue`,specs:[`Lightweight`,`Wind-Resistant`,`Packable`]},{id:`mod-mask-m2`,name:`M-2 Filtration Shield`,price:110,image:M,badge:`Core Module`,badgeClass:`pink`,specs:[`Level 2 HEPA`,`Breathable Mesh`,`Adjustable Fit`]},{id:`mod-backpack-b7`,name:`B-7 Cargo Rucksack`,price:215,image:O,badge:`Cargo Module`,badgeClass:`green`,specs:[`35L Volume`,`Laptop Pocket`,`Waterproof Zips`]},{id:`mod-rig-c4`,name:`C-4 Comm-Link Chest Plate`,price:155,image:D,badge:`Core Module`,badgeClass:`pink`,specs:[`Comms-Integrated`,`Laser-Cut Grid`,`FIDLOCK Buckles`]},{id:`mod-sneakers-s8`,name:`S-8 Street Ranger Shoes`,price:235,image:j,badge:`Cargo Module`,badgeClass:`green`,specs:[`Exo-Grip Outsole`,`Water-Resistant Upper`,`Quick-Lacing`]},{id:`mod-trench-x3`,name:`X-3 Cyberpunk Overcoat`,price:325,image:N,badge:`Shell Module`,badgeClass:`blue`,specs:[`Gore-Tex Shell`,`Reinforced Elbows`,`FIDLOCK Collar`]},{id:`mod-visor-shadow`,name:`M-9 Shadow-Link HUD Visor`,price:450,image:`/techwear-store/assets/shadow-visor-N7vo4O96.webp`,badge:`Black Market`,badgeClass:`pink`,specs:[`Military HUD`,`Synaptic Sync`,`Target Tracker`]},{id:`mod-leg-exo`,name:`EXO-7 Cybernetic Leg Augment`,price:750,image:`/techwear-store/assets/leg-exo-CjqxGHAn.webp`,badge:`Black Market`,badgeClass:`pink`,specs:[`Exo-steel frame`,`Sprint booster`,`Shock dampers`]},{id:`mod-cloak-stealth`,name:`N-3 Nano-Tech Stealth Cloak`,price:600,image:`/techwear-store/assets/stealth-cloak-nF1Tiaj5.webp`,badge:`Black Market`,badgeClass:`pink`,specs:[`Thermal invisibility`,`Active camouflage`,`Silent movement`]}],ie=(e,t)=>{let n;return(...r)=>{clearTimeout(n),n=setTimeout(()=>e(...r),t)}},ae=()=>{(localStorage.getItem(`techwear_theme`)===null||localStorage.getItem(`techwear_theme`)===`stealth`)&&localStorage.setItem(`techwear_theme`,`default`),localStorage.getItem(`techwear_sound`)===null&&localStorage.setItem(`techwear_sound`,`true`),localStorage.getItem(`techwear_ambient`)===null&&localStorage.setItem(`techwear_ambient`,`true`);let e=document.querySelector(`#app`);if(!e)return;let t=()=>x.getLevel()>=2?`<button class="catalog-filter__btn catalog-filter__btn--blackmarket" data-category="BLACKMARKET" id="blackmarket-filter-btn">⚡ Black Market //</button>`:`<button class="catalog-filter__btn catalog-filter__btn--locked" id="blackmarket-filter-btn" title="Reach Neural Level 2 to unlock">🔒 Locked //</button>`,n=()=>{let e=document.querySelector(`#blackmarket-filter-btn`);e&&(x.getLevel()>=2?(e.className=`catalog-filter__btn catalog-filter__btn--blackmarket`,e.dataset.category=`BLACKMARKET`,e.textContent=`⚡ Black Market //`,e.removeAttribute(`title`)):(e.className=`catalog-filter__btn catalog-filter__btn--locked`,e.dataset.category=``,e.textContent=`🔒 Locked //`,e.setAttribute(`title`,`Reach Neural Level 2 to unlock`)))};e.innerHTML=`
     <div class="scanline-overlay"></div>
     
     <div class="app">
-      <!-- Шапка -->
       ${c.render(0,s.isEnabled(),s.isAmbientActive())}
       
-      <!-- Основной контент -->
       <main class="main">
-        <!-- Бегущая строка чрезвычайных сводок Сити -->
         ${Z.render()}
-
-        <!-- Герой-баннер и интро о бренде -->
         ${G.render()}
 
-        <!-- Контрольная панель каталога (Поиск и Табы) -->
         <div class="catalog-controls reveal" id="catalog-controls">
-          <!-- Поисковое поле -->
           <div class="catalog-search">
             <input 
               type="text" 
@@ -1138,7 +1031,6 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
             </svg>
           </div>
           
-          <!-- Фильтры по модулям -->
           <div class="catalog-filter" id="catalog-filter-container">
             <button class="catalog-filter__btn catalog-filter__btn--active" data-category="ALL">All</button>
             <button class="catalog-filter__btn" data-category="SHELL">Shell</button>
@@ -1148,48 +1040,25 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
           </div>
         </div>
 
-        <!-- Сетка каталога (динамический рендеринг) -->
-        <section class="product-grid reveal" id="product-grid-container">
-          <!-- Заполняется динамически -->
-        </section>
-
-        <!-- Пагинация каталога -->
+        <section class="product-grid reveal" id="product-grid-container"></section>
         <div class="catalog-pagination reveal" id="catalog-pagination-container"></div>
-
-        <!-- Отзывы и FAQ -->
         ${Y.render()}
-
-        <!-- Блок с описанием ключевых особенностей (MBS Modular System) -->
         ${G.renderFeatures()}
       </main>
 
-      <!-- Футер сайта -->
       ${X.render()}
-
-      <!-- Выдвижная корзина (Cart Drawer) -->
       ${C.render()}
     </div>
 
-    <!-- Интерактивный сканер размеров -->
     ${T.render()}
-
-    <!-- Военный консольный терминал оформления заказа -->
     ${S.render()}
-
-    <!-- Конструктор модулей Modular Belt System -->
     ${B.render()}
-
-    <!-- Личный кабинет пользователя и терминал взлома -->
     ${H.render()}
-
-    <!-- ИИ Чат-Ассистент N.E.O.N. Cortex -->
     ${Q.render()}
 
-    <!-- Панель быстрых настроек системы -->
     <div class="cyber-settings-dock" id="cyber-quick-settings">
       <div class="cyber-settings-title">SYS // QUICK SETTINGS</div>
       
-      <!-- Кнопка-триггер для мобильных устройств -->
       <button class="cyber-settings-toggle-btn js-interactive" id="settings-toggle-trigger" title="Toggle Quick Settings" aria-label="Toggle Quick Settings">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="12" cy="12" r="3"></circle>
@@ -1247,4 +1116,4 @@ STAGING LOAD SHEET //`);let r=`<div class="terminal-grid">`;t.forEach(e=>{let t=
             SYSTEM ERROR: NO COMPATIBLE MODULES FOUND //
           </span>
         </div>
-      `,o&&(o.innerHTML=``),s.playError();return}let t=Math.ceil(e.length/6);f>t&&(f=t||1);let n=(f-1)*6;r.innerHTML=e.slice(n,n+6).map((e,t)=>l.render(e,t)).join(``),p(t)};c.initListeners(),C.initListeners(),T.initListeners(),S.initListeners(),B.initListeners(),H.initListeners(),G.initListeners(),Y.initListeners(),X.initListeners(),Z.initListeners(),(()=>{let e=document.querySelectorAll(`.reveal`),t=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting?e.target.classList.add(`reveal--active`):e.target.classList.remove(`reveal--active`)})},{threshold:.05,rootMargin:`0px 0px -40px 0px`});e.forEach(e=>t.observe(e))})(),r&&(r.addEventListener(`mousemove`,e=>{let t=e.target.closest(`.product-card`);if(!t)return;let n=t.getBoundingClientRect(),r=e.clientX-n.left,i=e.clientY-n.top,a=n.width/2,o=n.height/2,s=(o-i)/o*7,c=(r-a)/a*7;t.style.transform=`perspective(800px) rotateX(${s.toFixed(1)}deg) rotateY(${c.toFixed(1)}deg) translateY(-6px)`,t.style.transition=`transform 0.05s linear`,t.style.setProperty(`--mouse-x`,`${(r/n.width*100).toFixed(0)}%`),t.style.setProperty(`--mouse-y`,`${(i/n.height*100).toFixed(0)}%`)}),r.addEventListener(`mouseout`,e=>{let t=e.target.closest(`.product-card`);if(!t)return;let n=e.relatedTarget;n&&t.contains(n)||(t.style.transform=``,t.style.transition=`transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)`)}));let _=()=>{let e=document.querySelector(`#quick-sound-btn`),t=document.querySelector(`#quick-ambient-btn`),n=document.querySelector(`#quick-theme-btn`);e&&(s.isEnabled()?(e.classList.add(`cyber-settings-btn--active`),e.innerHTML=`🔊 SOUND // ON`):(e.classList.remove(`cyber-settings-btn--active`),e.innerHTML=`🔇 SOUND // OFF`)),t&&(localStorage.getItem(`techwear_ambient`)===`false`?(t.classList.remove(`cyber-settings-btn--active`),t.innerHTML=`💤 HUM // OFF`):(t.classList.add(`cyber-settings-btn--active`),t.innerHTML=`🌐 HUM // ON`)),n&&(n.innerHTML=`🎨 THEME: ${(localStorage.getItem(`techwear_theme`)||`default`).toUpperCase()}`)},v=document.querySelector(`#quick-theme-btn`),y=document.querySelector(`#quick-sound-btn`),b=document.querySelector(`#quick-ambient-btn`);v&&v.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-theme`))}),y&&y.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-sound`))}),b&&b.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-ambient`))});let E=document.querySelector(`#settings-toggle-trigger`),D=document.querySelector(`#cyber-quick-settings`);E&&D&&(E.addEventListener(`click`,()=>{D.classList.toggle(`cyber-settings-dock--open`),E.classList.toggle(`cyber-settings-toggle-btn--active`)}),document.addEventListener(`click`,e=>{window.innerWidth<=600&&(D.contains(e.target)||(D.classList.remove(`cyber-settings-dock--open`),E.classList.remove(`cyber-settings-toggle-btn--active`)))})),_(),m(),a&&a.addEventListener(`click`,e=>{let t=e.target.closest(`.catalog-filter__btn`);if(t){if(t.classList.contains(`catalog-filter__btn--locked`)){s.playError(),g.show(`ACCESS DENIED // NEURAL LEVEL 2 REQUIRED //`,`LINK OFFLINE //`,`pink`);return}a.querySelectorAll(`.catalog-filter__btn`).forEach(e=>{e.classList.remove(`catalog-filter__btn--active`)}),t.classList.add(`catalog-filter__btn--active`),u=t.dataset.category,f=1,m()}}),i&&i.addEventListener(`input`,ie(e=>{d=e.target.value,f=1,m()},250)),o&&o.addEventListener(`click`,e=>{let t=e.target.closest(`.js-pagination-prev`),n=e.target.closest(`.js-pagination-next`),r=e.target.closest(`.js-pagination-page`),i=w.filter($,u,d).length,a=Math.ceil(i/6),o=!1;if(t&&f>1)f--,o=!0;else if(n&&f<a)f++,o=!0;else if(r){let e=parseInt(r.dataset.page,10);e&&e!==f&&(f=e,o=!0)}if(o){s.playClick(),m();let e=document.getElementById(`catalog-controls`);e&&e.scrollIntoView({behavior:`smooth`})}}),e.addEventListener(`click`,e=>{let t=e.target,n=t.closest(`.js-add-to-cart`);if(n){let e=n.dataset.id,t=$.find(t=>t.id===e);t&&(h.addToCart(t),g.show(`${t.name.toUpperCase()} EQUIPPED //`,`GEAR UPDATE //`,`blue`),s.playSuccess());return}let r=t.closest(`.js-fit-scan`);if(r){let e=r.dataset.id,t=r.dataset.name;T.open(e,t);return}let i=t.closest(`#pwa-install-btn`);i&&O&&(O.prompt(),O.userChoice.then(({outcome:e})=>{console.log(`📱 [PWA] User choice outcome: ${e}`),O=null,i.style.display=`none`}))}),document.addEventListener(`cart-updated`,e=>{let{count:t}=e.detail;c.updateCartCount(t)}),document.addEventListener(`fit-profile-updated`,()=>{m(),x.addXP(25)}),document.addEventListener(`profile-updated`,()=>{n()}),document.addEventListener(`level-up`,e=>{let{level:t}=e.detail;s.playSuccess(),g.show(`SYSTEM RANK UPDATED: LEVEL ${t} //`,`LEVEL UP //`,`pink`),t===2&&setTimeout(()=>{g.show(`BLACK MARKET COMM-LINK ESTABLISHED // CATALOG UNLOCKED //`,`SECURITY DECRYPTED //`,`green`)},1500),n(),m()});let O,k=document.querySelector(`#pwa-install-btn`),A=document.querySelector(`#menu-item-install-wrapper`);window.addEventListener(`beforeinstallprompt`,e=>{e.preventDefault(),O=e,k&&(k.style.display=`flex`),A&&(A.style.display=`block`)}),document.addEventListener(`install-app`,()=>{O&&(O.prompt(),O.userChoice.then(({outcome:e})=>{console.log(`📱 [PWA] User choice outcome: ${e}`),O=null,k&&(k.style.display=`none`),A&&(A.style.display=`none`)}))}),window.addEventListener(`appinstalled`,()=>{console.log(`📱 [PWA] App installed.`),k&&(k.style.display=`none`),A&&(A.style.display=`none`),g.show(`SYSTEM DEPLOYED // PWA fully installed.`,`PWA SUCCESS //`,`pink`)}),x.init(),h.init(),B.loadFromUrl(),oe();let j=[`default`,`green`,`pink`,`cyber`],M=localStorage.getItem(`techwear_theme`)||`default`,N=e=>{e==="default"?document.documentElement.removeAttribute(`data-theme`):document.documentElement.setAttribute(`data-theme`,e),localStorage.setItem(`techwear_theme`,e)};N(M),document.addEventListener(`toggle-theme`,()=>{M=j[(j.indexOf(M)+1)%j.length],N(M);let e=M===`pink`?`pink`:`blue`;g.show(`INTERFACE SPECTRUM UPDATED: [${M.toUpperCase()}] //`,`THEME ENGAGED //`,e),_()}),document.addEventListener(`toggle-sound`,()=>{let e=s.toggle();c.updateSoundBtn(e),e&&s.playClick(),g.show(`SYSTEM SOUNDS: [${e?`ACTIVE`:`MUTED`}] //`,`SYSTEM CONFIG //`,`blue`),_()}),document.addEventListener(`toggle-ambient`,()=>{let e=s.toggleAmbient();c.updateAmbientBtn(e),g.show(`BACKGROUND SYSTEM HUM: [${e?`ENGAGED`:`OFFLINE`}] //`,`NAVIGATOR HUM //`,e?`green`:`blue`),_()}),document.addEventListener(`ambient-status-updated`,e=>{let t=e.detail.active;c.updateAmbientBtn(t),_()}),document.addEventListener(`toggle-builder`,()=>{B.open()}),document.addEventListener(`toggle-profile`,()=>{H.open()}),document.addEventListener(`click`,e=>{e.target.closest(`button, a, .catalog-filter__btn, .js-interactive`)&&(s.playClick(),localStorage.getItem(`techwear_ambient`)!==`false`&&!s.isAmbientActive()&&s.startAmbient())},!0),console.log(`👾 [Techwear OS] System and CartState initialized successfully.`)},oe=()=>{`serviceWorker`in navigator&&navigator.serviceWorker.register(`/techwear-store/sw.js`,{scope:`/techwear-store/`}).then(e=>{console.log(`📡 [PWA] Service Worker registered. Scope:`,e.scope)}).catch(e=>{console.warn(`⚠️ [PWA] Service Worker registration info:`,e)})};document.addEventListener(`DOMContentLoaded`,ae);
+      `,o&&(o.innerHTML=``),s.playError();return}let t=Math.ceil(e.length/6);f>t&&(f=t||1);let n=(f-1)*6;r.innerHTML=e.slice(n,n+6).map((e,t)=>l.render(e,t)).join(``),p(t)};c.initListeners(),C.initListeners(),T.initListeners(),S.initListeners(),B.initListeners(),H.initListeners(),G.initListeners(),Y.initListeners(),X.initListeners(),Z.initListeners(),(()=>{let e=document.querySelectorAll(`.reveal`),t=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting?e.target.classList.add(`reveal--active`):e.target.classList.remove(`reveal--active`)})},{threshold:.05,rootMargin:`0px 0px -40px 0px`});e.forEach(e=>t.observe(e))})(),r&&(r.addEventListener(`mousemove`,e=>{let t=e.target.closest(`.product-card`);if(!t)return;let n=t.getBoundingClientRect(),r=e.clientX-n.left,i=e.clientY-n.top,a=n.width/2,o=n.height/2,s=(o-i)/o*7,c=(r-a)/a*7;t.style.transform=`perspective(800px) rotateX(${s.toFixed(1)}deg) rotateY(${c.toFixed(1)}deg) translateY(-6px)`,t.style.transition=`transform 0.05s linear`,t.style.setProperty(`--mouse-x`,`${(r/n.width*100).toFixed(0)}%`),t.style.setProperty(`--mouse-y`,`${(i/n.height*100).toFixed(0)}%`)}),r.addEventListener(`mouseout`,e=>{let t=e.target.closest(`.product-card`);if(!t)return;let n=e.relatedTarget;n&&t.contains(n)||(t.style.transform=``,t.style.transition=`transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)`)}));let _=()=>{let e=document.querySelector(`#quick-sound-btn`),t=document.querySelector(`#quick-ambient-btn`),n=document.querySelector(`#quick-theme-btn`);e&&(s.isEnabled()?(e.classList.add(`cyber-settings-btn--active`),e.innerHTML=`🔊 SOUND // ON`):(e.classList.remove(`cyber-settings-btn--active`),e.innerHTML=`🔇 SOUND // OFF`)),t&&(localStorage.getItem(`techwear_ambient`)===`false`?(t.classList.remove(`cyber-settings-btn--active`),t.innerHTML=`💤 HUM // OFF`):(t.classList.add(`cyber-settings-btn--active`),t.innerHTML=`🌐 HUM // ON`)),n&&(n.innerHTML=`🎨 THEME: ${(localStorage.getItem(`techwear_theme`)||`default`).toUpperCase()}`)},v=document.querySelector(`#quick-theme-btn`),y=document.querySelector(`#quick-sound-btn`),b=document.querySelector(`#quick-ambient-btn`);v&&v.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-theme`))}),y&&y.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-sound`))}),b&&b.addEventListener(`click`,()=>{document.dispatchEvent(new CustomEvent(`toggle-ambient`))});let E=document.querySelector(`#settings-toggle-trigger`),D=document.querySelector(`#cyber-quick-settings`);E&&D&&(E.addEventListener(`click`,()=>{D.classList.toggle(`cyber-settings-dock--open`),E.classList.toggle(`cyber-settings-toggle-btn--active`)}),document.addEventListener(`click`,e=>{window.innerWidth<=600&&(D.contains(e.target)||(D.classList.remove(`cyber-settings-dock--open`),E.classList.remove(`cyber-settings-toggle-btn--active`)))})),_(),m(),a&&a.addEventListener(`click`,e=>{let t=e.target.closest(`.catalog-filter__btn`);if(t){if(t.classList.contains(`catalog-filter__btn--locked`)){s.playError(),g.show(`ACCESS DENIED // NEURAL LEVEL 2 REQUIRED //`,`LINK OFFLINE //`,`pink`);return}a.querySelectorAll(`.catalog-filter__btn`).forEach(e=>{e.classList.remove(`catalog-filter__btn--active`)}),t.classList.add(`catalog-filter__btn--active`),u=t.dataset.category,f=1,m()}}),i&&i.addEventListener(`input`,ie(e=>{d=e.target.value,f=1,m()},250)),o&&o.addEventListener(`click`,e=>{let t=e.target.closest(`.js-pagination-prev`),n=e.target.closest(`.js-pagination-next`),r=e.target.closest(`.js-pagination-page`),i=w.filter($,u,d).length,a=Math.ceil(i/6),o=!1;if(t&&f>1)f--,o=!0;else if(n&&f<a)f++,o=!0;else if(r){let e=parseInt(r.dataset.page,10);e&&e!==f&&(f=e,o=!0)}if(o){s.playClick(),m();let e=document.getElementById(`catalog-controls`);e&&e.scrollIntoView({behavior:`smooth`})}}),e.addEventListener(`click`,e=>{let t=e.target,n=t.closest(`.js-add-to-cart`);if(n){let e=n.dataset.id,t=$.find(t=>t.id===e);t&&(h.addToCart(t),g.show(`${t.name.toUpperCase()} EQUIPPED //`,`GEAR UPDATE //`,`blue`),s.playSuccess());return}let r=t.closest(`.js-fit-scan`);if(r){let e=r.dataset.id,t=r.dataset.name;T.open(e,t);return}let i=t.closest(`#pwa-install-btn`);i&&O&&(O.prompt(),O.userChoice.then(()=>{O=null,i.style.display=`none`}))}),document.addEventListener(`cart-updated`,e=>{let{count:t}=e.detail;c.updateCartCount(t)}),document.addEventListener(`fit-profile-updated`,()=>{m(),x.addXP(25)}),document.addEventListener(`profile-updated`,()=>{n()}),document.addEventListener(`level-up`,e=>{let{level:t}=e.detail;s.playSuccess(),g.show(`SYSTEM RANK UPDATED: LEVEL ${t} //`,`LEVEL UP //`,`pink`),t===2&&setTimeout(()=>{g.show(`BLACK MARKET COMM-LINK ESTABLISHED // CATALOG UNLOCKED //`,`SECURITY DECRYPTED //`,`green`)},1500),n(),m()});let O,k=document.querySelector(`#pwa-install-btn`),A=document.querySelector(`#menu-item-install-wrapper`);window.addEventListener(`beforeinstallprompt`,e=>{e.preventDefault(),O=e,k&&(k.style.display=`flex`),A&&(A.style.display=`block`)}),document.addEventListener(`install-app`,()=>{O&&(O.prompt(),O.userChoice.then(()=>{O=null,k&&(k.style.display=`none`),A&&(A.style.display=`none`)}))}),window.addEventListener(`appinstalled`,()=>{k&&(k.style.display=`none`),A&&(A.style.display=`none`),g.show(`SYSTEM DEPLOYED // PWA fully installed.`,`PWA SUCCESS //`,`pink`)}),x.init(),h.init(),B.loadFromUrl(),oe();let j=[`default`,`green`,`pink`,`cyber`],M=localStorage.getItem(`techwear_theme`)||`default`,N=e=>{e==="default"?document.documentElement.removeAttribute(`data-theme`):document.documentElement.setAttribute(`data-theme`,e),localStorage.setItem(`techwear_theme`,e)};N(M),document.addEventListener(`toggle-theme`,()=>{M=j[(j.indexOf(M)+1)%j.length],N(M);let e=M===`pink`?`pink`:`blue`;g.show(`INTERFACE SPECTRUM UPDATED: [${M.toUpperCase()}] //`,`THEME ENGAGED //`,e),_()}),document.addEventListener(`toggle-sound`,()=>{let e=s.toggle();c.updateSoundBtn(e),e&&s.playClick(),g.show(`SYSTEM SOUNDS: [${e?`ACTIVE`:`MUTED`}] //`,`SYSTEM CONFIG //`,`blue`),_()}),document.addEventListener(`toggle-ambient`,()=>{let e=s.toggleAmbient();c.updateAmbientBtn(e),g.show(`BACKGROUND SYSTEM HUM: [${e?`ENGAGED`:`OFFLINE`}] //`,`NAVIGATOR HUM //`,e?`green`:`blue`),_()}),document.addEventListener(`ambient-status-updated`,e=>{let t=e.detail.active;c.updateAmbientBtn(t),_()}),document.addEventListener(`toggle-builder`,()=>{B.open()}),document.addEventListener(`toggle-profile`,()=>{H.open()}),document.addEventListener(`click`,e=>{e.target.closest(`button, a, .catalog-filter__btn, .js-interactive`)&&(s.playClick(),localStorage.getItem(`techwear_ambient`)!==`false`&&!s.isAmbientActive()&&s.startAmbient())},!0)},oe=()=>{`serviceWorker`in navigator&&navigator.serviceWorker.register(`/techwear-store/sw.js`,{scope:`/techwear-store/`}).catch(e=>{console.warn(`Service Worker registration info:`,e)})};document.addEventListener(`DOMContentLoaded`,ae);
