@@ -1,14 +1,10 @@
-/* ==========================================================================
-   Компонент: CheckoutTerminal (Оформление заказа в стиле военного терминала)
-   ========================================================================== */
-
 .checkout-terminal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1100; /* Выше чем корзина */
+  z-index: 1100; 
   background: rgba(4, 5, 6, 0.92);
   backdrop-filter: blur(15px);
   display: flex;
@@ -41,7 +37,6 @@
   flex-direction: column;
 }
 
-/* Изменяем цвет под тему, если тема не "зеленая", терминал все равно остается аутентичным зеленым или синим */
 [data-theme="pink"] .checkout-terminal {
   border-color: var(--color-accent-pink);
   color: var(--color-accent-pink);
@@ -57,7 +52,6 @@
   box-shadow: 0 0 35px rgba(0, 240, 255, 0.15), inset 0 0 20px rgba(0, 240, 255, 0.05);
 }
 
-/* Шапка окна терминала */
 .checkout-terminal__header {
   background: rgba(0, 0, 0, 0.8);
   border-bottom: 1px solid currentColor;
@@ -85,7 +79,6 @@
   background: currentColor;
 }
 
-/* Тело вывода логов */
 .checkout-terminal__body {
   height: 380px;
   padding: var(--space-md);
@@ -107,7 +100,6 @@
   background-color: currentColor;
 }
 
-/* Строки вывода */
 .terminal-line {
   white-space: pre-wrap;
   word-break: break-all;
@@ -126,7 +118,6 @@
   text-shadow: 0 0 4px rgba(255, 0, 127, 0.5);
 }
 
-/* Интерактивная строка ввода */
 .checkout-terminal__input-line {
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   padding: var(--space-sm) var(--space-md);
@@ -155,7 +146,6 @@
   width: 100%;
 }
 
-/* CRT Мерцание экрана */
 .checkout-terminal::after {
   content: " ";
   display: block;
@@ -167,7 +157,6 @@
   pointer-events: none;
 }
 
-/* Анимация курсора */
 .terminal-cursor {
   display: inline-block;
   width: 8px;
@@ -182,7 +171,6 @@
   to { visibility: hidden; }
 }
 
-/* Сетка товаров в чеке */
 .terminal-grid {
   display: flex;
   flex-direction: column;

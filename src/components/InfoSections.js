@@ -64,7 +64,6 @@ const FAQS = [
 
 export const InfoSections = {
   render() {
-    // Рендер отзывов
     const reviewsHTML = REVIEWS.map(rev => `
       <div class="review-card">
         <div class="review-card__header">
@@ -80,7 +79,6 @@ export const InfoSections = {
       </div>
     `).join('');
 
-    // Рендер FAQ
     const faqHTML = FAQS.map((faq, index) => `
       <div class="faq-item" data-index="${index}">
         <button class="faq-item__trigger js-interactive" aria-expanded="false">
@@ -96,7 +94,6 @@ export const InfoSections = {
     `).join('');
 
     return `
-      <!-- Секция Отзывов -->
       <section class="info-section-wrapper reveal" style="margin-top: var(--space-xl);">
         <div class="reviews-header">
           <h2 class="info-section-title">USER // TRANSMISSION LOGS (REVIEWS)</h2>
@@ -112,7 +109,6 @@ export const InfoSections = {
         </div>
       </section>
 
-      <!-- Секция FAQ -->
       <section class="info-section-wrapper reveal" style="margin-top: var(--space-xl); margin-bottom: var(--space-xl);">
         <h2 class="info-section-title">SYSTEM // DIRECTIVES FAQ</h2>
         <div class="faq-container">
@@ -135,7 +131,6 @@ export const InfoSections = {
           const isOpen = item.classList.contains('faq-item--open');
           AudioService.playClick();
 
-          // Закрываем все остальные аккордеоны (опционально для чистоты)
           faqItems.forEach(otherItem => {
             if (otherItem !== item) {
               otherItem.classList.remove('faq-item--open');
@@ -148,7 +143,6 @@ export const InfoSections = {
             }
           });
 
-          // Переключаем текущий
           if (isOpen) {
             item.classList.remove('faq-item--open');
             trigger.setAttribute('aria-expanded', 'false');
@@ -164,7 +158,6 @@ export const InfoSections = {
       }
     });
 
-    // Инициализация слайдера отзывов
     const prevBtn = document.getElementById('reviews-prev');
     const nextBtn = document.getElementById('reviews-next');
     const track = document.getElementById('reviews-slider-track');

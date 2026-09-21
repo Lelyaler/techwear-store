@@ -3,7 +3,6 @@ import { AudioService } from '../modules/audio.js';
 import { Toast } from './Toast.js';
 import { ProfileState } from '../modules/profile.js';
 
-// Импортируем изображения для конструктора
 import jacketImg from '../assets/jacket.webp';
 import chestRigImg from '../assets/chest-rig.webp';
 import backpackImg from '../assets/backpack.webp';
@@ -18,7 +17,6 @@ import exoGlovesImg from '../assets/exo-gloves.webp';
 import bootsImg from '../assets/boots.webp';
 import mannequinImg from '../assets/mbs_mannequin.webp';
 
-// База данных совместимых модулей Modular Belt System
 const BUILDER_PRODUCTS = [
   { id: 'mod-jacket-x1', name: 'X-1 Shadow Shell Jacket', price: 289, image: jacketImg, slot: 'body', weight: 1.8 },
   { id: 'mod-rig-c3', name: 'C-3 Cyber Rig Harness', price: 145, image: chestRigImg, slot: 'chest', weight: 0.9 },
@@ -43,18 +41,13 @@ export const MbsBuilder = {
     hands: null,
     feet: null
   },
-  activeSlot: 'body', // Активный выбранный слот
+  activeSlot: 'body',
 
-  /**
-   * Генерация HTML разметки модального окна конструктора
-   * @returns {string} HTML string
-   */
   render() {
     return `
       <div class="mbs-overlay" id="mbs-overlay" aria-modal="true" role="dialog">
         <div class="mbs-modal">
           
-          <!-- Шапка -->
           <div class="mbs-header">
             <div class="mbs-title-group">
               <span class="mbs-title">MBS CUSTOMIZER // v1.4</span>
@@ -68,19 +61,14 @@ export const MbsBuilder = {
             </button>
           </div>
 
-          <!-- Рабочее пространство -->
           <div class="mbs-workspace">
             
-            <!-- Левая колонка: Интерактивный чертеж -->
             <div class="mbs-blueprint">
               <div class="mbs-grid"></div>
               
-              <!-- Интерактивная тактическая примерочная с манекеном и кружочками-указателями -->
               <div class="mbs-mannequin-container">
-                <!-- Лазерная линия сканирования -->
                 <div class="mbs-scanner-line"></div>
 
-                <!-- HUD диагностика в углу -->
                 <div class="mbs-hud-diagnostics">
                   <div class="mbs-hud-diagnostics__header">SYSTEM INTEGRITY SCAN //</div>
                   <div class="mbs-hud-diagnostics__row" id="hud-diag-slot">SLOT: NONE</div>
@@ -88,28 +76,19 @@ export const MbsBuilder = {
                   <div class="mbs-hud-diagnostics__row" id="hud-diag-weight">WEIGHT: -- KG</div>
                 </div>
                 
-                <!-- Фоновое изображение сгенерированного кибер-манекена -->
                 <img class="mbs-mannequin-image" src="${mannequinImg}" alt="MANNEQUIN SYSTEM PROTOCOL" width="600" height="894" loading="lazy" decoding="async" />
 
-                <!-- SVG направляющих линий (ответвления) -->
                 <svg class="mbs-mannequin-svg" viewBox="0 0 100 150">
                   <g stroke="var(--color-accent-blue)" stroke-width="0.8" stroke-dasharray="2,2" opacity="0.45">
-                    <!-- Head: Node(12, 22) -> Helmet(50, 24) -->
                     <line x1="12" y1="22" x2="50" y2="24" id="line-head"></line>
-                    <!-- Back: Node(88, 37) -> Shoulder/Backpack(68, 45) -->
                     <line x1="88" y1="37" x2="68" y2="45" id="line-back"></line>
-                    <!-- Chest: Node(12, 57) -> Armor(49, 48) -->
                     <line x1="12" y1="57" x2="49" y2="48" id="line-chest"></line>
-                    <!-- Hands: Node(88, 75) -> Glove/Arm(68, 68) -->
                     <line x1="88" y1="75" x2="68" y2="68" id="line-hands"></line>
-                    <!-- Body: Node(12, 93) -> Torso Shell(48, 75) -->
                     <line x1="12" y1="93" x2="48" y2="75" id="line-body"></line>
-                    <!-- Feet: Node(88, 129) -> Boots(50, 132) -->
                     <line x1="88" y1="129" x2="50" y2="132" id="line-feet"></line>
                   </g>
                 </svg>
 
-                <!-- Слоты в виде кружочков (Nodes) по бокам от манекена -->
                 <div class="mbs-node" id="node-head" data-slot="head">
                   <div class="mbs-node__circle">
                     <span class="mbs-node__placeholder">HD</span>
@@ -161,12 +140,9 @@ export const MbsBuilder = {
               </div>
             </div>
 
-            <!-- Правая колонка: Управление -->
             <div class="mbs-controls">
               
-              <!-- Селектор слотов -->
               <div class="mbs-slots-list">
-                
                 <div class="mbs-slot-card" data-slot="head">
                   <div class="mbs-slot-info">
                     <span class="mbs-slot-label">Head Module //</span>
@@ -214,22 +190,17 @@ export const MbsBuilder = {
                   </div>
                   <span class="mbs-slot-status-badge" id="slot-feet-badge">EMPTY</span>
                 </div>
-
               </div>
 
-              <!-- Панель выбора опций -->
               <div class="mbs-selection-panel">
                 <span class="mbs-selection-title" id="mbs-selection-title">AVAILABLE SHELL MODS //</span>
-                <div class="mbs-options-list" id="mbs-options-list">
-                  <!-- Заполняется динамически -->
-                </div>
+                <div class="mbs-options-list" id="mbs-options-list"></div>
               </div>
 
             </div>
 
           </div>
 
-          <!-- Подвал / Итоги -->
           <div class="mbs-footer">
             <div class="mbs-summary">
               <div class="mbs-summary-item">
@@ -260,9 +231,6 @@ export const MbsBuilder = {
     `;
   },
 
-  /**
-   * Открыть конструктор
-   */
   open() {
     const overlay = document.getElementById('mbs-overlay');
     if (overlay) {
@@ -272,13 +240,9 @@ export const MbsBuilder = {
     }
     
     this.updateUI();
-    // По дефолту активируем слот body
     this.selectSlot('body');
   },
 
-  /**
-   * Закрыть конструктор
-   */
   close() {
     const overlay = document.getElementById('mbs-overlay');
     if (overlay) {
@@ -288,13 +252,9 @@ export const MbsBuilder = {
     }
   },
 
-  /**
-   * Выбор активного слота
-   */
   selectSlot(slotName) {
     this.activeSlot = slotName;
     
-    // Сбрасываем классы активности со всех слотов в списке и на чертеже
     document.querySelectorAll('.mbs-slot-card').forEach(card => {
       if (card.dataset.slot === slotName) {
         card.classList.add('mbs-slot-card--active');
@@ -311,7 +271,6 @@ export const MbsBuilder = {
       }
     });
 
-    // Сбрасываем и подсвечиваем направляющие линии (branches)
     document.querySelectorAll('.mbs-mannequin-svg line').forEach(line => {
       line.setAttribute('stroke', 'var(--color-accent-blue)');
       line.setAttribute('stroke-width', '0.8');
@@ -326,7 +285,6 @@ export const MbsBuilder = {
       activeLine.removeAttribute('stroke-dasharray');
     }
 
-    // Обновляем HUD диагностику
     const item = this.equippedItems[slotName];
     const diagSlot = document.getElementById('hud-diag-slot');
     const diagItem = document.getElementById('hud-diag-item');
@@ -336,7 +294,6 @@ export const MbsBuilder = {
     if (diagItem) diagItem.textContent = `ITEM: ${item ? item.name.toUpperCase() : 'EMPTY'}`;
     if (diagWeight) diagWeight.textContent = `WEIGHT: ${item ? item.weight.toFixed(1) + ' KG' : '0.0 KG'}`;
 
-    // Обновляем панель выбора товара
     const titleEl = document.getElementById('mbs-selection-title');
     if (titleEl) {
       titleEl.textContent = `AVAILABLE ${slotName.toUpperCase()} MODULES //`;
@@ -345,19 +302,14 @@ export const MbsBuilder = {
     this.renderOptionsList();
   },
 
-  /**
-   * Отрисовка списка доступных товаров для активного слота
-   */
   renderOptionsList() {
     const optionsContainer = document.getElementById('mbs-options-list');
     if (!optionsContainer) return;
 
-    // Фильтруем товары совместимые с этим слотом
     const slotProducts = BUILDER_PRODUCTS.filter(p => p.slot === this.activeSlot);
     const currentlyEquipped = this.equippedItems[this.activeSlot];
 
     let html = `
-      <!-- Опция "Пустой слот" -->
       <div class="mbs-option-row ${!currentlyEquipped ? 'mbs-option-row--selected' : ''}" data-id="none">
         <div class="mbs-option-thumb" style="display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.4);">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="2.5">
@@ -390,9 +342,6 @@ export const MbsBuilder = {
     optionsContainer.innerHTML = html;
   },
 
-  /**
-   * Экипировка товара в слот
-   */
   equipItem(productId) {
     if (productId === 'none') {
       this.equippedItems[this.activeSlot] = null;
@@ -405,12 +354,9 @@ export const MbsBuilder = {
     
     AudioService.playClick();
     this.updateUI();
-    this.renderOptionsList(); // Обновляем выделение в панели выбора
+    this.renderOptionsList();
   },
 
-  /**
-   * Обновление всего интерфейса на основе состояния
-   */
   updateUI() {
     let totalPrice = 0;
     let totalWeight = 0;
@@ -467,7 +413,6 @@ export const MbsBuilder = {
       }
     });
 
-    // Обновляем текущую диагностику активного слота
     const activeItem = this.equippedItems[this.activeSlot];
     const diagSlot = document.getElementById('hud-diag-slot');
     const diagItem = document.getElementById('hud-diag-item');
@@ -477,7 +422,6 @@ export const MbsBuilder = {
     if (diagItem) diagItem.textContent = `ITEM: ${activeItem ? activeItem.name.toUpperCase() : 'EMPTY'}`;
     if (diagWeight) diagWeight.textContent = `WEIGHT: ${activeItem ? activeItem.weight.toFixed(1) + ' KG' : '0.0 KG'}`;
 
-    // Обновляем счетчики подвала
     const priceEl = document.getElementById('mbs-total-price');
     const weightEl = document.getElementById('mbs-total-weight');
     const deployBtn = document.getElementById('mbs-deploy-btn');
@@ -490,9 +434,6 @@ export const MbsBuilder = {
     }
   },
 
-  /**
-   * Сбросить все слоты
-   */
   reset() {
     Object.keys(this.equippedItems).forEach(slot => {
       this.equippedItems[slot] = null;
@@ -502,16 +443,11 @@ export const MbsBuilder = {
     this.renderOptionsList();
   },
 
-  /**
-   * Добавить все экипированные товары в корзину
-   */
   deployToCart() {
     let addCount = 0;
     Object.keys(this.equippedItems).forEach(slot => {
       const item = this.equippedItems[slot];
       if (item) {
-        // Добавляем в корзину (нам нужно сопоставить структуру с корзиной в main.js)
-        // В main.js у товаров есть badge, specs и т.д. Добавим базовые поля.
         CartState.addToCart({
           id: item.id,
           name: item.name,
@@ -534,9 +470,6 @@ export const MbsBuilder = {
     }
   },
 
-  /**
-   * Сформировать ссылку на текущую экипировку и скопировать в буфер обмена
-   */
   shareLoadout() {
     const parts = [];
     Object.keys(this.equippedItems).forEach(slot => {
@@ -567,9 +500,6 @@ export const MbsBuilder = {
       });
   },
 
-  /**
-   * Загрузить экипировку из параметров URL при старте приложения
-   */
   loadFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const loadout = params.get('loadout');
@@ -590,22 +520,17 @@ export const MbsBuilder = {
 
     if (loadedCount > 0) {
       this.updateUI();
-      // Запускаем открытие конструктора с небольшой задержкой, чтобы страница успела отрендериться
       setTimeout(() => {
         this.open();
         Toast.show(`LOADED ${loadedCount} MODULES FROM LINK //`, 'MBS CONFIG SYNC //', 'blue');
       }, 500);
 
-      // Очищаем параметры URL, чтобы при перезагрузке окно повторно не всплывало
       const url = new URL(window.location.href);
       url.searchParams.delete('loadout');
       window.history.replaceState({}, document.title, url.toString());
     }
   },
 
-  /**
-   * Инициализация обработчиков событий
-   */
   initListeners() {
     const overlay = document.getElementById('mbs-overlay');
     const closeBtn = document.getElementById('mbs-close-btn');
@@ -635,9 +560,8 @@ export const MbsBuilder = {
       deployBtn.addEventListener('click', () => this.deployToCart());
     }
 
-    // Слушаем клики по точкам чертежа (Nodes)
     document.querySelectorAll('.mbs-node').forEach(node => {
-      node.addEventListener('click', (e) => {
+      node.addEventListener('click', () => {
         const slot = node.dataset.slot;
         if (slot) {
           AudioService.playClick();
@@ -646,7 +570,6 @@ export const MbsBuilder = {
       });
     });
 
-    // Слушаем клики по карточкам слотов
     document.querySelectorAll('.mbs-slot-card').forEach(card => {
       card.addEventListener('click', () => {
         const slot = card.dataset.slot;
@@ -657,7 +580,6 @@ export const MbsBuilder = {
       });
     });
 
-    // Делегируем клики на опции выбора товара в панели
     const optionsContainer = document.getElementById('mbs-options-list');
     if (optionsContainer) {
       optionsContainer.addEventListener('click', (e) => {

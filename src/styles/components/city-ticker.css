@@ -1,7 +1,3 @@
-/* ==========================================
-   Компонент: CityTicker (Бегущая строка чрезвычайных сводок)
-   ========================================== */
-
 .city-ticker {
   width: 100%;
   height: 32px;
@@ -71,7 +67,7 @@
 }
 
 .city-ticker:hover .city-ticker__track {
-  animation-play-state: paused; /* Пауза при наведении мыши для удобства чтения */
+  animation-play-state: paused; 
 }
 
 @keyframes city-ticker-marquee {

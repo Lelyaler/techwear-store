@@ -12,7 +12,6 @@ export const CityTicker = {
     `;
 
     return `
-      <!-- Бегущая строка предупреждений -->
       <div class="city-ticker reveal js-interactive" id="city-ticker">
         <div class="city-ticker__badge">SYSTEM ALERT //</div>
         <div class="city-ticker__body">
@@ -29,10 +28,7 @@ export const CityTicker = {
     if (!ticker) return;
 
     ticker.addEventListener('click', () => {
-      // Воспроизводим короткий предупреждающий звук
       AudioService.playError();
-      
-      // Показываем Toast с расшифрованной сводкой погоды
       Toast.show(
         'ACID PRECIPITATION LEVEL 8.2pH INBOUND IN 15 MINUTES. LEVEL 3 SHIELD GEAR REQUIRED.',
         'TACTICAL WEATHER RADAR //',

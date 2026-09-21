@@ -33,7 +33,7 @@
   flex-direction: column;
   justify-content: space-between;
   flex-grow: 1;
-  min-width: 0; /* Предотвращает переполнение флекс-элемента длинным текстом */
+  min-width: 0; 
 }
 
 .cart-item__title {
@@ -68,7 +68,6 @@
   margin-right: 1px;
 }
 
-/* Блок изменения количества */
 .cart-item__controls {
   display: flex;
   align-items: center;
@@ -106,10 +105,9 @@
   color: var(--color-text-primary);
   border: none;
   background: transparent;
-  pointer-events: none; /* Количество меняем только кнопками */
+  pointer-events: none; 
 }
 
-/* Кнопка полного удаления */
 .cart-item__remove-btn {
   background: transparent;
   border: none;

@@ -1,12 +1,7 @@
-/**
- * Модуль управления состоянием профиля пользователя (Cyber Profile & Wallet)
- * Синхронизирует профиль с LocalStorage.
- */
-
 const STORAGE_KEY = 'techwear_cyber_profile';
 
 let state = {
-  faction: 'NETRUNNER', // NETRUNNER, CYBORG, RECON, OPERATIVE
+  faction: 'NETRUNNER',
   credits: 100,
   decryptedCodes: [],
   orders: [],
@@ -20,23 +15,18 @@ const loadProfile = () => {
     if (raw) {
       state = { ...state, ...JSON.parse(raw) };
     }
-  } catch (error) {
-    console.error('❌ [Profile State] Failed to load profile:', error);
-  }
+  } catch (error) {}
 };
 
 const saveProfile = () => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (error) {
-    console.error('❌ [Profile State] Failed to save profile:', error);
-  }
+  } catch (error) {}
 };
 
 export const ProfileState = {
   init() {
     loadProfile();
-    console.log('👤 [Profile State] Loaded profile:', state);
   },
 
   getFaction() {
@@ -129,12 +119,10 @@ export const ProfileState = {
     
     let cashback = 0;
     if (!skipCashback) {
-      // За покупку начисляем 10% кэшбэка в кредитах
       cashback = Math.round(total * 0.1);
       state.credits += cashback;
     }
     
-    // Начисляем 100 XP за покупку
     this.addXP(100);
 
     saveProfile();

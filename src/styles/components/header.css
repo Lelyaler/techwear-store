@@ -147,9 +147,8 @@
   }
 }
 
-/* Кнопка установки PWA */
 .header__btn--install {
-  display: none; /* Скрыта по умолчанию, активируется через JS */
+  display: none; 
   width: auto;
   padding: 0 var(--space-sm);
   font-family: var(--font-display);
@@ -169,7 +168,6 @@
   box-shadow: var(--glow-green);
 }
 
-/* Кнопка смены темы */
 .header__btn--theme {
   font-family: var(--font-display);
   font-weight: 800;
@@ -189,7 +187,6 @@
   box-shadow: var(--glow-blue);
 }
 
-/* Кнопка переключения звука */
 .header__btn--sound {
   font-family: var(--font-display);
   font-weight: 800;
@@ -216,7 +213,6 @@
   box-shadow: var(--glow-blue);
 }
 
-/* Кнопка включения эмбиента */
 .header__btn--ambient {
   font-family: var(--font-display);
   font-weight: 800;
@@ -243,7 +239,6 @@
   box-shadow: var(--glow-green);
 }
 
-/* Мобильная навигация */
 .header__desktop-nav {
   display: flex;
   align-items: center;
@@ -266,7 +261,6 @@
   }
 }
 
-/* Оверлей мобильного меню */
 .menu-overlay {
   position: fixed;
   top: 0;
@@ -391,7 +385,6 @@
   padding-top: var(--space-sm);
 }
 
-/* Адаптивность шапки и меню для микромобилок до 480px */
 @media (max-width: 480px) {
   .header__logo-brand {
     font-size: 1rem;
@@ -407,7 +400,7 @@
     height: 38px;
   }
   .menu-drawer {
-    max-width: 100%; /* Занимает всю ширину на ультра-маленьких телефонах */
+    max-width: 100%; 
   }
   .menu-drawer__item {
     padding: var(--space-xs) var(--space-sm);
@@ -415,12 +408,11 @@
   }
 }
 
-/* Специфичный перенос "// MODULE" на вторую строку для экранов <= 360px (включая 320px) */
 @media (max-width: 360px) {
   .header__logo {
     flex-direction: column;
     align-items: flex-start;
-    gap: 4px; /* Отодвинули подзаголовок от верхнего текста */
+    gap: 4px; 
   }
   
   .header__logo-brand {
@@ -435,6 +427,3 @@
     margin-left: 2px;
   }
 }
-
-
-

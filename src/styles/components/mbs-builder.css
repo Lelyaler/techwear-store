@@ -1,7 +1,3 @@
-/* ==========================================================================
-   Компонент: MBS Builder (Конструктор модулей Modular Belt System)
-   ========================================================================== */
-
 .mbs-overlay {
   position: fixed;
   top: 0;
@@ -42,7 +38,6 @@
   gap: var(--space-md);
 }
 
-/* Свечение углов */
 .mbs-modal::before, .mbs-modal::after {
   content: '';
   position: absolute;
@@ -66,7 +61,6 @@
   border-top: none;
 }
 
-/* Шапка конструктора */
 .mbs-header {
   display: flex;
   justify-content: space-between;
@@ -112,7 +106,6 @@
   transform: rotate(90deg);
 }
 
-/* Двухколоночный интерфейс */
 .mbs-workspace {
   flex: 1;
   display: grid;
@@ -128,7 +121,6 @@
   }
 }
 
-/* Левая колонка: Интерактивный чертеж */
 .mbs-blueprint {
   background: transparent;
   border: none;
@@ -141,7 +133,6 @@
   height: 100%;
 }
 
-/* Координатная сетка */
 .mbs-grid {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -152,7 +143,6 @@
   pointer-events: none;
 }
 
-/* Интерактивная примерочная: Тактическая карта с манекеном и ответвлениями */
 .mbs-mannequin-container {
   position: relative;
   height: 100%;
@@ -171,7 +161,6 @@
   box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9);
 }
 
-/* Лазерная линия сканирования */
 .mbs-scanner-line {
   position: absolute;
   left: 0;
@@ -191,7 +180,6 @@
   100% { top: 100%; opacity: 0.1; }
 }
 
-/* Диагностический блок HUD в углу манекена */
 .mbs-hud-diagnostics {
   position: absolute;
   bottom: 10px;
@@ -229,7 +217,6 @@
   text-overflow: ellipsis;
 }
 
-/* Анимированный поток энергии по связям */
 @keyframes line-energy-flow {
   to {
     stroke-dashoffset: -20;
@@ -242,7 +229,6 @@
   filter: drop-shadow(0 0 1px currentColor);
 }
 
-/* Фоновый сгенерированный кибер-манекен */
 .mbs-mannequin-image {
   width: 100%;
   height: 100%;
@@ -251,7 +237,6 @@
   pointer-events: none;
 }
 
-/* Направляющие SVG линии-ответвления */
 .mbs-mannequin-svg {
   position: absolute;
   top: 0;
@@ -263,7 +248,6 @@
   filter: drop-shadow(0 0 1.5px rgba(0, 240, 255, 0.4));
 }
 
-/* Узлы слотов по бокам от манекена (Nodes) */
 .mbs-node {
   position: absolute;
   display: flex;
@@ -274,7 +258,6 @@
   z-index: 10;
 }
 
-/* Точное позиционирование узлов по бокам (согласовано с координатами SVG линий) */
 #node-head { top: 15%; left: 12%; transform: translate(-50%, -50%); }
 #node-back { top: 25%; left: 88%; transform: translate(-50%, -50%); }
 #node-chest { top: 38%; left: 12%; transform: translate(-50%, -50%); }
@@ -282,7 +265,6 @@
 #node-body { top: 62%; left: 12%; transform: translate(-50%, -50%); }
 #node-feet { top: 86%; left: 88%; transform: translate(-50%, -50%); }
 
-/* Круглый слот callout */
 .mbs-node__circle {
   width: 44px;
   height: 44px;
@@ -346,14 +328,12 @@
   pointer-events: none;
 }
 
-/* Эффекты при наведении */
 .mbs-node:hover .mbs-node__circle {
   transform: scale(1.1);
   border-color: var(--color-accent-blue);
   box-shadow: 0 0 10px rgba(0, 240, 255, 0.45);
 }
 
-/* Выбранный активный слот */
 .mbs-node--active .mbs-node__circle {
   border-style: solid;
   border-color: var(--color-accent-blue);
@@ -383,7 +363,6 @@
   }
 }
 
-/* Экипированное состояние */
 .mbs-node--equipped .mbs-node__img {
   opacity: 1;
 }
@@ -397,7 +376,6 @@
   border-width: 1.5px;
 }
 
-/* Разделение свечения по ролям модулей при экипировке */
 #node-head.mbs-node--equipped .mbs-node__circle,
 #node-hands.mbs-node--equipped .mbs-node__circle,
 #node-body.mbs-node--equipped .mbs-node__circle {
@@ -416,7 +394,6 @@
   box-shadow: var(--glow-green);
 }
 
-/* Правая колонка: Настройки слотов */
 .mbs-controls {
   display: flex;
   flex-direction: column;
@@ -435,7 +412,6 @@
   }
 }
 
-/* Список слотов */
 .mbs-slots-list {
   display: flex;
   flex-direction: column;
@@ -512,7 +488,6 @@
   box-shadow: var(--glow-blue);
 }
 
-/* Панель выбора товара для активного слота */
 .mbs-selection-panel {
   border: 1px solid var(--border-color);
   background: rgba(10, 12, 14, 0.7);
@@ -591,7 +566,6 @@
   color: var(--color-accent-blue);
 }
 
-/* Футер конструктора */
 .mbs-footer {
   border-top: 1px solid var(--border-color);
   padding-top: var(--space-sm);
@@ -679,7 +653,6 @@
   border-color: var(--color-text-primary);
 }
 
-/* Кнопка открытия MBS в шапке */
 .header__btn--builder {
   font-family: var(--font-display);
   font-weight: 800;
@@ -700,7 +673,6 @@
   box-shadow: var(--glow-blue);
 }
 
-/* Адаптивные медиа-запросы для MBS Customizer */
 @media (max-width: 600px) {
   .mbs-modal {
     padding: var(--space-md);

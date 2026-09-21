@@ -1,38 +1,19 @@
 import '../styles/components/product-card.css';
 
-/**
- * UI Компонент: ProductCard (Карточка товара)
- * Презентационный компонент для отображения отдельного товара в каталоге.
- */
 export const ProductCard = {
-  /**
-   * Генерация HTML-разметки карточки товара
-   * @param {Object} product - объект с данными товара
-   * @param {string|number} product.id - уникальный ID товара
-   * @param {string} product.name - название товара
-   * @param {number} product.price - стоимость товара
-   * @param {string} product.image - путь к картинке товара
-   * @param {string} [product.badge] - текст бейджа (например, "SHELL")
-   * @param {string} [product.badgeClass] - цвет бейджа ("blue", "pink", "green")
-   * @param {string[]} [product.specs] - массив технических характеристик
-   * @returns {string} HTML string
-   */
   render(product, index = 0) {
     const { id, name, price, image, badge, badgeClass, specs = [] } = product;
     const delay = index * 0.04;
 
-    // Генерируем HTML для характеристик
     const specsHtml = specs
       .map(spec => `<span class="product-card__spec">${spec}</span>`)
       .join('');
 
-    // Вычисляем класс для бейджа
     const badgeModifier = badgeClass ? `product-card__badge--${badgeClass}` : '';
     const badgeHtml = badge 
       ? `<div class="product-card__badge ${badgeModifier}">${badge}</div>` 
       : '';
 
-    // Проверяем, сохранен ли размер в биометрическом профиле
     const savedSize = localStorage.getItem(`fit_size_${id}`);
     const fitBadgeHtml = savedSize 
       ? `<div class="product-card__fit-badge">YOUR FIT: ${savedSize}</div>` 
@@ -40,7 +21,6 @@ export const ProductCard = {
 
     return `
       <article class="product-card" data-id="${id}" style="animation-delay: ${delay}s">
-        <!-- Обертка для изображения с бейджем -->
         <div class="product-card__image-wrapper">
           ${badgeHtml}
           <img 
@@ -54,24 +34,19 @@ export const ProductCard = {
           />
         </div>
         
-        <!-- Контентная часть карточки -->
         <div class="product-card__body">
           <h3 class="product-card__title" title="${name}">${name}</h3>
           
-          <!-- Теги характеристик -->
           <div class="product-card__specs">
             ${specsHtml}
           </div>
 
-          <!-- Рекомендованный размер (если отсканирован) -->
           ${fitBadgeHtml}
 
-          <!-- Кнопка запуска сканера размеров -->
           <button class="product-card__scan-link js-fit-scan" data-id="${id}" data-name="${name}">
             FIT SCANNER //
           </button>
           
-          <!-- Футер карточки (Цена + Добавить в корзину) -->
           <div class="product-card__footer">
             <span class="product-card__price">${price}</span>
             <button 

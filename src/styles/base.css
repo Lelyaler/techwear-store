@@ -1,4 +1,3 @@
-/* Глобальный сброс стилей (CSS Reset) */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -19,7 +18,6 @@ html, body {
   scroll-behavior: smooth;
 }
 
-/* Стилизация скроллбара в футуристичном стиле */
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -39,7 +37,6 @@ html, body {
   box-shadow: var(--glow-blue);
 }
 
-/* Типографика */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 800;
@@ -75,7 +72,6 @@ img {
   display: block;
 }
 
-/* Базовый адаптивный макет */
 .app {
   display: flex;
   flex-direction: column;
@@ -84,7 +80,7 @@ img {
 
 .main {
   flex-grow: 1;
-  padding-top: var(--header-height); /* Компенсируем фиксированную шапку */
+  padding-top: var(--header-height); 
   padding-left: var(--space-sm);
   padding-right: var(--space-sm);
   padding-bottom: var(--space-xl);
@@ -93,7 +89,6 @@ img {
   width: 100%;
 }
 
-/* Эффект шума/сетки для создания киберпанк-атмосферы (опционально) */
 .scanline-overlay {
   position: fixed;
   top: 0;
@@ -115,7 +110,6 @@ img {
   opacity: 0.15;
 }
 
-/* Скролл-анимации (Reveal on Scroll) */
 .reveal {
   opacity: 0;
   transform: translateY(30px);

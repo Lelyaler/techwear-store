@@ -1,7 +1,3 @@
-/* ==========================================
-   Компонент: InfoSections (Reviews & FAQ Accordions)
-   ========================================== */
-
 .info-section-wrapper {
   width: 100%;
 }
@@ -27,10 +23,6 @@
   background-color: var(--color-accent-blue);
   box-shadow: var(--glow-blue);
 }
-
-/* ==========================================
-   Отзывы (Reviews Slider)
-   ========================================== */
 
 .reviews-header {
   display: flex;
@@ -182,10 +174,6 @@
   font-style: italic;
 }
 
-/* ==========================================
-   FAQ (Interactive Accordion)
-   ========================================== */
-
 .faq-container {
   display: flex;
   flex-direction: column;
@@ -248,10 +236,10 @@
   font-size: 0.8rem;
   color: var(--color-text-secondary);
   transition: color var(--transition-fast);
-  flex-shrink: 0; /* Запрещает сжатие и искажение скобок */
-  white-space: nowrap; /* Исключает перенос символов внутри скобок */
+  flex-shrink: 0; 
+  white-space: nowrap; 
   text-align: right;
-  min-width: 35px; /* Резервируем фиксированное место под иконку */
+  min-width: 35px; 
 }
 
 .faq-item__trigger:hover .faq-item__icon {

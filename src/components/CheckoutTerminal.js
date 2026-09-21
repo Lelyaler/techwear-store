@@ -3,12 +3,8 @@ import { AudioService } from '../modules/audio.js';
 import { Toast } from './Toast.js';
 import { ProfileState } from '../modules/profile.js';
 
-/**
- * UI Компонент: CheckoutTerminal (Консольное оформление заказа)
- * Предоставляет интерактивный ретро-футуристический CLI терминал для оформления покупок.
- */
 export const CheckoutTerminal = {
-  currentStep: 0, // 0: Address, 1: Phone, 2: Email, 3: Promo Code, 4: Confirmation, 5: Finished
+  currentStep: 0,
   userData: {
     address: '',
     phone: '',
@@ -16,18 +12,13 @@ export const CheckoutTerminal = {
   },
   promoDiscount: 0,
   finalTotal: 0,
-  paymentMethod: 'card', // 'card' or 'credits'
+  paymentMethod: 'card',
   
-  /**
-   * Генерация HTML-разметки модального окна терминала
-   * @returns {string} HTML string
-   */
   render() {
     return `
       <div class="checkout-terminal-overlay" id="checkout-terminal-overlay" aria-modal="true" role="dialog">
         <div class="checkout-terminal" id="terminal-container">
           
-          <!-- Шапка терминала -->
           <div class="checkout-terminal__header">
             <span>SECURE_COMM_TERMINAL // PORT: 922</span>
             <div class="checkout-terminal__window-controls">
@@ -37,12 +28,8 @@ export const CheckoutTerminal = {
             </div>
           </div>
 
-          <!-- Тело логов консоли -->
-          <div class="checkout-terminal__body" id="terminal-output">
-            <!-- Здесь генерируются логи -->
-          </div>
+          <div class="checkout-terminal__body" id="terminal-output"></div>
 
-          <!-- Интерактивная строка ввода -->
           <div class="checkout-terminal__input-line" id="terminal-input-row">
             <span class="checkout-terminal__prompt" id="terminal-prompt-prefix">operator@techwear_os:~$</span>
             <input 
@@ -61,9 +48,6 @@ export const CheckoutTerminal = {
     `;
   },
 
-  /**
-   * Открыть терминал и инициализировать сессию
-   */
   open() {
     const overlay = document.getElementById('checkout-terminal-overlay');
     const inputField = document.getElementById('terminal-input');
@@ -80,7 +64,6 @@ export const CheckoutTerminal = {
     this.finalTotal = 0;
     this.paymentMethod = 'card';
 
-    // Фокусируем терминал
     if (inputField) {
       setTimeout(() => inputField.focus(), 150);
     }
@@ -88,9 +71,6 @@ export const CheckoutTerminal = {
     this.printWelcomeSequence();
   },
 
-  /**
-   * Закрыть терминал
-   */
   close() {
     const overlay = document.getElementById('checkout-terminal-overlay');
     if (overlay) {
@@ -100,9 +80,6 @@ export const CheckoutTerminal = {
     }
   },
 
-  /**
-   * Напечатать приветствие, список товаров и первый вопрос
-   */
   printWelcomeSequence() {
     const output = document.getElementById('terminal-output');
     if (!output) return;
@@ -119,7 +96,6 @@ export const CheckoutTerminal = {
     this.printLine('[SYS] Link status: SECURE // PORT: 922 ESTABLISHED');
     this.printLine('[SYS] Loading telemetry modules...');
     
-    // Печать товаров в терминальном стиле
     this.printLine('\nSTAGING LOAD SHEET //');
     
     let itemsGrid = `<div class="terminal-grid">`;
@@ -134,7 +110,6 @@ export const CheckoutTerminal = {
       `;
     });
     
-    // Доставка
     const shipName = 'TACTICAL UAV DELIVERY'.padEnd(35, '.');
     itemsGrid += `
       <div class="terminal-grid-row">
@@ -143,7 +118,6 @@ export const CheckoutTerminal = {
       </div>
     `;
     
-    // Итого
     const totalName = 'GRAND TOTAL'.padEnd(35, '.');
     itemsGrid += `
       <div class="terminal-grid-row" style="font-weight: bold; border-top: 1px dashed currentColor; margin-top: 4px; padding-top: 4px;">
@@ -153,7 +127,6 @@ export const CheckoutTerminal = {
     `;
     itemsGrid += '</div>';
 
-    // Вставляем сетку
     const gridContainer = document.createElement('div');
     gridContainer.innerHTML = itemsGrid;
     output.appendChild(gridContainer);
@@ -166,9 +139,6 @@ export const CheckoutTerminal = {
     output.scrollTop = output.scrollHeight;
   },
 
-  /**
-   * Добавить текстовую строку в консоль
-   */
   printLine(text, type = 'default') {
     const output = document.getElementById('terminal-output');
     if (!output) return;
@@ -181,9 +151,6 @@ export const CheckoutTerminal = {
     output.scrollTop = output.scrollHeight;
   },
 
-  /**
-   * Изменить префикс подсказки (prompt)
-   */
   updatePrompt(prefix) {
     const promptEl = document.getElementById('terminal-prompt-prefix');
     if (promptEl) {
@@ -191,18 +158,13 @@ export const CheckoutTerminal = {
     }
   },
 
-  /**
-   * Реакция на ввод команды пользователем
-   */
   handleInput(inputVal) {
     const trimmedVal = inputVal.trim();
     if (!trimmedVal) return;
 
-    // Сначала печатаем команду пользователя
     this.printLine(`> ${trimmedVal}`, 'user');
     AudioService.playClick();
 
-    // Быстрый выход по команде 'exit'
     if (trimmedVal.toLowerCase() === 'exit' || trimmedVal.toLowerCase() === '/exit') {
       this.printLine('[SYS] Aborting connection. Closing terminal...');
       setTimeout(() => this.close(), 500);
@@ -210,7 +172,7 @@ export const CheckoutTerminal = {
     }
 
     switch (this.currentStep) {
-      case 0: // Ввод адреса
+      case 0:
         if (trimmedVal.length < 5) {
           this.printLine('[ERR] Sector coordinates invalid. Must be at least 5 characters.', 'error');
           AudioService.playError();
@@ -223,7 +185,7 @@ export const CheckoutTerminal = {
         }
         break;
 
-      case 1: // Ввод телефона
+      case 1:
         const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g;
         if (trimmedVal.length < 7 || !phoneRegex.test(trimmedVal)) {
           this.printLine('[ERR] Connection frequency invalid. Input correct numerical node address (phone).', 'error');
@@ -237,7 +199,7 @@ export const CheckoutTerminal = {
         }
         break;
 
-      case 2: // Ввод email
+      case 2:
         if (trimmedVal.length < 5 || !trimmedVal.includes('@') || !trimmedVal.includes('.')) {
           this.printLine('[ERR] Authentication pattern rejected. Enter valid email signature.', 'error');
           AudioService.playError();
@@ -250,7 +212,7 @@ export const CheckoutTerminal = {
         }
         break;
 
-      case 3: // Ввод промокода
+      case 3:
         {
           const code = trimmedVal.toUpperCase();
           const unlockedCodes = ProfileState.getDecryptedCodes();
@@ -259,7 +221,6 @@ export const CheckoutTerminal = {
             this.promoDiscount = 0;
             this.printLine('[SYS] Proceeding without promo discount.');
           } else if (code === 'NEOHACK20' || code === 'TACTICAL15') {
-            // Проверяем, взломал ли пользователь этот промокод
             if (unlockedCodes.includes(code)) {
               this.promoDiscount = code === 'NEOHACK20' ? 0.20 : 0.15;
               this.printLine(`[SYS] PROMO CODE VERIFIED: -${this.promoDiscount * 100}% DISCOUNT ENGAGED [OK]`);
@@ -299,7 +260,7 @@ export const CheckoutTerminal = {
         }
         break;
 
-      case 4: // Подтверждение заказа и метод оплаты
+      case 4:
         {
           const val = trimmedVal.toUpperCase();
           if (val === 'CARD' || val === 'CONFIRM' || val === 'Y' || val === 'YES') {
@@ -332,12 +293,9 @@ export const CheckoutTerminal = {
     }
   },
 
-  /**
-   * Анимация отправки заказа дроном с выводом интерактивного радара на Canvas
-   */
   runDispatchSequence() {
     const inputRow = document.getElementById('terminal-input-row');
-    if (inputRow) inputRow.style.display = 'none'; // Скрываем поле ввода
+    if (inputRow) inputRow.style.display = 'none';
 
     this.printLine('\n[SYS] BOOTING UAV AUTONOMOUS NAVIGATOR...');
     AudioService.playOpen();
@@ -348,7 +306,6 @@ export const CheckoutTerminal = {
       return;
     }
 
-    // Создаем контейнер для Canvas радара прямо в выводе терминала
     const radarContainer = document.createElement('div');
     radarContainer.style.cssText = `
       border: 1px solid var(--border-color);
@@ -405,14 +362,12 @@ export const CheckoutTerminal = {
     const endY = 40;
 
     const drawRadar = () => {
-      // Очистка холста
       ctx.fillStyle = '#060709';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent-blue').trim() || '#00f0ff';
       const greenColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent-green').trim() || '#00ff66';
 
-      // 1. Отрисовка координатной сетки
       ctx.strokeStyle = 'rgba(0, 240, 255, 0.03)';
       ctx.lineWidth = 1;
       for (let x = 0; x < canvas.width; x += 30) {
@@ -428,7 +383,6 @@ export const CheckoutTerminal = {
         ctx.stroke();
       }
 
-      // 2. Радиальные круги радара в точках DOCK и TARGET
       ctx.strokeStyle = 'rgba(0, 255, 102, 0.04)';
       ctx.beginPath();
       ctx.arc(startX, startY, 40, 0, Math.PI * 2);
@@ -438,7 +392,6 @@ export const CheckoutTerminal = {
       ctx.arc(endX, endY, 45, 0, Math.PI * 2);
       ctx.stroke();
 
-      // 3. Линия маршрута полета (пунктир)
       ctx.strokeStyle = 'rgba(0, 240, 255, 0.1)';
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -448,7 +401,6 @@ export const CheckoutTerminal = {
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // 4. Отрисовка док-станции
       ctx.fillStyle = accentColor;
       ctx.beginPath();
       ctx.arc(startX, startY, 5, 0, Math.PI * 2);
@@ -457,25 +409,21 @@ export const CheckoutTerminal = {
       ctx.font = '8px monospace';
       ctx.fillText('DOCK_09', startX - 18, startY + 15);
 
-      // 5. Отрисовка сектора доставки
-      ctx.fillStyle = '#ff0055'; // Розовый маркер цели
+      ctx.fillStyle = '#ff0055';
       ctx.beginPath();
       ctx.arc(endX, endY, 5, 0, Math.PI * 2);
       ctx.fill();
       ctx.fillText(`SECTOR: ${this.userData.address.toUpperCase()}`, endX - 80, endY - 10);
 
-      // 6. Расчет текущих координат дрона UAV
       const uavX = startX + (endX - startX) * progress;
       const uavY = startY + (endY - startY) * progress;
 
-      // Эффект сканирования (пульсирующий круг вокруг дрона)
       const pulseRadius = 8 + Math.sin(Date.now() * 0.015) * 4;
       ctx.strokeStyle = 'rgba(0, 255, 102, 0.25)';
       ctx.beginPath();
       ctx.arc(uavX, uavY, pulseRadius, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Отрисовка самого треугольника дрона
       ctx.fillStyle = greenColor;
       ctx.beginPath();
       ctx.moveTo(uavX, uavY - 6);
@@ -484,16 +432,13 @@ export const CheckoutTerminal = {
       ctx.closePath();
       ctx.fill();
 
-      // Вывод координат телеметрии дрона
       ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
       ctx.font = '7px monospace';
       ctx.fillText(`X:${Math.round(uavX)} Y:${Math.round(uavY)}`, uavX + 8, uavY + 2);
 
-      // Увеличиваем прогресс полета
-      progress += 0.004; // ~4 секунды полета
+      progress += 0.004;
 
       if (progress < 1) {
-        // Обновляем текст телеметрии
         const distRemaining = ((1 - progress) * 4.8).toFixed(1);
         distanceText.textContent = `DIST: ${distRemaining} KM`;
 
@@ -524,18 +469,13 @@ export const CheckoutTerminal = {
     drawRadar();
   },
 
-  /**
-   * Завершение оформления, очистка корзины и показ Toast
-   */
   finalizeOrder() {
-    // Генерируем случайный номер заказа
     const orderId = 'TX-' + Math.floor(100000 + Math.random() * 900000);
     
     const items = CartState.getItems();
     const itemsCount = items.reduce((sum, item) => sum + item.quantity, 0);
     const finalTotal = this.finalTotal || (CartState.getTotal() + 15);
     
-    // Сохраняем в лог профиля и начисляем кредиты (пропускаем кэшбэк если платили кредитами)
     const isCredits = this.paymentMethod === 'credits';
     const cashback = ProfileState.addOrder(orderId, finalTotal, itemsCount, isCredits);
 
@@ -554,16 +494,12 @@ export const CheckoutTerminal = {
     this.printLine(`***************************************************`);
     this.printLine(`\n[SYS] Closing link. Stay tactical.`);
 
-    // Звуковой эффект успеха
     AudioService.playSuccess();
     
-    // Toast
     Toast.show(`ORDER DISPATCHED: #${orderId} // DRONE DEPLOYED`, 'TACTICAL UPDATE //', 'green');
 
-    // Очищаем корзину
     CartState.clearCart();
 
-    // Создаем кнопку закрытия внутри консоли
     const output = document.getElementById('terminal-output');
     if (output) {
       const exitBtn = document.createElement('button');
@@ -579,9 +515,6 @@ export const CheckoutTerminal = {
     }
   },
 
-  /**
-   * Инициализация обработчиков
-   */
   initListeners() {
     const overlay = document.getElementById('checkout-terminal-overlay');
     const container = document.getElementById('terminal-container');
@@ -591,7 +524,6 @@ export const CheckoutTerminal = {
 
     if (overlay) {
       overlay.addEventListener('click', (e) => {
-        // Закрываем по клику на подложку только если заказ не в процессе отправки
         if (e.target === overlay && this.currentStep !== 5) {
           this.close();
         }
@@ -604,7 +536,6 @@ export const CheckoutTerminal = {
       });
     }
 
-    // Фокусируем ввод при клике в любое место консоли
     if (container && inputField) {
       container.addEventListener('click', () => {
         if (this.currentStep !== 5) inputField.focus();
@@ -621,7 +552,6 @@ export const CheckoutTerminal = {
       });
     }
 
-    // Сбрасываем видимость инпута при открытии в будущем
     document.addEventListener('checkout-opened', () => {
       if (inputRow) inputRow.style.display = 'flex';
     });

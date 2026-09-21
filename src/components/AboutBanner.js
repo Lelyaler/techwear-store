@@ -8,7 +8,6 @@ import '../styles/components/about-banner.css';
 export const AboutBanner = {
   render() {
     return `
-      <!-- Главный баннер (Hero section) -->
       <section class="hero-banner reveal">
         <div class="hero-banner__image-wrapper">
           <img 
@@ -75,7 +74,6 @@ export const AboutBanner = {
         </div>
       </section>
 
-      <!-- Модалка Манифеста -->
       <div class="manifesto-overlay" id="manifesto-overlay">
         <div class="manifesto-modal">
           <div class="manifesto-header">
@@ -102,7 +100,6 @@ export const AboutBanner = {
 
   renderFeatures() {
     return `
-      <!-- Блок с описанием ключевых особенностей -->
       <section class="brand-features reveal">
         <div class="brand-feature js-interactive">
           <div class="brand-feature__icon-wrapper">
@@ -149,11 +146,9 @@ export const AboutBanner = {
     const openBtns = document.querySelectorAll('.js-open-manifesto');
     const closeBtns = document.querySelectorAll('.js-close-manifesto');
 
-    // Автоматическое перелистывание баннеров (слайд-шоу из 4 баннеров)
     const models = ['female', 'male', 'cyber', 'pilot'];
     let currentIndex = 0;
 
-    // Отложенная загрузка остальных фонов после загрузки страницы (чтобы не блокировать LCP/FCP)
     const loadSecondaryImages = () => {
       const lazyImages = document.querySelectorAll('.hero-banner__image[data-src]');
       lazyImages.forEach(img => {
@@ -173,7 +168,6 @@ export const AboutBanner = {
     }
 
     window.techwearBannerInterval = setInterval(() => {
-      // Гарантируем загрузку следующей картинки перед её отображением
       const nextModelIndex = (currentIndex + 1) % models.length;
       const nextModel = models[nextModelIndex];
       const nextImgEl = document.getElementById(`hero-banner-img-${nextModel}`);
@@ -182,19 +176,16 @@ export const AboutBanner = {
         nextImgEl.removeAttribute('data-src');
       }
 
-      // Снимаем класс active со всех картинок
       models.forEach(model => {
         const el = document.getElementById(`hero-banner-img-${model}`);
         if (el) el.classList.remove('hero-banner__image--active');
       });
 
-      // Переходим к следующему индексу
       currentIndex = nextModelIndex;
 
-      // Навешиваем active на новое изображение
       const nextEl = document.getElementById(`hero-banner-img-${models[currentIndex]}`);
       if (nextEl) nextEl.classList.add('hero-banner__image--active');
-    }, 6000); // Перелистывание каждые 6 секунд
+    }, 6000);
 
     openBtns.forEach(btn => {
       btn.addEventListener('click', () => {

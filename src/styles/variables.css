@@ -1,38 +1,38 @@
 :root {
-  /* Шрифты */
+  
   --font-display: 'Orbitron', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-  /* Цветовая палитра — Techwear & Cyberpunk */
-  --color-bg-main: #060709;      /* Глубокий космический черный */
-  --color-bg-card: #0d0f12;      /* Темный фон для карточек и контейнеров */
-  --color-bg-panel: #11141a;     /* Фон всплывающих панелей/меню */
   
-  --color-text-primary: #f1f2f5;   /* Яркий белый для текста */
-  --color-text-secondary: #87909c; /* Приглушенный серый для описаний */
-  --color-text-muted: #4e555e;     /* Темно-серый для второстепенных деталей */
+  --color-bg-main: #060709;      
+  --color-bg-card: #0d0f12;      
+  --color-bg-panel: #11141a;     
+  
+  --color-text-primary: #f1f2f5;   
+  --color-text-secondary: #87909c; 
+  --color-text-muted: #4e555e;     
 
-  /* Неоновые акценты (Бело-серый тактический минимализм по умолчанию) */
-  --color-accent-blue: #ffffff;    /* Белый акцент по умолчанию */
-  --color-accent-pink: #87909c;    /* Серый акцент по умолчанию */
-  --color-accent-green: #00ff66;   /* Cyber Green - успешные действия */
-  --color-accent-purple: #9d00ff;  /* Cyber Purple - альтернативный акцент */
+  
+  --color-accent-blue: #ffffff;    
+  --color-accent-pink: #87909c;    
+  --color-accent-green: #00ff66;   
+  --color-accent-purple: #9d00ff;  
 
-  /* Границы и рамки (Techwear эстетика: тонкие линии) */
+  
   --border-color: rgba(255, 255, 255, 0.08);
   --border-color-glow: rgba(255, 255, 255, 0.3);
   --border-width: 1px;
-  --border-radius-xs: 0px;         /* Полностью острые углы для милитари-стиля */
+  --border-radius-xs: 0px;         
   --border-radius-sm: 2px;
   --border-radius-md: 4px;
   --border-radius-lg: 8px;
 
-  /* Тени и неоновое свечение (Glow Effects) */
+  
   --glow-blue: 0 0 8px rgba(255, 255, 255, 0.3);
   --glow-pink: 0 0 8px rgba(135, 144, 156, 0.3);
   --glow-green: 0 0 10px rgba(0, 255, 102, 0.3);
 
-  /* Сетка и отступы (базируется на 8px) */
+  
   --space-xxs: 4px;
   --space-xs: 8px;
   --space-sm: 16px;
@@ -41,47 +41,39 @@
   --space-xl: 48px;
   --space-xxl: 64px;
 
-  /* Высоты фиксированных элементов */
+  
   --header-height: 72px;
 
-  /* Степень перекрытия (Z-index) */
+  
   --z-header: 100;
   --z-drawer: 200;
   --z-toast: 300;
 
-  /* Плавность переходов (Transitions) */
+  
   --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ==========================================
-   Цветовые темы (Cyber-Themes)
-   ========================================== */
-
-/* Тема Green: тактический зеленый неон */
 [data-theme="green"] {
-  --color-accent-blue: #00ff66;    /* Cyber Green становится основным */
-  --color-accent-pink: #ff9900;    /* Cyber Orange для контрастных действий */
+  --color-accent-blue: #00ff66;    
+  --color-accent-pink: #ff9900;    
   --border-color-glow: rgba(0, 255, 102, 0.35);
   --glow-blue: 0 0 10px rgba(0, 255, 102, 0.4), 0 0 20px rgba(0, 255, 102, 0.15);
   --glow-pink: 0 0 10px rgba(255, 153, 0, 0.4), 0 0 20px rgba(255, 153, 0, 0.15);
 }
 
-/* Тема Alert (Pink): яркий розово-фиолетовый агрессивный спектр */
 [data-theme="pink"] {
-  --color-accent-blue: #ff0055;    /* Cyber Pink становится основным */
-  --color-accent-pink: #bd00ff;    /* Cyber Purple для контраста */
+  --color-accent-blue: #ff0055;    
+  --color-accent-pink: #bd00ff;    
   --border-color-glow: rgba(255, 0, 85, 0.35);
   --glow-blue: 0 0 10px rgba(255, 0, 85, 0.4), 0 0 20px rgba(255, 0, 85, 0.15);
   --glow-pink: 0 0 10px rgba(189, 0, 255, 0.4), 0 0 20px rgba(189, 0, 255, 0.15);
 }
 
-/* Тема Cyber: яркий голубой с неоновым розовым */
 [data-theme="cyber"] {
-  --color-accent-blue: #00f0ff;    /* Cyber Blue */
-  --color-accent-pink: #ff0055;    /* Cyber Pink */
+  --color-accent-blue: #00f0ff;    
+  --color-accent-pink: #ff0055;    
   --border-color-glow: rgba(0, 240, 255, 0.3);
   --glow-blue: 0 0 10px rgba(0, 240, 255, 0.35), 0 0 20px rgba(0, 240, 255, 0.15);
   --glow-pink: 0 0 10px rgba(255, 0, 85, 0.35), 0 0 20px rgba(255, 0, 85, 0.15);
 }
-

@@ -6,7 +6,6 @@
   margin-top: var(--space-md);
 }
 
-/* Адаптивность для планшетов (Mobile-First) */
 @media (min-width: 600px) {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -14,7 +13,6 @@
   }
 }
 
-/* Адаптивность для десктопов */
 @media (min-width: 960px) {
   .product-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -22,12 +20,11 @@
   }
 }
 
-/* Стили пагинации каталога */
 .catalog-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: var(--space-xs); /* Меньше зазор для компактного ряда цифр */
+  gap: var(--space-xs); 
   margin-top: var(--space-lg);
   margin-bottom: var(--space-md);
   user-select: none;
@@ -40,7 +37,7 @@
   font-weight: 800;
   letter-spacing: 0.05em;
   padding: 8px 12px;
-  min-width: 32px; /* Фиксированная ширина для ровных квадратных кнопок */
+  min-width: 32px; 
   height: 32px;
   display: flex;
   align-items: center;
@@ -65,7 +62,6 @@
   cursor: not-allowed;
 }
 
-/* Активная страница (цифра) */
 .pagination__btn--active {
   color: var(--color-bg-main) !important;
   background: var(--color-accent-blue) !important;

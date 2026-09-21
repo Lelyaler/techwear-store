@@ -9,7 +9,6 @@ export const Footer = {
       <footer class="footer reveal">
         <div class="footer__container">
           
-          <!-- Левая секция: Брендинг и Копирайт -->
           <div class="footer__section">
             <div class="footer__logo">
               <span class="footer__logo-brand">TECHWEAR</span>
@@ -21,7 +20,6 @@ export const Footer = {
             </p>
           </div>
 
-          <!-- Средняя секция: Статус Телеметрии -->
           <div class="footer__section">
             <h4 class="footer__title">SYSTEM TELEMETRY //</h4>
             <div class="footer__telemetry">
@@ -40,7 +38,6 @@ export const Footer = {
             </div>
           </div>
 
-          <!-- Правая секция: Юридические директивы -->
           <div class="footer__section">
             <h4 class="footer__title">LEGAL PROTOCOLS //</h4>
             <ul class="footer__links">

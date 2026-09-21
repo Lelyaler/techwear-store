@@ -5,21 +5,18 @@ import '../styles/components/neon-chat.css';
 export const NeonChat = {
   isOpen: false,
   messages: [
-    { sender: 'system', text: 'Neural link established. N.E.O.N. Cortex AI online // Ready to optimize your tactical loadout.' }
+    { sender: 'system', text: 'Neural link established. N.E.O.N. Cortex online // Ready to optimize your tactical loadout.' }
   ],
 
   render() {
     return `
-      <!-- Launcher Button -->
       <button class="neon-chat-trigger" id="neon-chat-trigger" aria-label="Open neural support link">
         <svg class="neon-chat-trigger__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         </svg>
       </button>
 
-      <!-- Chat Window -->
       <div class="neon-chat-window neon-chat-window--hidden" id="neon-chat-window">
-        <!-- Header -->
         <div class="neon-chat-header">
           <div class="neon-chat-title-group">
             <span class="neon-chat-title">N.E.O.N. CORTEX //</span>
@@ -28,12 +25,10 @@ export const NeonChat = {
           <button class="neon-chat-close" id="neon-chat-close-btn">X // DISCONNECT</button>
         </div>
 
-        <!-- Message logs -->
         <div class="neon-chat-messages" id="neon-chat-messages-container">
           ${this.renderMessages()}
         </div>
 
-        <!-- Input row -->
         <div class="neon-chat-input-row">
           <input 
             type="text" 
@@ -52,7 +47,6 @@ export const NeonChat = {
   renderMessages() {
     return this.messages.map(msg => {
       let text = msg.text;
-      // Подсветим промокоды, если они есть в тексте
       text = text.replace(/(NEOHACK20|TACTICAL15)/g, '<span class="neon-chat-msg__code">$1</span>');
       return `
         <div class="neon-chat-msg neon-chat-msg--${msg.sender}">
@@ -73,7 +67,6 @@ export const NeonChat = {
       windowEl.classList.remove('neon-chat-window--hidden');
       triggerEl.classList.add('neon-chat-trigger--active');
       AudioService.playOpen();
-      // Scroll to bottom
       const msgsContainer = document.getElementById('neon-chat-messages-container');
       if (msgsContainer) msgsContainer.scrollTop = msgsContainer.scrollHeight;
       
@@ -96,11 +89,9 @@ export const NeonChat = {
     inputEl.value = '';
     AudioService.playClick();
 
-    // 1. Добавляем сообщение пользователя
     this.messages.push({ sender: 'user', text: val });
     this.updateMessagesUI();
 
-    // 2. Показываем лоадер "печатает..."
     const msgsContainer = document.getElementById('neon-chat-messages-container');
     if (!msgsContainer) return;
 
@@ -111,9 +102,7 @@ export const NeonChat = {
     msgsContainer.appendChild(typingIndicator);
     msgsContainer.scrollTop = msgsContainer.scrollHeight;
 
-    // 3. Вычисляем и выводим ответ с задержкой
     setTimeout(() => {
-      // Удаляем индикатор
       const indicator = document.getElementById('neon-chat-typing-indicator');
       if (indicator) indicator.remove();
 
@@ -170,7 +159,7 @@ export const NeonChat = {
     const fallbacks = [
       'Анализ запроса... База данных TECHWEAR подтверждает наличие совместимых модулей в каталоге. Спросите меня о скидках, размерах или доставке.',
       'Данные получены. Наш текущий ассортимент включает высокотехнологичные модули: от респираторов M-1 до экзоскелетных перчаток GL-5. Требуется ли помощь в конфигурации?',
-      'Внимание: Зафиксирован повышенный уровень электромагнитного шума. Связь стабильна. Чем я могу помочь ваческому тактическому комплекту?',
+      'Внимание: Зафиксирован повышенный уровень электромагнитного шума. Связь стабильна. Чем я могу помочь вашему тактическому комплекту?',
       'Протокол связи Cortex v1.2 в режиме ожидания. Вы можете спросить о доставке, скидках, кредитах или о том, как использовать MBS Builder.'
     ];
 

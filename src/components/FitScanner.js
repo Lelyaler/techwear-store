@@ -1,26 +1,17 @@
 import { AudioService } from '../modules/audio.js';
 import { Toast } from './Toast.js';
 
-/**
- * UI Компонент: FitScanner (Интерактивный сканер размеров)
- * Симулирует футуристическое сканирование биометрических параметров для подбора размера.
- */
 export const FitScanner = {
   activeProductId: null,
-  activeCategory: 'apparel', // apparel, sneakers, gloves, onesize
+  activeCategory: 'apparel',
   scanTimeout: null,
   logInterval: null,
 
-  /**
-   * Генерация базовой HTML разметки модального окна
-   * @returns {string} HTML string
-   */
   render() {
     return `
       <div class="fit-scanner-overlay" id="fit-scanner-overlay" aria-modal="true" role="dialog">
         <div class="fit-scanner-modal">
           
-          <!-- Шапка -->
           <div class="fit-scanner__header">
             <div class="fit-scanner__title-group">
               <span class="fit-scanner__title">FIT SCANNER // v2.9</span>
@@ -34,13 +25,9 @@ export const FitScanner = {
             </button>
           </div>
 
-          <!-- Основное тело модального окна -->
           <div class="fit-scanner__body">
             
-            <!-- ШАГ 1: Ввод параметров -->
             <div class="fit-scanner__step fit-scanner__step--active" id="fit-scanner-step-input">
-              
-              <!-- Набор полей для Apparel (одежда) -->
               <div class="js-scanner-inputs" data-type="apparel" style="display: flex; flex-direction: column; gap: var(--space-md);">
                 <div class="fit-scanner__field">
                   <div class="fit-scanner__label-row">
@@ -58,7 +45,6 @@ export const FitScanner = {
                 </div>
               </div>
 
-              <!-- Набор полей для Sneakers (обувь) -->
               <div class="js-scanner-inputs" data-type="sneakers" style="display: none; flex-direction: column; gap: var(--space-md);">
                 <div class="fit-scanner__field">
                   <div class="fit-scanner__label-row">
@@ -69,7 +55,6 @@ export const FitScanner = {
                 </div>
               </div>
 
-              <!-- Набор полей для Gloves (перчатки) -->
               <div class="js-scanner-inputs" data-type="gloves" style="display: none; flex-direction: column; gap: var(--space-md);">
                 <div class="fit-scanner__field">
                   <div class="fit-scanner__label-row">
@@ -80,7 +65,6 @@ export const FitScanner = {
                 </div>
               </div>
 
-              <!-- Набор полей для One Size (универсальный) -->
               <div class="js-scanner-inputs" data-type="onesize" style="display: none; text-align: center; color: var(--color-text-secondary); padding: var(--space-md) 0;">
                 <p style="font-size: 0.8rem; line-height: 1.5;">
                   THIS MODULE HAS AN ADJUSTABLE FIT SYSTEM.<br>
@@ -95,23 +79,18 @@ export const FitScanner = {
               </div>
             </div>
 
-            <!-- ШАГ 2: Анимация сканирования -->
             <div class="fit-scanner__step" id="fit-scanner-step-process">
               <div class="fit-scanner__scanning-box">
                 <div class="fit-scanner__hologram"></div>
                 <div class="fit-scanner__laser"></div>
                 
-                <!-- SVG силуэт человека для сканирования -->
                 <svg class="fit-scanner__silhouette" viewBox="0 0 100 100">
                   <path d="M50,15 C54,15 54,23 50,23 C46,23 46,15 50,15 Z M42,25 C45,24 55,24 58,25 C64,26 64,45 61,45 C59,45 59,33 58,33 L57,55 L58,85 L54,85 L51,60 L49,60 L46,85 L42,85 L43,55 L42,33 C41,33 41,45 39,45 C36,45 36,26 42,25 Z"></path>
                 </svg>
               </div>
-              <div class="fit-scanner__logs" id="fit-scanner-log-console">
-                <!-- Сюда вставляются строки логов -->
-              </div>
+              <div class="fit-scanner__logs" id="fit-scanner-log-console"></div>
             </div>
 
-            <!-- ШАГ 3: Результат -->
             <div class="fit-scanner__step" id="fit-scanner-step-results">
               <div class="fit-scanner__results-box">
                 <span class="fit-scanner__result-title" id="fit-product-title">COMPATIBLE SIZE</span>
@@ -138,9 +117,6 @@ export const FitScanner = {
     `;
   },
 
-  /**
-   * Определение категории товара по его ID
-   */
   detectCategory(productId) {
     const id = productId.toLowerCase();
     if (id.includes('sneakers') || id.includes('boots')) return 'sneakers';
@@ -149,11 +125,6 @@ export const FitScanner = {
     return 'apparel';
   },
 
-  /**
-   * Открытие сканера
-   * @param {string} productId - ID сканируемого товара
-   * @param {string} productName - Название товара
-   */
   open(productId, productName) {
     this.activeProductId = productId;
     this.activeCategory = this.detectCategory(productId);
@@ -165,10 +136,8 @@ export const FitScanner = {
       targetLabel.textContent = `TARGET: ${productName.toUpperCase()}`;
     }
 
-    // Сбрасываем шаги
     this.showStep('input');
 
-    // Показываем нужные инпуты
     document.querySelectorAll('.js-scanner-inputs').forEach(el => {
       if (el.dataset.type === this.activeCategory) {
         el.style.display = 'flex';
@@ -184,9 +153,6 @@ export const FitScanner = {
     }
   },
 
-  /**
-   * Закрытие сканера
-   */
   close() {
     const overlay = document.getElementById('fit-scanner-overlay');
     if (overlay) {
@@ -195,14 +161,10 @@ export const FitScanner = {
       AudioService.playClick();
     }
     
-    // Чистим таймеры
     clearTimeout(this.scanTimeout);
     clearInterval(this.logInterval);
   },
 
-  /**
-   * Переключение активного шага
-   */
   showStep(stepName) {
     const steps = {
       input: document.getElementById('fit-scanner-step-input'),
@@ -221,9 +183,6 @@ export const FitScanner = {
     });
   },
 
-  /**
-   * Инициализация обработчиков событий
-   */
   initListeners() {
     const overlay = document.getElementById('fit-scanner-overlay');
     const closeBtn = document.getElementById('fit-scanner-close-btn');
@@ -231,7 +190,6 @@ export const FitScanner = {
     const saveBtn = document.getElementById('fit-scanner-save-btn');
     const recalBtn = document.getElementById('fit-scanner-recal-btn');
 
-    // Закрытие по клику вне окна
     if (overlay) {
       overlay.addEventListener('click', (e) => {
         if (e.target === overlay) this.close();
@@ -242,7 +200,6 @@ export const FitScanner = {
       closeBtn.addEventListener('click', () => this.close());
     }
 
-    // Реактивное обновление значений слайдеров
     const sliders = [
       { id: 'height', unit: ' cm' },
       { id: 'weight', unit: ' kg' },
@@ -260,21 +217,17 @@ export const FitScanner = {
       }
     });
 
-    // Кнопка запуска сканирования
     if (startBtn) {
       startBtn.addEventListener('click', () => {
         this.runScanning();
       });
     }
 
-    // Кнопка сохранения размера в профиль
     if (saveBtn) {
       saveBtn.addEventListener('click', () => {
         const sizeResult = document.getElementById('fit-result-size').textContent;
-        // Сохраняем размер для конкретного товара
         localStorage.setItem(`fit_size_${this.activeProductId}`, sizeResult);
         
-        // Оповещаем систему о том, что профиль размеров обновился
         document.dispatchEvent(new CustomEvent('fit-profile-updated', {
           detail: { productId: this.activeProductId, size: sizeResult }
         }));
@@ -288,7 +241,6 @@ export const FitScanner = {
       });
     }
 
-    // Кнопка перезапуска сканирования
     if (recalBtn) {
       recalBtn.addEventListener('click', () => {
         this.showStep('input');
@@ -297,12 +249,9 @@ export const FitScanner = {
     }
   },
 
-  /**
-   * Запуск анимированного процесса сканирования
-   */
   runScanning() {
     this.showStep('process');
-    AudioService.playOpen(); // Звуковой эффект свиста/сканирования
+    AudioService.playOpen();
 
     const consoleLog = document.getElementById('fit-scanner-log-console');
     if (consoleLog) consoleLog.innerHTML = '';
@@ -318,7 +267,6 @@ export const FitScanner = {
 
     let currentLogIndex = 0;
     
-    // Каждые 300мс выводим новую строку лога в стиле консоли
     this.logInterval = setInterval(() => {
       if (currentLogIndex < logLines.length) {
         const logLine = document.createElement('div');
@@ -327,25 +275,20 @@ export const FitScanner = {
         consoleLog.appendChild(logLine);
         consoleLog.scrollTop = consoleLog.scrollHeight;
         
-        // Легкий щелчок на каждый лог
         AudioService.playClick();
         currentLogIndex++;
       }
     }, 300);
 
-    // Через 2 секунды рассчитываем результат и переходим к шагу 3
     this.scanTimeout = setTimeout(() => {
       clearInterval(this.logInterval);
       this.calculateAndShowResult();
     }, 2100);
   },
 
-  /**
-   * Расчет рекомендуемого размера
-   */
   calculateAndShowResult() {
     let size = 'M';
-    let matchIdx = 95.0 + Math.random() * 4.9; // Рандом в диапазоне 95.0% - 99.9%
+    let matchIdx = 95.0 + Math.random() * 4.9;
     let desc = '';
 
     if (this.activeCategory === 'onesize') {
@@ -368,7 +311,6 @@ export const FitScanner = {
       }
     } else if (this.activeCategory === 'sneakers') {
       const footVal = parseInt(document.getElementById('foot-slider').value);
-      // Карта: mm -> EU Size
       if (footVal < 245) size = '39';
       else if (footVal < 252) size = '40';
       else if (footVal < 260) size = '41';
@@ -380,7 +322,6 @@ export const FitScanner = {
       
       desc = 'Sole cushion matches foot geometry. Glow-sole pressure zones optimized for maximum energy recoil.';
     } else {
-      // Одежда (apparel)
       const height = parseInt(document.getElementById('height-slider').value);
       const weight = parseInt(document.getElementById('weight-slider').value);
 
@@ -420,12 +361,11 @@ export const FitScanner = {
       }
     }
 
-    // Выводим результаты
     document.getElementById('fit-result-size').textContent = size;
     document.getElementById('fit-accuracy').textContent = `MATCH INDEX: ${matchIdx.toFixed(1)}%`;
     document.getElementById('fit-result-desc').textContent = desc;
 
     this.showStep('results');
-    AudioService.playSuccess(); // Звуковой сигнал успеха
+    AudioService.playSuccess();
   }
 };

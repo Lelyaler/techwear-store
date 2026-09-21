@@ -42,7 +42,6 @@ export const CyberProfile = {
     const xpPercent = Math.min(100, Math.round((xp / xpNeeded) * 100));
     const currentFactionInfo = FACTIONS[faction] || FACTIONS.NETRUNNER;
 
-    // Генерация истории заказов
     let ordersListHTML = '';
     if (orders.length === 0) {
       ordersListHTML = `
@@ -62,7 +61,6 @@ export const CyberProfile = {
       `).join('');
     }
 
-    // Опции выбора фракции
     const factionButtonsHTML = Object.keys(FACTIONS).map(key => `
       <button 
         class="profile-faction__btn ${faction === key ? 'profile-faction__btn--active' : ''} js-faction-select" 
@@ -76,7 +74,6 @@ export const CyberProfile = {
       <div class="profile-overlay" id="profile-overlay" aria-modal="true" role="dialog">
         <div class="profile-container" id="profile-container">
           
-          <!-- Шапка -->
           <div class="profile-header">
             <span>NEURAL_LINK // CUSTOMER ID CARD</span>
             <div class="profile-window-controls">
@@ -86,13 +83,10 @@ export const CyberProfile = {
             </div>
           </div>
 
-          <!-- Контент -->
           <div class="profile-body">
             
-            <!-- Левая колонка: ID Card -->
             <div class="profile-card-section">
               <div class="profile-card">
-                <!-- Аватар (ASCII) -->
                 <div class="profile-card__avatar-container">
                   <pre class="profile-card__avatar">
    .---.
@@ -105,7 +99,6 @@ export const CyberProfile = {
                   <div class="profile-card__avatar-overlay"></div>
                 </div>
 
-                <!-- Детали -->
                 <div class="profile-card__details">
                   <div class="profile-card__label">CODENAME:</div>
                   <div class="profile-card__val">OPERATOR_LELYALER</div>
@@ -115,7 +108,6 @@ export const CyberProfile = {
                     LEVEL ${level} // <span style="font-size: 0.65rem; color: var(--color-text-secondary);">${xp} / ${xpNeeded} XP</span>
                   </div>
 
-                  <!-- XP Progress Bar -->
                   <div class="profile-xp-bar" title="Neural Experience Progress">
                     <div class="profile-xp-bar__fill" style="width: ${xpPercent}%;"></div>
                   </div>
@@ -131,7 +123,6 @@ export const CyberProfile = {
                 </div>
               </div>
 
-              <!-- Фракция -->
               <div class="profile-faction">
                 <h4 class="profile-section-title">CHOOSE SPECIALIZATION //</h4>
                 <div class="profile-faction__grid">
@@ -145,9 +136,7 @@ export const CyberProfile = {
               </div>
             </div>
 
-            <!-- Правая колонка: Терминал взлома и Заказы -->
             <div class="profile-interact-section">
-              <!-- Терминал -->
               <div class="hacker-terminal">
                 <div class="hacker-terminal__header">SYSTEM DECRYPTOR PROMPT //</div>
                 <div class="hacker-terminal__body" id="hacker-output">
@@ -166,7 +155,6 @@ export const CyberProfile = {
                 </div>
               </div>
 
-              <!-- Логи заказов -->
               <div class="profile-orders">
                 <h4 class="profile-section-title">SECURE DISPATCH LOGS //</h4>
                 <div class="profile-orders__list" id="profile-orders-list">
@@ -185,8 +173,6 @@ export const CyberProfile = {
     const overlay = document.getElementById('profile-overlay');
     if (!overlay) return;
 
-    // Перерисовываем контент перед открытием
-    const appEl = document.querySelector('#app');
     const existingOverlay = document.getElementById('profile-overlay');
     if (existingOverlay) {
       existingOverlay.outerHTML = this.render();
@@ -199,7 +185,6 @@ export const CyberProfile = {
 
     this.initListeners();
 
-    // Скроллим терминал
     const output = document.getElementById('hacker-output');
     if (output) output.scrollTop = output.scrollHeight;
   },
@@ -278,7 +263,6 @@ export const CyberProfile = {
         Toast.show('₵50 INJECTED // EXPLOIT CONFIRMED', 'SECURITY BYPASS //', 'pink');
         AudioService.playSuccess();
         
-        // Обновляем баланс в UI
         const creditsEl = document.getElementById('profile-credits-value');
         if (creditsEl) creditsEl.textContent = ProfileState.getCredits();
       }, 600);
@@ -353,7 +337,6 @@ export const CyberProfile = {
       });
     }
 
-    // Слушатели смены фракции
     factionSelectButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         const faction = e.target.dataset.faction;
@@ -361,11 +344,9 @@ export const CyberProfile = {
         ProfileState.addXP(10);
         AudioService.playClick();
         
-        // Обновляем активную кнопку
         factionSelectButtons.forEach(b => b.classList.remove('profile-faction__btn--active'));
         e.target.classList.add('profile-faction__btn--active');
 
-        // Обновляем описание фракции
         const info = FACTIONS[faction];
         const descBox = document.getElementById('faction-desc-box');
         if (descBox && info) {

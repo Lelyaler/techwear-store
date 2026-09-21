@@ -8,36 +8,26 @@ export const Header = {
     return `
       <header class="header">
         <div class="header__container">
-          <!-- Логотип бренда -->
           <div class="header__logo" id="header-logo" title="На главную">
             <span class="header__logo-brand">TECHWEAR</span>
             <span class="header__logo-sub">// MODULE</span>
           </div>
           
-          <!-- Действия в шапке -->
           <div class="header__actions">
-            
-            <!-- Десктопная навигация (скрывается на мобилках) -->
             <div class="header__desktop-nav">
-              <!-- Кнопка установки PWA -->
               <button class="header__btn header__btn--install" id="pwa-install-btn" aria-label="Установить PWA">
                 INSTALL //
               </button>
 
-              <!-- Кнопка MBS конструктора -->
               <button class="header__btn header__btn--builder" id="builder-toggle-btn" aria-label="Открыть конструктор">
                 MBS BUILDER //
               </button>
               
-              <!-- Кнопка Личного Кабинета -->
               <button class="header__btn header__btn--profile" id="profile-toggle-btn" aria-label="Открыть личный кабинет">
                 NEURAL ID //
               </button>
             </div>
-
-            <!-- Общие кнопки для мобилок и ПК (Поиск, Корзина, Бургер-Меню) -->
             
-            <!-- Кнопка поиска -->
             <button class="header__btn header__btn--search js-interactive" id="search-trigger" aria-label="Открыть поиск">
               <svg class="header__icon" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8"></circle>
@@ -45,7 +35,6 @@ export const Header = {
               </svg>
             </button>
             
-            <!-- Иконка Корзины -->
             <button class="header__btn header__btn--cart js-interactive" id="cart-trigger" aria-label="Открыть корзину">
               <svg class="header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -57,7 +46,6 @@ export const Header = {
               </span>
             </button>
 
-            <!-- Кнопка Мобильного Бургер-меню (скрыта на ПК) -->
             <button class="header__btn header__btn--menu js-interactive" id="menu-toggle-btn" aria-label="Открыть меню">
               <svg class="header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -65,11 +53,9 @@ export const Header = {
                 <line x1="3" y1="18" x2="21" y2="18"></line>
               </svg>
             </button>
-
           </div>
         </div>
 
-        <!-- Оверлей Мобильного Меню (Drawer) -->
         <div class="menu-overlay" id="menu-overlay">
           <div class="menu-drawer">
             <div class="menu-drawer__header">
@@ -101,7 +87,6 @@ export const Header = {
             </div>
           </div>
         </div>
-
       </header>
     `;
   },
@@ -111,14 +96,12 @@ export const Header = {
     const cartTrigger = document.querySelector('#cart-trigger');
     const logo = document.querySelector('#header-logo');
 
-    // Десктопные кнопки
     const themeTrigger = document.querySelector('#theme-toggle-btn');
     const soundTrigger = document.querySelector('#sound-toggle-btn');
     const ambientTrigger = document.querySelector('#ambient-toggle-btn');
     const builderTrigger = document.querySelector('#builder-toggle-btn');
     const profileTrigger = document.querySelector('#profile-toggle-btn');
 
-    // Бургер меню кнопки
     const menuTrigger = document.querySelector('#menu-toggle-btn');
     const menuOverlay = document.querySelector('#menu-overlay');
     const menuCloseBtn = document.querySelector('#menu-close-btn');
@@ -130,7 +113,6 @@ export const Header = {
     const mAmbientBtn = document.querySelector('#menu-item-ambient');
     const mInstallBtn = document.querySelector('#menu-item-install');
 
-    // Функции закрытия/открытия меню
     const openMenu = () => {
       if (menuOverlay) {
         menuOverlay.classList.add('menu-overlay--open');
@@ -154,7 +136,6 @@ export const Header = {
       });
     }
 
-    // Обработчики кликов мобильного меню
     if (mProfileBtn) {
       mProfileBtn.addEventListener('click', () => {
         closeMenu();
@@ -194,7 +175,6 @@ export const Header = {
       });
     }
 
-    // Десктопные обработчики кликов
     if (themeTrigger) {
       themeTrigger.addEventListener('click', () => {
         document.dispatchEvent(new CustomEvent('toggle-theme'));

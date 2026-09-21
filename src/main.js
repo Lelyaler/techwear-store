@@ -24,7 +24,6 @@ import { CityTicker } from './components/CityTicker.js';
 import { NeonChat } from './components/NeonChat.js';
 import './styles/components/settings-dock.css';
 
-// Импортируем изображения товаров (Vite ESM)
 import jacketImg from './assets/jacket.webp';
 import chestRigImg from './assets/chest-rig.webp';
 import backpackImg from './assets/backpack.webp';
@@ -41,7 +40,6 @@ import shadowVisorImg from './assets/shadow-visor.webp';
 import legExoImg from './assets/leg-exo.webp';
 import stealthCloakImg from './assets/stealth-cloak.webp';
 
-// Расширенная база данных товаров магазина Techwear
 const PRODUCTS = [
   {
     id: 'mod-jacket-x1',
@@ -234,9 +232,6 @@ const PRODUCTS = [
   }
 ];
 
-/**
- * Вспомогательная функция задержки выполнения (Debounce)
- */
 const debounce = (fn, delay) => {
   let timeoutId;
   return (...args) => {
@@ -245,9 +240,7 @@ const debounce = (fn, delay) => {
   };
 };
 
-// Точка входа в систему Techwear & Modular Gear
 const initializeApp = () => {
-  // Инициализация дефолтных настроек в LocalStorage для предотвращения кэш-багов
   if (localStorage.getItem('techwear_theme') === null || localStorage.getItem('techwear_theme') === 'stealth') {
     localStorage.setItem('techwear_theme', 'default');
   }
@@ -259,16 +252,14 @@ const initializeApp = () => {
   }
 
   const appElement = document.querySelector('#app');
-  
   if (!appElement) return;
 
   const renderBlackMarketTabButton = () => {
     const level = ProfileState.getLevel();
     if (level >= 2) {
       return `<button class="catalog-filter__btn catalog-filter__btn--blackmarket" data-category="BLACKMARKET" id="blackmarket-filter-btn">⚡ Black Market //</button>`;
-    } else {
-      return `<button class="catalog-filter__btn catalog-filter__btn--locked" id="blackmarket-filter-btn" title="Reach Neural Level 2 to unlock">🔒 Locked //</button>`;
     }
+    return `<button class="catalog-filter__btn catalog-filter__btn--locked" id="blackmarket-filter-btn" title="Reach Neural Level 2 to unlock">🔒 Locked //</button>`;
   };
 
   const updateBlackMarketTabButton = () => {
@@ -290,24 +281,16 @@ const initializeApp = () => {
   };
 
   appElement.innerHTML = `
-    <!-- Эффект CRT-сканирования -->
     <div class="scanline-overlay"></div>
     
     <div class="app">
-      <!-- Шапка -->
       ${Header.render(0, AudioService.isEnabled(), AudioService.isAmbientActive())}
       
-      <!-- Основной контент -->
       <main class="main">
-        <!-- Бегущая строка чрезвычайных сводок Сити -->
         ${CityTicker.render()}
-
-        <!-- Герой-баннер и интро о бренде -->
         ${AboutBanner.render()}
 
-        <!-- Контрольная панель каталога (Поиск и Табы) -->
         <div class="catalog-controls reveal" id="catalog-controls">
-          <!-- Поисковое поле -->
           <div class="catalog-search">
             <input 
               type="text" 
@@ -323,7 +306,6 @@ const initializeApp = () => {
             </svg>
           </div>
           
-          <!-- Фильтры по модулям -->
           <div class="catalog-filter" id="catalog-filter-container">
             <button class="catalog-filter__btn catalog-filter__btn--active" data-category="ALL">All</button>
             <button class="catalog-filter__btn" data-category="SHELL">Shell</button>
@@ -333,48 +315,25 @@ const initializeApp = () => {
           </div>
         </div>
 
-        <!-- Сетка каталога (динамический рендеринг) -->
-        <section class="product-grid reveal" id="product-grid-container">
-          <!-- Заполняется динамически -->
-        </section>
-
-        <!-- Пагинация каталога -->
+        <section class="product-grid reveal" id="product-grid-container"></section>
         <div class="catalog-pagination reveal" id="catalog-pagination-container"></div>
-
-        <!-- Отзывы и FAQ -->
         ${InfoSections.render()}
-
-        <!-- Блок с описанием ключевых особенностей (MBS Modular System) -->
         ${AboutBanner.renderFeatures()}
       </main>
 
-      <!-- Футер сайта -->
       ${Footer.render()}
-
-      <!-- Выдвижная корзина (Cart Drawer) -->
       ${CartDrawer.render()}
     </div>
 
-    <!-- Интерактивный сканер размеров -->
     ${FitScanner.render()}
-
-    <!-- Военный консольный терминал оформления заказа -->
     ${CheckoutTerminal.render()}
-
-    <!-- Конструктор модулей Modular Belt System -->
     ${MbsBuilder.render()}
-
-    <!-- Личный кабинет пользователя и терминал взлома -->
     ${CyberProfile.render()}
-
-    <!-- ИИ Чат-Ассистент N.E.O.N. Cortex -->
     ${NeonChat.render()}
 
-    <!-- Панель быстрых настроек системы -->
     <div class="cyber-settings-dock" id="cyber-quick-settings">
       <div class="cyber-settings-title">SYS // QUICK SETTINGS</div>
       
-      <!-- Кнопка-триггер для мобильных устройств -->
       <button class="cyber-settings-toggle-btn js-interactive" id="settings-toggle-trigger" title="Toggle Quick Settings" aria-label="Toggle Quick Settings">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="12" cy="12" r="3"></circle>
@@ -396,7 +355,6 @@ const initializeApp = () => {
     </div>
   `;
 
-  // Инициализируем обработчики событий для ИИ Чата
   NeonChat.initListeners();
 
   const gridContainer = document.querySelector('#product-grid-container');
@@ -409,9 +367,6 @@ const initializeApp = () => {
   let currentPage = 1;
   const itemsPerPage = 6;
 
-  /**
-   * Функция отрисовки кнопок переключения страниц (Пагинации)
-   */
   const renderPagination = (totalPages) => {
     if (!paginationContainer) return;
 
@@ -443,15 +398,11 @@ const initializeApp = () => {
     paginationContainer.innerHTML = html;
   };
 
-  /**
-   * Функция отрисовки каталога на основе текущих фильтров
-   */
   const renderCatalog = () => {
     if (!gridContainer) return;
 
     const filteredProducts = FilterService.filter(PRODUCTS, activeCategory, searchQuery);
     
-    // Если ничего не найдено — выводим системную заглушку
     if (filteredProducts.length === 0) {
       gridContainer.innerHTML = `
         <div style="
@@ -481,11 +432,10 @@ const initializeApp = () => {
         </div>
       `;
       if (paginationContainer) paginationContainer.innerHTML = '';
-      AudioService.playError(); // Звуковой сигнал об ошибке поиска
+      AudioService.playError();
       return;
     }
 
-    // Рассчитываем параметры пагинации
     const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
     if (currentPage > totalPages) {
       currentPage = totalPages || 1;
@@ -494,16 +444,13 @@ const initializeApp = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const paginatedProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
 
-    // Рендерим отфильтрованный список карточек (только 6 штук на страницу)
     gridContainer.innerHTML = paginatedProducts
       .map((product, index) => ProductCard.render(product, index))
       .join('');
 
-    // Отрисовываем кнопки пагинации
     renderPagination(totalPages);
   };
 
-  // Инициализируем слушатели событий UI-компонентов
   Header.initListeners();
   CartDrawer.initListeners();
   FitScanner.initListeners();
@@ -515,7 +462,6 @@ const initializeApp = () => {
   Footer.initListeners();
   CityTicker.initListeners();
 
-  // Настройка скролл-анимаций (Intersection Observer)
   const setupScrollAnimations = () => {
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
@@ -535,7 +481,6 @@ const initializeApp = () => {
   };
   setupScrollAnimations();
 
-  // Настройка интерактивного 3D Tilt эффекта на карточках товаров с бликом
   const setup3DTiltEffects = () => {
     if (!gridContainer) return;
 
@@ -550,14 +495,12 @@ const initializeApp = () => {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
 
-      // Максимальный угол наклона 7 градусов
       const rotateX = ((centerY - y) / centerY) * 7;
       const rotateY = ((x - centerX) / centerX) * 7;
 
       card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(1)}deg) rotateY(${rotateY.toFixed(1)}deg) translateY(-6px)`;
       card.style.transition = 'transform 0.05s linear';
 
-      // Передаем координаты для CSS-блика
       card.style.setProperty('--mouse-x', `${((x / rect.width) * 100).toFixed(0)}%`);
       card.style.setProperty('--mouse-y', `${((y / rect.height) * 100).toFixed(0)}%`);
     });
@@ -575,7 +518,6 @@ const initializeApp = () => {
   };
   setup3DTiltEffects();
 
-  // Функция обновления состояния кнопок быстрого доступа (Quick Settings)
   const updateQuickSettingsUI = () => {
     const soundBtn = document.querySelector('#quick-sound-btn');
     const ambientBtn = document.querySelector('#quick-ambient-btn');
@@ -609,7 +551,6 @@ const initializeApp = () => {
     }
   };
 
-  // Слушатели кликов по кнопкам быстрой настройки
   const quickThemeBtn = document.querySelector('#quick-theme-btn');
   const quickSoundBtn = document.querySelector('#quick-sound-btn');
   const quickAmbientBtn = document.querySelector('#quick-ambient-btn');
@@ -630,7 +571,6 @@ const initializeApp = () => {
     });
   }
 
-  // Настройка мобильного переключателя быстрых настроек
   const settingsToggleTrigger = document.querySelector('#settings-toggle-trigger');
   const settingsDock = document.querySelector('#cyber-quick-settings');
 
@@ -640,7 +580,6 @@ const initializeApp = () => {
       settingsToggleTrigger.classList.toggle('cyber-settings-toggle-btn--active');
     });
 
-    // Автоматическое закрытие панели при клике в пустом месте на мобильных экранах
     document.addEventListener('click', (e) => {
       if (window.innerWidth <= 600) {
         if (!settingsDock.contains(e.target)) {
@@ -651,19 +590,14 @@ const initializeApp = () => {
     });
   }
 
-  // Обновляем UI быстрой настройки при инициализации
   updateQuickSettingsUI();
-
-  // Делаем первый рендер каталога
   renderCatalog();
 
-  // Обработчик переключения табов фильтрации
   if (filterContainer) {
     filterContainer.addEventListener('click', (event) => {
       const clickedBtn = event.target.closest('.catalog-filter__btn');
       if (!clickedBtn) return;
 
-      // Если кликнули на заблокированный таб Черного Рынка
       if (clickedBtn.classList.contains('catalog-filter__btn--locked')) {
         AudioService.playError();
         Toast.show(
@@ -674,28 +608,25 @@ const initializeApp = () => {
         return;
       }
 
-      // Переключаем класс активности
       filterContainer.querySelectorAll('.catalog-filter__btn').forEach(btn => {
         btn.classList.remove('catalog-filter__btn--active');
       });
       clickedBtn.classList.add('catalog-filter__btn--active');
 
       activeCategory = clickedBtn.dataset.category;
-      currentPage = 1; // Сброс страницы на 1 при смене категории
+      currentPage = 1;
       renderCatalog();
     });
   }
 
-  // Обработчик ввода в поиск с задержкой (Debounce)
   if (searchInput) {
     searchInput.addEventListener('input', debounce((event) => {
       searchQuery = event.target.value;
-      currentPage = 1; // Сброс страницы на 1 при вводе в поиск
+      currentPage = 1;
       renderCatalog();
     }, 250));
   }
 
-  // Обработчик кликов по кнопкам пагинации страниц
   if (paginationContainer) {
     paginationContainer.addEventListener('click', (e) => {
       const prevBtn = e.target.closest('.js-pagination-prev');
@@ -724,7 +655,6 @@ const initializeApp = () => {
       if (changed) {
         AudioService.playClick();
         renderCatalog();
-        // Скроллим к шапке каталога
         const catalogControls = document.getElementById('catalog-controls');
         if (catalogControls) {
           catalogControls.scrollIntoView({ behavior: 'smooth' });
@@ -733,11 +663,9 @@ const initializeApp = () => {
     });
   }
 
-  // Общий обработчик событий клика на корневом уровне (Делегирование)
   appElement.addEventListener('click', (event) => {
     const target = event.target;
 
-    // 1. Клики по кнопке "Добавить в корзину" (ADD TO GEAR)
     const addToCartBtn = target.closest('.js-add-to-cart');
     if (addToCartBtn) {
       const productId = addToCartBtn.dataset.id;
@@ -746,12 +674,11 @@ const initializeApp = () => {
       if (product) {
         CartState.addToCart(product);
         Toast.show(`${product.name.toUpperCase()} EQUIPPED //`, 'GEAR UPDATE //', 'blue');
-        AudioService.playSuccess(); // Звук успешного добавления
+        AudioService.playSuccess();
       }
-      return; // Выходим из обработчика
+      return;
     }
 
-    // 2. Клик по кнопке запуска сканера размеров
     const fitScanBtn = target.closest('.js-fit-scan');
     if (fitScanBtn) {
       const productId = fitScanBtn.dataset.id;
@@ -760,36 +687,30 @@ const initializeApp = () => {
       return;
     }
 
-    // 3. Клик по кнопке установки PWA
     const installBtn = target.closest('#pwa-install-btn');
     if (installBtn && deferredPrompt) {
       deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(({ outcome }) => {
-        console.log(`📱 [PWA] User choice outcome: ${outcome}`);
+      deferredPrompt.userChoice.then(() => {
         deferredPrompt = null;
         installBtn.style.display = 'none';
       });
     }
   });
 
-  // Реактивная подписка: обновляем шапку при изменении корзины
   document.addEventListener('cart-updated', (event) => {
     const { count } = event.detail;
     Header.updateCartCount(count);
   });
 
-  // Реактивная подписка на обновление профиля размеров (начисляем 25 XP)
   document.addEventListener('fit-profile-updated', () => {
     renderCatalog();
     ProfileState.addXP(25);
   });
 
-  // Реактивная подписка на обновление профиля
   document.addEventListener('profile-updated', () => {
     updateBlackMarketTabButton();
   });
 
-  // Реактивная подписка на повышение уровня (геймификация)
   document.addEventListener('level-up', (event) => {
     const { level } = event.detail;
     AudioService.playSuccess();
@@ -809,14 +730,10 @@ const initializeApp = () => {
       }, 1500);
     }
 
-    // Обновляем состояние кнопки в UI и перерисовываем каталог
     updateBlackMarketTabButton();
     renderCatalog();
   });
 
-  // ==========================================
-  // Логика установки PWA приложения (Add to Home Screen)
-  // ==========================================
   let deferredPrompt;
   const installBtn = document.querySelector('#pwa-install-btn');
   const mInstallBtnWrapper = document.querySelector('#menu-item-install-wrapper');
@@ -832,12 +749,10 @@ const initializeApp = () => {
     }
   });
 
-  // Слушаем событие установки PWA из мобильного меню
   document.addEventListener('install-app', () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(({ outcome }) => {
-        console.log(`📱 [PWA] User choice outcome: ${outcome}`);
+      deferredPrompt.userChoice.then(() => {
         deferredPrompt = null;
         if (installBtn) installBtn.style.display = 'none';
         if (mInstallBtnWrapper) mInstallBtnWrapper.style.display = 'none';
@@ -845,35 +760,20 @@ const initializeApp = () => {
     }
   });
 
-  // Успешная установка PWA
   window.addEventListener('appinstalled', () => {
-    console.log('📱 [PWA] App installed.');
     if (installBtn) installBtn.style.display = 'none';
     if (mInstallBtnWrapper) mInstallBtnWrapper.style.display = 'none';
     Toast.show('SYSTEM DEPLOYED // PWA fully installed.', 'PWA SUCCESS //', 'pink');
   });
 
-  // Инициализируем состояние профиля и кошелька
   ProfileState.init();
-
-  // Инициализируем состояние корзины (загрузка из LocalStorage)
   CartState.init();
-
-  // Загружаем экипировку из параметров URL, если они присутствуют
   MbsBuilder.loadFromUrl();
-
-  // Регистрация Service Worker для поддержки оффлайн-режима
   registerServiceWorker();
 
-  // ==========================================
-  // Логика переключения цветовых тем (Cyber-Themes)
-  // ==========================================
   const THEMES = ['default', 'green', 'pink', 'cyber'];
   let currentTheme = localStorage.getItem('techwear_theme') || 'default';
 
-  /**
-   * Применить выбранную тему к документу
-   */
   const applyTheme = (theme) => {
     if (theme === 'default') {
       document.documentElement.removeAttribute('data-theme');
@@ -883,17 +783,14 @@ const initializeApp = () => {
     localStorage.setItem('techwear_theme', theme);
   };
 
-  // Применяем сохраненную тему при запуске
   applyTheme(currentTheme);
 
-  // Слушаем событие переключения темы из шапки
   document.addEventListener('toggle-theme', () => {
     const currentIndex = THEMES.indexOf(currentTheme);
     const nextIndex = (currentIndex + 1) % THEMES.length;
     currentTheme = THEMES[nextIndex];
     applyTheme(currentTheme);
 
-    // Меняем цвет Toast-сообщения под тему
     const toastStyle = currentTheme === 'pink' ? 'pink' : 'blue';
     Toast.show(
       `INTERFACE SPECTRUM UPDATED: [${currentTheme.toUpperCase()}] //`,
@@ -901,16 +798,13 @@ const initializeApp = () => {
       toastStyle
     );
 
-    // Синхронизируем панель быстрых настроек
     updateQuickSettingsUI();
   });
 
-  // Слушаем событие переключения звука из шапки
   document.addEventListener('toggle-sound', () => {
     const isEnabled = AudioService.toggle();
     Header.updateSoundBtn(isEnabled);
     
-    // Если включили — воспроизводим проверочный щелчок
     if (isEnabled) {
       AudioService.playClick();
     }
@@ -921,11 +815,9 @@ const initializeApp = () => {
       'blue'
     );
 
-    // Синхронизируем панель быстрых настроек
     updateQuickSettingsUI();
   });
 
-  // Слушаем событие переключения фонового эмбиента из шапки
   document.addEventListener('toggle-ambient', () => {
     const isAmbientActive = AudioService.toggleAmbient();
     Header.updateAmbientBtn(isAmbientActive);
@@ -936,56 +828,42 @@ const initializeApp = () => {
       isAmbientActive ? 'green' : 'blue'
     );
 
-    // Синхронизируем панель быстрых настроек
     updateQuickSettingsUI();
   });
 
-  // Синхронизируем состояние кнопок при автоматическом включении/выключении гула
   document.addEventListener('ambient-status-updated', (event) => {
     const isAmbientActive = event.detail.active;
     Header.updateAmbientBtn(isAmbientActive);
     updateQuickSettingsUI();
   });
 
-  // Слушаем событие открытия конструктора MBS из шапки
   document.addEventListener('toggle-builder', () => {
     MbsBuilder.open();
   });
 
-  // Слушаем событие открытия личного кабинета из шапки
   document.addEventListener('toggle-profile', () => {
     CyberProfile.open();
   });
 
-  // Глобальный перехватчик кликов на фазе захвата для озвучивания всех интерактивных элементов
   document.addEventListener('click', (event) => {
     const target = event.target;
     if (target.closest('button, a, .catalog-filter__btn, .js-interactive')) {
       AudioService.playClick();
       
-      // Автоматический запуск эмбиента при первом взаимодействии с интерактивным элементом
       const isAmbientEnabled = localStorage.getItem('techwear_ambient') !== 'false';
       if (isAmbientEnabled && !AudioService.isAmbientActive()) {
         AudioService.startAmbient();
       }
     }
-  }, true); // true активирует фазу capture, чтобы сработало раньше других слушателей
-
-  console.log('👾 [Techwear OS] System and CartState initialized successfully.');
+  }, true);
 };
 
-/**
- * Регистрация Service Worker для оффлайн-работы PWA
- */
 const registerServiceWorker = () => {
   if ('serviceWorker' in navigator) {
     const swUrl = `${import.meta.env.BASE_URL}sw.js`;
     navigator.serviceWorker.register(swUrl, { scope: import.meta.env.BASE_URL })
-      .then((registration) => {
-        console.log('📡 [PWA] Service Worker registered. Scope:', registration.scope);
-      })
       .catch((error) => {
-        console.warn('⚠️ [PWA] Service Worker registration info:', error);
+        console.warn('Service Worker registration info:', error);
       });
   }
 };
