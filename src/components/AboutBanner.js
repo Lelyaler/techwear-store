@@ -1,7 +1,7 @@
-import femaleBannerImg from '../assets/techwear-banner.jpg';
-import maleBannerImg from '../assets/techwear-male-banner.jpg';
-import cyberBannerImg from '../assets/techwear-cyber-banner.jpg';
-import pilotBannerImg from '../assets/techwear-pilot-banner.jpg';
+import femaleBannerImg from '../assets/techwear-banner.webp';
+import maleBannerImg from '../assets/techwear-male-banner.webp';
+import cyberBannerImg from '../assets/techwear-cyber-banner.webp';
+import pilotBannerImg from '../assets/techwear-pilot-banner.webp';
 import { AudioService } from '../modules/audio.js';
 import '../styles/components/about-banner.css';
 
@@ -11,10 +11,46 @@ export const AboutBanner = {
       <!-- Главный баннер (Hero section) -->
       <section class="hero-banner reveal">
         <div class="hero-banner__image-wrapper">
-          <img class="hero-banner__image hero-banner__image--active" src="${femaleBannerImg}" alt="Techwear Tactical Gear" id="hero-banner-img-female" />
-          <img class="hero-banner__image" data-src="${maleBannerImg}" alt="Techwear Tactical Gear" id="hero-banner-img-male" />
-          <img class="hero-banner__image" data-src="${cyberBannerImg}" alt="Techwear Cybernetical Gear" id="hero-banner-img-cyber" />
-          <img class="hero-banner__image" data-src="${pilotBannerImg}" alt="Techwear Pilot Gear" id="hero-banner-img-pilot" />
+          <img 
+            class="hero-banner__image hero-banner__image--active" 
+            src="${femaleBannerImg}" 
+            alt="Techwear Tactical Gear" 
+            id="hero-banner-img-female" 
+            width="1200" 
+            height="669" 
+            fetchpriority="high" 
+            decoding="async" 
+          />
+          <img 
+            class="hero-banner__image" 
+            data-src="${maleBannerImg}" 
+            alt="Techwear Tactical Gear" 
+            id="hero-banner-img-male" 
+            width="1200" 
+            height="805" 
+            loading="lazy" 
+            decoding="async" 
+          />
+          <img 
+            class="hero-banner__image" 
+            data-src="${cyberBannerImg}" 
+            alt="Techwear Cybernetical Gear" 
+            id="hero-banner-img-cyber" 
+            width="1200" 
+            height="805" 
+            loading="lazy" 
+            decoding="async" 
+          />
+          <img 
+            class="hero-banner__image" 
+            data-src="${pilotBannerImg}" 
+            alt="Techwear Pilot Gear" 
+            id="hero-banner-img-pilot" 
+            width="1200" 
+            height="805" 
+            loading="lazy" 
+            decoding="async" 
+          />
           <div class="hero-banner__overlay"></div>
         </div>
         

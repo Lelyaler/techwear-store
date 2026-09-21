@@ -25,21 +25,21 @@ import { NeonChat } from './components/NeonChat.js';
 import './styles/components/settings-dock.css';
 
 // Импортируем изображения товаров (Vite ESM)
-import jacketImg from './assets/jacket.jpg';
-import chestRigImg from './assets/chest-rig.jpg';
-import backpackImg from './assets/backpack.jpg';
-import visorImg from './assets/visor.jpg';
-import glovesImg from './assets/gloves.jpg';
-import sneakersImg from './assets/sneakers.jpg';
-import maskImg from './assets/mask.jpg';
-import trenchImg from './assets/trench.jpg';
-import vestImg from './assets/vest.jpg';
-import slingImg from './assets/sling.jpg';
-import exoGlovesImg from './assets/exo-gloves.jpg';
-import bootsImg from './assets/boots.jpg';
-import shadowVisorImg from './assets/shadow-visor.jpg';
-import legExoImg from './assets/leg-exo.jpg';
-import stealthCloakImg from './assets/stealth-cloak.jpg';
+import jacketImg from './assets/jacket.webp';
+import chestRigImg from './assets/chest-rig.webp';
+import backpackImg from './assets/backpack.webp';
+import visorImg from './assets/visor.webp';
+import glovesImg from './assets/gloves.webp';
+import sneakersImg from './assets/sneakers.webp';
+import maskImg from './assets/mask.webp';
+import trenchImg from './assets/trench.webp';
+import vestImg from './assets/vest.webp';
+import slingImg from './assets/sling.webp';
+import exoGlovesImg from './assets/exo-gloves.webp';
+import bootsImg from './assets/boots.webp';
+import shadowVisorImg from './assets/shadow-visor.webp';
+import legExoImg from './assets/leg-exo.webp';
+import stealthCloakImg from './assets/stealth-cloak.webp';
 
 // Расширенная база данных товаров магазина Techwear
 const PRODUCTS = [
@@ -375,21 +375,21 @@ const initializeApp = () => {
       <div class="cyber-settings-title">SYS // QUICK SETTINGS</div>
       
       <!-- Кнопка-триггер для мобильных устройств -->
-      <button class="cyber-settings-toggle-btn js-interactive" id="settings-toggle-trigger" title="Toggle Quick Settings">
-        <svg viewBox="0 0 24 24">
+      <button class="cyber-settings-toggle-btn js-interactive" id="settings-toggle-trigger" title="Toggle Quick Settings" aria-label="Toggle Quick Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="12" cy="12" r="3"></circle>
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
         </svg>
       </button>
 
       <div class="cyber-settings-buttons">
-        <button class="cyber-settings-btn cyber-settings-btn--theme js-interactive" id="quick-theme-btn" title="Cycle System Theme">
+        <button class="cyber-settings-btn cyber-settings-btn--theme js-interactive" id="quick-theme-btn" title="Cycle System Theme" aria-label="Cycle System Theme">
           🎨 THEME
         </button>
-        <button class="cyber-settings-btn js-interactive" id="quick-sound-btn" title="Toggle Sound FX">
+        <button class="cyber-settings-btn js-interactive" id="quick-sound-btn" title="Toggle Sound FX" aria-label="Toggle Sound FX">
           🔊 SOUND
         </button>
-        <button class="cyber-settings-btn js-interactive" id="quick-ambient-btn" title="Toggle Ambient Hum">
+        <button class="cyber-settings-btn js-interactive" id="quick-ambient-btn" title="Toggle Ambient Hum" aria-label="Toggle Ambient Hum">
           🌐 HUM
         </button>
       </div>
@@ -979,12 +979,13 @@ const initializeApp = () => {
  */
 const registerServiceWorker = () => {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
+    const swUrl = `${import.meta.env.BASE_URL}sw.js`;
+    navigator.serviceWorker.register(swUrl, { scope: import.meta.env.BASE_URL })
       .then((registration) => {
         console.log('📡 [PWA] Service Worker registered. Scope:', registration.scope);
       })
       .catch((error) => {
-        console.error('❌ [PWA] Service Worker registration failed:', error);
+        console.warn('⚠️ [PWA] Service Worker registration info:', error);
       });
   }
 };

@@ -53,6 +53,8 @@
 .city-ticker__track {
   display: flex;
   white-space: nowrap;
+  will-change: transform;
+  transform: translateZ(0);
   animation: city-ticker-marquee 35s linear infinite;
   padding-left: 20px;
 }

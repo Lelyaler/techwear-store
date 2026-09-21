@@ -1,8 +1,8 @@
 import { AudioService } from '../modules/audio.js';
 import '../styles/components/info-sections.css';
-import avatarGhost from '../assets/avatar-ghost.jpg';
-import avatarNetrunner from '../assets/avatar-netrunner.jpg';
-import avatarRecon from '../assets/avatar-recon.jpg';
+import avatarGhost from '../assets/avatar-ghost.webp';
+import avatarNetrunner from '../assets/avatar-netrunner.webp';
+import avatarRecon from '../assets/avatar-recon.webp';
 
 const REVIEWS = [
   {
@@ -69,7 +69,7 @@ export const InfoSections = {
       <div class="review-card">
         <div class="review-card__header">
           <div class="review-card__avatar-wrapper">
-            <img class="review-card__avatar-img" src="${rev.avatar}" alt="${rev.author}" />
+            <img class="review-card__avatar-img" src="${rev.avatar}" alt="${rev.author}" width="48" height="48" loading="lazy" decoding="async" />
           </div>
           <div class="review-card__meta">
             <div class="review-card__author">${rev.author}</div>

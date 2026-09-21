@@ -354,87 +354,32 @@
 .glitch::before {
   left: 2px;
   text-shadow: -2px 0 var(--color-accent-pink);
-  clip: rect(44px, 450px, 56px, 0);
-  animation: glitch-anim 5s infinite linear alternate-reverse;
+  will-change: transform, opacity;
+  animation: glitch-anim 4s infinite linear alternate-reverse;
 }
 
 .glitch::after {
   left: -2px;
   text-shadow: -2px 0 var(--color-accent-blue), 0 2px var(--color-accent-pink);
-  clip: rect(85px, 450px, 140px, 0);
-  animation: glitch-anim2 5s infinite linear alternate-reverse;
+  will-change: transform, opacity;
+  animation: glitch-anim2 4s infinite linear alternate-reverse;
 }
 
 @keyframes glitch-anim {
-  0% {
-    clip: rect(31px, 9999px, 94px, 0);
-  }
-  10% {
-    clip: rect(112px, 9999px, 76px, 0);
-  }
-  20% {
-    clip: rect(85px, 9999px, 5px, 0);
-  }
-  30% {
-    clip: rect(27px, 9999px, 115px, 0);
-  }
-  40% {
-    clip: rect(73px, 9999px, 29px, 0);
-  }
-  50% {
-    clip: rect(114px, 9999px, 98px, 0);
-  }
-  60% {
-    clip: rect(9px, 9999px, 43px, 0);
-  }
-  70% {
-    clip: rect(84px, 9999px, 119px, 0);
-  }
-  80% {
-    clip: rect(39px, 9999px, 64px, 0);
-  }
-  90% {
-    clip: rect(102px, 9999px, 53px, 0);
-  }
-  100% {
-    clip: rect(18px, 9999px, 87px, 0);
-  }
+  0% { transform: translate(0, 0); opacity: 0.8; }
+  20% { transform: translate(-2px, 1px); opacity: 0.95; }
+  40% { transform: translate(1px, -1px); opacity: 0.7; }
+  60% { transform: translate(-1px, 2px); opacity: 1; }
+  80% { transform: translate(2px, 0); opacity: 0.85; }
+  100% { transform: translate(0, 0); opacity: 0.8; }
 }
 
 @keyframes glitch-anim2 {
-  0% {
-    clip: rect(76px, 9999px, 116px, 0);
-  }
-  11% {
-    clip: rect(5px, 9999px, 12px, 0);
-  }
-  22% {
-    clip: rect(113px, 9999px, 48px, 0);
-  }
-  33% {
-    clip: rect(87px, 9999px, 32px, 0);
-  }
-  44% {
-    clip: rect(12px, 9999px, 83px, 0);
-  }
-  55% {
-    clip: rect(64px, 9999px, 122px, 0);
-  }
-  66% {
-    clip: rect(95px, 9999px, 19px, 0);
-  }
-  77% {
-    clip: rect(33px, 9999px, 90px, 0);
-  }
-  88% {
-    clip: rect(119px, 9999px, 73px, 0);
-  }
-  99% {
-    clip: rect(44px, 9999px, 102px, 0);
-  }
-  100% {
-    clip: rect(9px, 9999px, 5px, 0);
-  }
+  0% { transform: translate(0, 0); opacity: 0.7; }
+  25% { transform: translate(2px, -1px); opacity: 0.9; }
+  50% { transform: translate(-1px, 1px); opacity: 0.75; }
+  75% { transform: translate(1px, 2px); opacity: 0.95; }
+  100% { transform: translate(0, 0); opacity: 0.7; }
 }
 
 /* Мобильная адаптивность для экранов шириной до 480px (микромобилки) */

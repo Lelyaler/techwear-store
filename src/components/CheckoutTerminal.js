@@ -33,7 +33,7 @@ export const CheckoutTerminal = {
             <div class="checkout-terminal__window-controls">
               <span class="checkout-terminal__dot"></span>
               <span class="checkout-terminal__dot"></span>
-              <span class="checkout-terminal__dot checkout-terminal__dot--fill" id="terminal-close-btn" style="cursor: pointer;"></span>
+              <span class="checkout-terminal__dot checkout-terminal__dot--fill" id="terminal-close-btn" role="button" aria-label="Close terminal window" tabindex="0" style="cursor: pointer;"></span>
             </div>
           </div>
 

@@ -47,14 +47,14 @@ export const FitScanner = {
                     <span>HEIGHT (cm) //</span>
                     <span class="fit-scanner__val" id="height-val">178</span>
                   </div>
-                  <input type="range" class="fit-scanner__slider" id="height-slider" min="150" max="210" value="178" />
+                  <input type="range" class="fit-scanner__slider" id="height-slider" min="150" max="210" value="178" aria-label="Height in centimeters" />
                 </div>
                 <div class="fit-scanner__field">
                   <div class="fit-scanner__label-row">
                     <span>WEIGHT (kg) //</span>
                     <span class="fit-scanner__val" id="weight-val">75</span>
                   </div>
-                  <input type="range" class="fit-scanner__slider" id="weight-slider" min="40" max="130" value="75" />
+                  <input type="range" class="fit-scanner__slider" id="weight-slider" min="40" max="130" value="75" aria-label="Weight in kilograms" />
                 </div>
               </div>
 
@@ -65,7 +65,7 @@ export const FitScanner = {
                     <span>FOOT LENGTH (mm) //</span>
                     <span class="fit-scanner__val" id="foot-val">270</span>
                   </div>
-                  <input type="range" class="fit-scanner__slider" id="foot-slider" min="230" max="310" value="270" />
+                  <input type="range" class="fit-scanner__slider" id="foot-slider" min="230" max="310" value="270" aria-label="Foot length in millimeters" />
                 </div>
               </div>
 
@@ -76,7 +76,7 @@ export const FitScanner = {
                     <span>PALM WIDTH (cm) //</span>
                     <span class="fit-scanner__val" id="palm-val">8.5</span>
                   </div>
-                  <input type="range" class="fit-scanner__slider" id="palm-slider" min="6.5" max="11.5" step="0.5" value="8.5" />
+                  <input type="range" class="fit-scanner__slider" id="palm-slider" min="6.5" max="11.5" step="0.5" value="8.5" aria-label="Palm width in centimeters" />
                 </div>
               </div>
 

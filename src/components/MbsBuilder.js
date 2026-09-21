@@ -4,19 +4,19 @@ import { Toast } from './Toast.js';
 import { ProfileState } from '../modules/profile.js';
 
 // Импортируем изображения для конструктора
-import jacketImg from '../assets/jacket.jpg';
-import chestRigImg from '../assets/chest-rig.jpg';
-import backpackImg from '../assets/backpack.jpg';
-import visorImg from '../assets/visor.jpg';
-import glovesImg from '../assets/gloves.jpg';
-import sneakersImg from '../assets/sneakers.jpg';
-import maskImg from '../assets/mask.jpg';
-import trenchImg from '../assets/trench.jpg';
-import vestImg from '../assets/vest.jpg';
-import slingImg from '../assets/sling.jpg';
-import exoGlovesImg from '../assets/exo-gloves.jpg';
-import bootsImg from '../assets/boots.jpg';
-import mannequinImg from '../assets/mbs_mannequin.jpg';
+import jacketImg from '../assets/jacket.webp';
+import chestRigImg from '../assets/chest-rig.webp';
+import backpackImg from '../assets/backpack.webp';
+import visorImg from '../assets/visor.webp';
+import glovesImg from '../assets/gloves.webp';
+import sneakersImg from '../assets/sneakers.webp';
+import maskImg from '../assets/mask.webp';
+import trenchImg from '../assets/trench.webp';
+import vestImg from '../assets/vest.webp';
+import slingImg from '../assets/sling.webp';
+import exoGlovesImg from '../assets/exo-gloves.webp';
+import bootsImg from '../assets/boots.webp';
+import mannequinImg from '../assets/mbs_mannequin.webp';
 
 // База данных совместимых модулей Modular Belt System
 const BUILDER_PRODUCTS = [
@@ -89,7 +89,7 @@ export const MbsBuilder = {
                 </div>
                 
                 <!-- Фоновое изображение сгенерированного кибер-манекена -->
-                <img class="mbs-mannequin-image" src="${mannequinImg}" alt="MANNEQUIN SYSTEM PROTOCOL" />
+                <img class="mbs-mannequin-image" src="${mannequinImg}" alt="MANNEQUIN SYSTEM PROTOCOL" width="600" height="894" loading="lazy" decoding="async" />
 
                 <!-- SVG направляющих линий (ответвления) -->
                 <svg class="mbs-mannequin-svg" viewBox="0 0 100 150">

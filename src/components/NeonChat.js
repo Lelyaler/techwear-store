@@ -41,8 +41,9 @@ export const NeonChat = {
             id="neon-chat-input-field" 
             placeholder="Ask N.E.O.N. Cortex..." 
             autocomplete="off" 
+            aria-label="Ask N.E.O.N. Cortex" 
           />
-          <button class="neon-chat-send" id="neon-chat-send-btn">SEND</button>
+          <button class="neon-chat-send" id="neon-chat-send-btn" aria-label="Send message">SEND</button>
         </div>
       </div>
     `;

@@ -47,7 +47,10 @@ export const ProductCard = {
             class="product-card__image" 
             src="${image}" 
             alt="${name}" 
+            width="300" 
+            height="300" 
             loading="lazy" 
+            decoding="async" 
           />
         </div>
         

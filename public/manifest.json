@@ -2,15 +2,15 @@
   "name": "TECHWEAR // Modular Gear & Cybernetic Accessories",
   "short_name": "Techwear OS",
   "description": "Суперсовременный PWA-магазин технологичной одежды и кибер-аксессуаров в стиле Techwear.",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#060709",
   "theme_color": "#060709",
   "orientation": "portrait",
-  "scope": "/",
+  "scope": "./",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"

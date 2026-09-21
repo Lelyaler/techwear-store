@@ -82,7 +82,7 @@ export const CyberProfile = {
             <div class="profile-window-controls">
               <span class="profile-dot"></span>
               <span class="profile-dot"></span>
-              <span class="profile-dot profile-dot--fill" id="profile-close-btn" style="cursor: pointer;"></span>
+              <span class="profile-dot profile-dot--fill" id="profile-close-btn" role="button" aria-label="Close profile window" tabindex="0" style="cursor: pointer;"></span>
             </div>
           </div>
 
@@ -161,6 +161,7 @@ export const CyberProfile = {
                     id="hacker-input" 
                     placeholder="Type 'help'..." 
                     autocomplete="off"
+                    aria-label="Terminal command input"
                   />
                 </div>
               </div>
