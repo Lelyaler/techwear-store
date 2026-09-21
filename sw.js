@@ -1,10 +1,9 @@
-const CACHE_NAME = 'techwear-cache-v1';
+const CACHE_NAME = 'techwear-cache-v2';
 
 // Базовые файлы App Shell для кэширования при установке
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/favicon.svg'
+  './',
+  './favicon.svg'
 ];
 
 /**
@@ -14,7 +13,9 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('⚙️ [Service Worker] Pre-caching App Shell assets');
-      return cache.addAll(ASSETS_TO_CACHE);
+      return cache.addAll(ASSETS_TO_CACHE).catch((err) => {
+        console.warn('⚙️ [Service Worker] Pre-cache partial warning:', err);
+      });
     })
   );
   self.skipWaiting(); // Форсируем активацию новой версии SW без ожидания закрытия вкладок
