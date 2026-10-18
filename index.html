@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TECHWEAR // Modular Gear & Tactical Apparel</title>
+    <link rel="canonical" href="https://lelyaler.github.io/techwear-store/" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;800;900&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;800;900&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;800;900&display=swap"
+      />
+    </noscript>
+
+    <link
+      rel="preload"
+      as="image"
+      href="./images/techwear-banner-mobile.webp"
+      type="image/webp"
+      media="(max-width: 640px)"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="./images/techwear-banner.webp"
+      type="image/webp"
+      media="(min-width: 641px)"
+      fetchpriority="high"
+    />
+
+    <link rel="manifest" href="./manifest.json" />
+
+    <meta name="theme-color" content="#060709" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Techwear Store" />
+    <meta name="description" content="Магазин модульной одежды и технологичных аксессуаров в стиле Techwear." />
+  </head>
+  <body>
+    <div id="root">
+      <div class="app-root">
+        <header class="header">
+          <div class="header__container">
+            <div class="header__logo">
+              <span class="header__logo-brand">TECHWEAR</span>
+              <span class="header__logo-sub">// OS</span>
+            </div>
+            <div class="header__desktop-nav">
+              <span class="header__btn header__btn--theme">CATALOG //</span>
+              <span class="header__btn header__btn--theme">FIT ASSISTANT //</span>
+            </div>
+          </div>
+        </header>
+
+        <main class="main container">
+          <section class="hero-banner" style="position:relative;min-height:350px;background:#0d1117;border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);margin-top:12px;">
+            <div class="hero-banner__image-wrapper" style="position:absolute;inset:0;">
+              <picture>
+                <source media="(max-width: 640px)" srcset="./images/techwear-banner-mobile.webp" type="image/webp" width="640" height="356" />
+                <img
+                  src="./images/techwear-banner.webp"
+                  alt="Techwear Tactical Gear"
+                  fetchpriority="high"
+                  decoding="async"
+                  width="1200"
+                  height="669"
+                  style="width:100%;height:100%;object-fit:cover;object-position:80% center;opacity:0.95;"
+                />
+              </picture>
+              <div class="hero-banner__overlay" style="position:absolute;inset:0;background:linear-gradient(90deg, rgba(6,7,9,0.92) 30%, rgba(6,7,9,0.5) 65%, transparent 100%);"></div>
+            </div>
+            <div class="hero-banner__content" style="position:relative;z-index:4;padding:40px 24px;max-width:650px;">
+              <div class="hero-banner__badge" style="font-size:0.75rem;color:#00ff66;letter-spacing:2px;margin-bottom:8px;font-weight:700;">ENGINEERED PERFORMANCE // 2026</div>
+              <h1 class="hero-banner__title" style="font-size:clamp(1.8rem, 4vw, 3rem);font-weight:900;color:#fff;margin:0 0 12px;letter-spacing:1px;line-height:1.1;">TACTICAL // CORE GEAR</h1>
+              <p class="hero-banner__subtitle" style="font-size:0.9rem;line-height:1.6;color:#a0aab8;margin:0 0 20px;">
+                Экипировка нового поколения для урбанистической среды. Высокотехнологичные материалы, модульная совместимость Molle и надежная ветро-влагозащита по полевым стандартам.
+              </p>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

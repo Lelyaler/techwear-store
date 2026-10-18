@@ -1,0 +1,43 @@
+{
+  "name": "techwear-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive modular techwear e-commerce platform and gear customizer built with React 19, TypeScript, and Vite.",
+  "author": "Valeriya Chernyavskaya <lelyaler@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://lelyaler.github.io/techwear-store/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lelyaler/techwear-store.git"
+  },
+  "keywords": [
+    "react",
+    "typescript",
+    "techwear",
+    "ecommerce",
+    "pwa",
+    "web-audio-api",
+    "canvas-api",
+    "vite",
+    "modular-clothing"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "gh-pages": "^6.3.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.0"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  }
+}
