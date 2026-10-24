@@ -1,4 +1,4 @@
-const CACHE_NAME = 'techwear-cache-v2';
+const CACHE_NAME = 'techwear-cache-v3';
 
 const ASSETS_TO_CACHE = [
   './',
